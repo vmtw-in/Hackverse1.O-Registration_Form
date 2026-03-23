@@ -83,12 +83,10 @@
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
       50%{transform:translateY(-18px) translateX(12px) scale(1.06);}
     }
-
     @keyframes floatOrb2{
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
       50%{transform:translateY(18px) translateX(-15px) scale(1.08);}
     }
-
     @keyframes floatOrb3{
       0%,100%{transform:translateY(0) scale(1);}
       50%{transform:translateY(-14px) scale(1.07);}
@@ -734,7 +732,7 @@
 
     <div class="hero">
       <h2>Hackverse 1.O</h2>
-      <h3>Organizing by VIGNAN'S INSTITUTE OF MANAGEMENT AND TECHNOLOGY FOR WOMEN</h3>
+      <h3>Coding usibg AI Tool - A 24 hours HACKATHON</h3>
     </div>
 
     <div class="flash-news">
@@ -845,6 +843,7 @@
                 </div>
                 <div class="qr-caption">
                   Pay the <span>registration fee</span> using this QR code,<br>
+				  The <span> Registration_fee </span> should be deposited in favour of <br> <span> Hackverse1.O-vmtw </span> <br>
                   then enter the <span>transaction ID</span> and upload the payment screenshot.
                 </div>
               </div>
@@ -900,7 +899,6 @@
     </div>
   </div>
 
-  <!-- Success / Ticket Popup -->
   <div class="ticket-modal" id="ticketModal">
     <div class="ticket-card" id="ticketCard">
       <div class="ticket-header">
@@ -941,7 +939,7 @@
   </div>
 
   <script>
-    const GAS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyLZMTHGIgguMHQLrgvoBz80uDfTicc1OTN1bFRug60B0qANabeEpNjW7TFcWah3Mw9fw/exec";
     const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/IkGdFlQv1wmAE5tStHLCOJ";
 
     const teamSize = document.getElementById("teamSize");
@@ -956,6 +954,8 @@
     const previewImage = document.getElementById("previewImage");
     const downloadTicketBtn = document.getElementById("downloadTicketBtn");
     const joinWhatsappBtn = document.getElementById("joinWhatsappBtn");
+
+    let latestTicketUrl = "";
 
     function getFee(size) {
       if (size === "2") return 600;
@@ -1011,7 +1011,6 @@
     }
 
     async function loadStats() {
-      if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") return;
       try {
         const res = await fetch(GAS_URL + "?action=stats");
         const data = await res.json();
@@ -1110,11 +1109,6 @@
         members: members
       };
 
-      if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
-        showTicket("HV-DEMO-001", payload);
-        return;
-      }
-
       loadingText.style.display = "block";
 
       try {
@@ -1128,7 +1122,9 @@
         loadingText.style.display = "none";
 
         if (result.status === "success") {
+          latestTicketUrl = result.ticketUrl || "";
           showTicket(result.applicationId, payload);
+
           form.reset();
           feeBox.textContent = "Registration Fee: ₹0";
           membersContainer.innerHTML = "";
@@ -1137,7 +1133,7 @@
           previewImage.src = "";
           loadStats();
         } else {
-          alert("Submission failed: " + result.message);
+          alert("Submission failed.");
         }
       } catch (error) {
         loadingText.style.display = "none";
@@ -1180,7 +1176,11 @@
       });
 
       downloadTicketBtn.onclick = function () {
-        window.print();
+        if (latestTicketUrl) {
+          window.open(latestTicketUrl, "_blank");
+        } else {
+          window.print();
+        }
       };
 
       joinWhatsappBtn.onclick = function () {
