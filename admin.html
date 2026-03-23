@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hackverse 1.O Registration Form</title>
+  <title>Hackverse Admin Panel</title>
   <style>
     *{
       margin:0;
@@ -21,9 +21,8 @@
       --accent:#f59e0b;
       --success:#16a34a;
       --danger:#dc2626;
-      --cyan:#06b6d4;
-      --pink:#ec4899;
-      --border:rgba(255,255,255,0.18);
+      --border:rgba(255,255,255,0.16);
+      --glass:rgba(255,255,255,0.08);
       --shadow:0 20px 50px rgba(0,0,0,0.35);
     }
 
@@ -31,11 +30,10 @@
       min-height:100vh;
       color:#fff;
       background:
-        radial-gradient(circle at 10% 15%, rgba(37,99,235,0.20), transparent 18%),
-        radial-gradient(circle at 85% 12%, rgba(124,58,237,0.22), transparent 20%),
+        radial-gradient(circle at 10% 20%, rgba(37,99,235,0.20), transparent 18%),
+        radial-gradient(circle at 85% 15%, rgba(124,58,237,0.22), transparent 20%),
         radial-gradient(circle at 50% 85%, rgba(245,158,11,0.12), transparent 18%),
         linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-      background-attachment: fixed;
       padding:24px;
       overflow-x:hidden;
       position:relative;
@@ -62,17 +60,17 @@
     }
 
     .orb2{
-      width:230px;
-      height:230px;
+      width:220px;
+      height:220px;
       background:linear-gradient(135deg, #7c3aed, #c084fc);
-      top:240px;
-      right:40px;
+      top:220px;
+      right:50px;
       animation:floatOrb2 10s infinite;
     }
 
     .orb3{
-      width:150px;
-      height:150px;
+      width:140px;
+      height:140px;
       background:linear-gradient(135deg, #f59e0b, #fcd34d);
       bottom:40px;
       left:18%;
@@ -81,262 +79,78 @@
 
     @keyframes floatOrb1{
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
-      50%{transform:translateY(-18px) translateX(12px) scale(1.06);}
+      50%{transform:translateY(-16px) translateX(12px) scale(1.05);}
     }
 
     @keyframes floatOrb2{
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
-      50%{transform:translateY(18px) translateX(-15px) scale(1.08);}
+      50%{transform:translateY(18px) translateX(-14px) scale(1.08);}
     }
 
     @keyframes floatOrb3{
       0%,100%{transform:translateY(0) scale(1);}
-      50%{transform:translateY(-14px) scale(1.07);}
+      50%{transform:translateY(-12px) scale(1.07);}
     }
 
-    .container{
-      max-width:1180px;
+    .page-wrap{
+      max-width:1400px;
       margin:auto;
-      border-radius:30px;
-      overflow:hidden;
+      position:relative;
+      z-index:1;
+    }
+
+    .panel{
       background:rgba(255,255,255,0.06);
       border:1px solid var(--border);
-      backdrop-filter:blur(18px);
+      backdrop-filter:blur(16px);
+      border-radius:28px;
       box-shadow:var(--shadow);
-      position:relative;
-      z-index:1;
-      animation:containerFloat 6s ease-in-out infinite;
-    }
-
-    @keyframes containerFloat{
-      0%,100%{transform:translateY(0px);}
-      50%{transform:translateY(-4px);}
-    }
-
-    .college-header{
-      display:grid;
-      grid-template-columns:120px 1fr 120px;
-      gap:16px;
-      align-items:center;
-      padding:24px 26px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.97), rgba(248,250,252,0.96));
-      color:#0f172a;
-      border-bottom:4px solid #2563eb;
-      position:relative;
       overflow:hidden;
     }
 
-    .logo-box{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      z-index:1;
-    }
-
-    .college-logo,.naac-logo{
-      width:98px;
-      height:98px;
-      object-fit:contain;
-      background:#fff;
-      padding:8px;
-      border-radius:22px;
-      box-shadow:
-        0 16px 30px rgba(15,23,42,0.18),
-        inset 0 2px 8px rgba(255,255,255,0.9);
-      transform:perspective(900px) rotateX(10deg);
-      transition:0.35s ease;
-    }
-
-    .college-logo:hover,.naac-logo:hover{
-      transform:perspective(900px) rotateX(0deg) translateY(-6px) scale(1.04);
-    }
-
-    .college-text{
+    .header{
+      padding:28px 24px;
       text-align:center;
-      position:relative;
-      z-index:1;
+      background:linear-gradient(135deg, rgba(124,58,237,0.94), rgba(37,99,235,0.92));
     }
 
-    .college-text h1{
-      font-size:26px;
-      line-height:1.3;
+    .header h1{
+      font-size:36px;
+      margin-bottom:8px;
       font-weight:900;
-      text-transform:uppercase;
-      margin-bottom:6px;
     }
 
-    .college-text h2{
-      font-size:15px;
-      line-height:1.5;
-      color:#334155;
-      font-weight:800;
-      margin-bottom:4px;
-    }
-
-    .college-text p{
-      font-size:14px;
-      line-height:1.5;
-      color:#475569;
+    .header p{
+      font-size:16px;
+      color:#f8fafc;
       font-weight:700;
     }
 
-    .hero{
-      position:relative;
-      padding:30px 28px 24px;
-      text-align:center;
-      background:linear-gradient(135deg, rgba(124,58,237,0.94), rgba(37,99,235,0.92));
-      overflow:hidden;
+    .content{
+      padding:28px;
     }
 
-    .hero h2{
-      position:relative;
-      font-size:42px;
-      line-height:1.25;
-      font-weight:900;
-      margin-bottom:10px;
-      text-shadow:0 6px 18px rgba(0,0,0,0.25);
-      z-index:1;
-    }
-
-    .hero h3{
-      position:relative;
-      font-size:22px;
-      line-height:1.5;
-      font-weight:800;
-      color:#fef3c7;
-      z-index:1;
-    }
-
-    .flash-news{
-      background:linear-gradient(90deg, #f59e0b, #ea580c, #dc2626);
-      color:#fff;
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-    }
-
-    .flash-label{
-      min-width:180px;
-      padding:14px 18px;
-      font-size:17px;
-      font-weight:900;
-      text-align:center;
-      background:rgba(0,0,0,0.18);
-      text-transform:uppercase;
-    }
-
-    .flash-track{
-      overflow:hidden;
-      white-space:nowrap;
-      flex:1;
-    }
-
-    .flash-content{
-      display:inline-block;
-      white-space:nowrap;
-      padding-left:100%;
-      animation:marqueeMove 28s linear infinite;
-      font-size:16px;
-      font-weight:800;
-      padding-top:14px;
-      padding-bottom:14px;
-    }
-
-    @keyframes marqueeMove{
-      0%{transform:translateX(0);}
-      100%{transform:translateX(-100%);}
-    }
-
-    .form-area{
-      padding:34px;
-    }
-
-    .form-main-title{
-      text-align:center;
-      margin-bottom:26px;
-      padding:18px 20px;
-      border-radius:22px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+    .login-box{
+      max-width:460px;
+      margin:0 auto;
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
       border:1px solid rgba(255,255,255,0.14);
-      box-shadow:0 14px 34px rgba(0,0,0,0.18);
-      transform:perspective(1000px) rotateX(6deg);
-    }
-
-    .form-main-title h2{
-      font-size:34px;
-      font-weight:900;
-      color:#fff;
-    }
-
-    .counter-bar{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:16px;
-      margin-bottom:24px;
-    }
-
-    .counter-card{
-      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
-      border:1px solid rgba(255,255,255,0.14);
-      border-radius:20px;
-      padding:18px;
-      text-align:center;
-      box-shadow:0 14px 34px rgba(0,0,0,0.18);
-      transition:0.3s ease;
-    }
-
-    .counter-card:hover{
-      transform:translateY(-4px) scale(1.02);
-    }
-
-    .counter-card h3{
-      font-size:28px;
-      color:#fde68a;
-      margin-bottom:6px;
-    }
-
-    .counter-card p{
-      font-weight:800;
-      color:#e2e8f0;
-    }
-
-    .section-card{
-      background:linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
-      border:1px solid rgba(255,255,255,0.13);
       border-radius:24px;
       padding:24px;
-      margin-bottom:24px;
-      box-shadow:0 14px 34px rgba(0,0,0,0.18);
-      transition:0.35s ease;
-      position:relative;
-      overflow:hidden;
+      box-shadow:0 16px 36px rgba(0,0,0,0.22);
     }
 
-    .section-card:hover{
-      transform:translateY(-5px);
-      box-shadow:0 22px 45px rgba(0,0,0,0.24);
-    }
-
-    .section-title{
-      font-size:22px;
-      font-weight:900;
-      color:#bfdbfe;
-      border-left:5px solid #60a5fa;
-      padding-left:12px;
+    .login-box h2{
+      text-align:center;
       margin-bottom:18px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
-      gap:18px;
-      margin-bottom:16px;
+      font-size:28px;
+      color:#fde68a;
     }
 
     .input-group{
       display:flex;
       flex-direction:column;
+      margin-bottom:16px;
     }
 
     .input-group label{
@@ -345,240 +159,204 @@
       color:#e2e8f0;
     }
 
-    .input-group input,
-    .input-group select{
+    .input-group input{
       padding:14px 15px;
-      border-radius:15px;
+      border-radius:14px;
       border:1px solid rgba(255,255,255,0.18);
       outline:none;
-      background:linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+      background:rgba(255,255,255,0.10);
       color:#fff;
       font-size:15px;
-      transition:0.28s ease;
-    }
-
-    .input-group input[type="file"]{
-      padding:12px;
-      cursor:pointer;
     }
 
     .input-group input::placeholder{
       color:#cbd5e1;
     }
 
-    .input-group input:focus,
-    .input-group select:focus{
-      transform:translateY(-2px) scale(1.01);
-      border-color:#93c5fd;
+    .input-group input:focus{
       box-shadow:0 0 0 4px rgba(147,197,253,0.15);
+      border-color:#93c5fd;
     }
 
-    select option{
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:14px 20px;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      transition:0.25s ease;
+      color:#fff;
+    }
+
+    .btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .login-btn{
+      width:100%;
+      background:linear-gradient(135deg, #f59e0b, #ea580c);
+      margin-top:8px;
+    }
+
+    .login-msg{
+      margin-top:12px;
+      text-align:center;
+      font-weight:800;
+      color:#fde68a;
+      min-height:20px;
+    }
+
+    .dashboard{
+      display:none;
+    }
+
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+
+    .top-bar h2{
+      font-size:30px;
+      font-weight:900;
+      color:#fff;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .refresh-btn{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
+    .export-btn{background:linear-gradient(135deg,#16a34a,#15803d);}
+    .logout-btn{background:linear-gradient(135deg,#ef4444,#dc2626);}
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+      margin-bottom:22px;
+    }
+
+    .stat-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:22px;
+      padding:22px;
+      text-align:center;
+      box-shadow:0 14px 34px rgba(0,0,0,0.18);
+      transition:0.25s ease;
+    }
+
+    .stat-card:hover{
+      transform:translateY(-4px);
+    }
+
+    .stat-card h3{
+      font-size:34px;
+      color:#fde68a;
+      margin-bottom:8px;
+      font-weight:900;
+    }
+
+    .stat-card p{
+      font-weight:800;
+      color:#e2e8f0;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns: 1fr 220px;
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .toolbar input,
+    .toolbar select{
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.18);
+      outline:none;
+      background:rgba(255,255,255,0.10);
+      color:#fff;
+      font-size:15px;
+    }
+
+    .toolbar input::placeholder{
+      color:#cbd5e1;
+    }
+
+    .toolbar select option{
       color:#111827;
     }
 
-    .fee-box{
-      margin-top:10px;
-      padding:18px;
-      border-radius:20px;
-      text-align:center;
-      font-size:24px;
-      font-weight:900;
-      background:linear-gradient(135deg, #16a34a, #15803d);
-      box-shadow:0 18px 30px rgba(22,163,74,0.28);
-      transform:perspective(1000px) rotateX(8deg);
-      animation:feePulse 2.4s ease-in-out infinite;
-    }
-
-    @keyframes feePulse{
-      0%,100%{transform:perspective(1000px) rotateX(8deg) scale(1);}
-      50%{transform:perspective(1000px) rotateX(8deg) scale(1.015);}
-    }
-
-    .payment-wrap{
-      display:grid;
-      grid-template-columns: minmax(260px, 340px) 1fr;
-      gap:22px;
-      align-items:center;
-    }
-
-    .payment-card{
-      position:relative;
-      min-height:360px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      transform-style:preserve-3d;
-      perspective:1200px;
-    }
-
-    .qr-shell{
+    .table-wrap{
       width:100%;
-      max-width:320px;
-      padding:18px;
-      border-radius:26px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
-      border:1px solid rgba(255,255,255,0.18);
-      box-shadow:
-        0 24px 45px rgba(0,0,0,0.22),
-        inset 0 1px 12px rgba(255,255,255,0.12);
-      animation:rollFloat 5s ease-in-out infinite;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .qr-shell::before{
-      content:"";
-      position:absolute;
-      width:180%;
-      height:60%;
-      left:-40%;
-      top:-20%;
-      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.18), transparent);
-      transform:rotate(15deg);
-      animation:shine 3.4s linear infinite;
-    }
-
-    .qr-shell::after{
-      content:"";
-      position:absolute;
-      inset:8px;
-      border-radius:22px;
-      border:1px solid rgba(255,255,255,0.10);
-      pointer-events:none;
-    }
-
-    @keyframes rollFloat{
-      0%,100%{transform:rotateY(0deg) rotateX(8deg) translateY(0);}
-      25%{transform:rotateY(8deg) rotateX(10deg) translateY(-6px);}
-      50%{transform:rotateY(0deg) rotateX(6deg) translateY(-10px);}
-      75%{transform:rotateY(-8deg) rotateX(10deg) translateY(-6px);}
-    }
-
-    @keyframes shine{
-      0%{transform:translateX(-120%) rotate(15deg);}
-      100%{transform:translateX(120%) rotate(15deg);}
-    }
-
-    .qr-top-badge{
-      text-align:center;
-      font-size:14px;
-      font-weight:900;
-      letter-spacing:1px;
-      color:#fef3c7;
-      margin-bottom:12px;
-      text-transform:uppercase;
-    }
-
-    .qr-box{
-      background:#fff;
+      overflow:auto;
       border-radius:20px;
-      padding:16px;
-      box-shadow:inset 0 1px 8px rgba(0,0,0,0.06);
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      box-shadow:0 14px 34px rgba(0,0,0,0.18);
     }
 
-    .qr-box img{
+    table{
       width:100%;
-      display:block;
-      border-radius:12px;
-      object-fit:contain;
+      min-width:1800px;
+      border-collapse:collapse;
     }
 
-    .qr-caption{
+    th, td{
+      padding:12px 10px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      text-align:left;
+      vertical-align:top;
+      font-size:13px;
+    }
+
+    th{
+      position:sticky;
+      top:0;
+      background:#2563eb;
+      color:#fff;
+      font-weight:900;
+      z-index:1;
+    }
+
+    td{
+      color:#e5e7eb;
+      line-height:1.5;
+      white-space:pre-wrap;
+    }
+
+    tr:hover td{
+      background:rgba(255,255,255,0.04);
+    }
+
+    .screenshot-link{
+      color:#86efac;
+      font-weight:800;
+      text-decoration:underline;
+      cursor:pointer;
+      word-break:break-word;
+    }
+
+    .empty-state{
+      padding:26px;
       text-align:center;
-      margin-top:12px;
-      font-size:14px;
-      line-height:1.6;
       color:#e2e8f0;
       font-weight:800;
     }
 
-    .qr-caption span{
-      color:#fde68a;
-    }
-
-    .payment-info{
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-
-    .payment-note{
-      padding:16px;
-      border-radius:18px;
-      background:linear-gradient(135deg, rgba(6,182,212,0.14), rgba(236,72,153,0.10));
-      border:1px solid rgba(255,255,255,0.14);
-      box-shadow:0 12px 28px rgba(0,0,0,0.15);
-    }
-
-    .payment-note h4{
-      margin-bottom:8px;
-      font-size:18px;
-      color:#fef3c7;
-    }
-
-    .payment-note p{
-      color:#e5e7eb;
-      line-height:1.7;
-      font-weight:700;
-      font-size:14px;
-    }
-
-    .preview-box{
-      margin-top:10px;
-      display:none;
-      padding:12px;
-      border-radius:16px;
-      background:rgba(255,255,255,0.10);
-      border:1px solid rgba(255,255,255,0.14);
-      text-align:center;
-    }
-
-    .preview-box img{
-      max-width:220px;
-      width:100%;
-      border-radius:12px;
-      box-shadow:0 8px 18px rgba(0,0,0,0.18);
-    }
-
-    .btn-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:14px;
-      margin-top:24px;
-    }
-
-    button{
-      border:none;
-      border-radius:16px;
-      padding:15px 24px;
-      font-size:16px;
-      font-weight:900;
-      cursor:pointer;
-      transition:all 0.28s ease;
-      box-shadow:0 12px 24px rgba(0,0,0,0.16);
-    }
-
-    button:hover{
-      transform:translateY(-4px) scale(1.02);
-    }
-
-    .submit-btn{ background:linear-gradient(135deg, #f59e0b, #ea580c); color:#fff; }
-    .reset-btn{ background:linear-gradient(135deg, #475569, #334155); color:#fff; }
-
-    .loading{
-      display:none;
-      margin-top:14px;
-      font-weight:800;
-      color:#fde68a;
-      font-size:15px;
-    }
-
-    .ticket-modal{
+    .preview-modal{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,0.78);
-      backdrop-filter:blur(8px);
+      background:rgba(0,0,0,0.84);
+      backdrop-filter:blur(6px);
       display:none;
       align-items:center;
       justify-content:center;
@@ -586,127 +364,68 @@
       padding:20px;
     }
 
-    .ticket-card{
+    .preview-content{
+      position:relative;
+      max-width:900px;
       width:100%;
-      max-width:980px;
       background:#fff;
-      color:#111827;
-      border-radius:26px;
-      overflow:hidden;
-      box-shadow:0 28px 60px rgba(0,0,0,0.42);
-      animation:zoomIn 0.35s ease;
+      border-radius:20px;
+      padding:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,0.40);
     }
 
-    @keyframes zoomIn{
-      from{opacity:0; transform:scale(0.92);}
-      to{opacity:1; transform:scale(1);}
-    }
-
-    .ticket-header{
-      text-align:center;
-      padding:26px 22px;
-      color:#fff;
-      background:linear-gradient(135deg, #7c3aed, #2563eb);
-    }
-
-    .ticket-header h2{
-      font-size:30px;
-      line-height:1.4;
-      margin-bottom:8px;
-    }
-
-    .ticket-body{ padding:24px; }
-
-    .ticket-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:14px;
-    }
-
-    .ticket-item{
-      background:#f8fafc;
-      border-left:4px solid #2563eb;
-      padding:14px;
-      border-radius:12px;
-    }
-
-    .ticket-item strong{
-      display:block;
-      color:#1d4ed8;
-      margin-bottom:6px;
-    }
-
-    .member-list{
-      margin-top:18px;
-      background:#f8fafc;
-      padding:16px;
-      border-radius:14px;
-    }
-
-    .member-list h4{
-      color:#1d4ed8;
-      margin-bottom:10px;
-      font-size:18px;
-    }
-
-    .member-list ul{ padding-left:18px; }
-    .member-list li{ margin-bottom:8px; line-height:1.6; }
-
-    .ticket-actions{
-      padding:18px 24px 26px;
+    .preview-actions{
       display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
+      justify-content:space-between;
+      align-items:center;
       gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
     }
 
-    .download-btn{ background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; }
-    .whatsapp-btn{ background:linear-gradient(135deg, #22c55e, #16a34a); color:#fff; }
-    .close-btn{ background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; }
+    .preview-actions h3{
+      color:#111827;
+      font-size:20px;
+    }
 
-    .success-message{
-      margin-top:16px;
-      padding:14px 16px;
+    .preview-close{
+      background:linear-gradient(135deg,#ef4444,#dc2626);
+    }
+
+    .preview-open{
+      background:linear-gradient(135deg,#16a34a,#15803d);
+    }
+
+    .preview-image{
+      width:100%;
+      max-height:70vh;
+      object-fit:contain;
       border-radius:14px;
-      background:#eefcf2;
-      color:#14532d;
-      font-weight:800;
-      text-align:center;
-      border:1px solid #bbf7d0;
-    }
-
-    @media print{
-      body *{visibility:hidden;}
-      #ticketCard, #ticketCard *{visibility:visible;}
-      #ticketCard{
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        box-shadow:none;
-      }
-      .ticket-actions,.close-btn,.success-message{display:none !important;}
+      background:#f8fafc;
     }
 
     @media (max-width: 900px){
-      .payment-wrap{
+      .toolbar{
         grid-template-columns:1fr;
       }
     }
 
     @media (max-width: 768px){
-      body{ padding:14px; }
-      .college-header{ grid-template-columns:1fr; text-align:center; }
-      .logo-box{ margin:auto; }
-      .college-text h1{ font-size:18px; }
-      .college-text h2,.college-text p{ font-size:13px; }
-      .hero h2{ font-size:24px; }
-      .hero h3{ font-size:15px; }
-      .flash-news{ flex-direction:column; align-items:stretch; }
-      .flash-label{ min-width:100%; }
-      .form-area{ padding:18px; }
-      .form-main-title h2{ font-size:24px; }
-      .payment-card{ min-height:auto; }
+      body{
+        padding:14px;
+      }
+
+      .content{
+        padding:18px;
+      }
+
+      .header h1{
+        font-size:28px;
+      }
+
+      .top-bar h2{
+        font-size:24px;
+      }
     }
   </style>
 </head>
@@ -715,490 +434,308 @@
   <div class="bg-orb orb2"></div>
   <div class="bg-orb orb3"></div>
 
-  <div class="container">
-    <div class="college-header">
-      <div class="logo-box">
-        <img src="vmtw-logo.png" alt="VMTW Logo" class="college-logo">
+  <div class="page-wrap">
+    <div class="panel">
+      <div class="header">
+        <h1>Hackverse Admin Panel</h1>
+        <p>Separate secure dashboard for organizers only</p>
       </div>
 
-      <div class="college-text">
-        <h1>VIGNAN'S INSTITUTE OF MANAGEMENT AND TECHNOLOGY FOR WOMEN</h1>
-        <h2>An Autonomous Institution, Approved by AICTE and Affiliated to JNTUH</h2>
-        <p>Kondapur (V), Ghatkesar (M), Medchal (D), Telangana - 501301</p>
-      </div>
+      <div class="content">
+        <div class="login-box" id="loginBox">
+          <h2>Admin Login</h2>
 
-      <div class="logo-box">
-        <img src="NAAC-logo.png" alt="NAAC Logo" class="naac-logo">
-      </div>
-    </div>
+          <div class="input-group">
+            <label>Admin ID</label>
+            <input type="text" id="adminId" placeholder="Enter admin ID">
+          </div>
 
-    <div class="hero">
-      <h2>Hackverse 1.O</h2>
-      <h3>Organizing by VIGNAN'S INSTITUTE OF MANAGEMENT AND TECHNOLOGY FOR WOMEN</h3>
-    </div>
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter password">
+          </div>
 
-    <div class="flash-news">
-      <div class="flash-label">Flash News</div>
-      <div class="flash-track">
-        <div class="flash-content">
-          Starting Date: 01-04-2026 to 02-04-2026 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-          Event Venue: VMTW_Campus_Ghatkesar_kondapur(V), Hyderabad, Medchal Dist-501301 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-          For more details contact Dr. J. Ranjith - 6369043983 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-          Student Coordinator Ms. Hema Sri - 8125617760
+          <button class="btn login-btn" onclick="loginAdmin()">Login</button>
+          <div class="login-msg" id="loginMsg"></div>
         </div>
-      </div>
-    </div>
 
-    <div class="form-area">
-      <div class="form-main-title">
-        <h2>HACKATHON Registration Form</h2>
-      </div>
+        <div class="dashboard" id="dashboard">
+          <div class="top-bar">
+            <h2>Registrations Dashboard</h2>
 
-      <div class="counter-bar">
-        <div class="counter-card">
-          <h3 id="teamsCount">0</h3>
-          <p>Registered Teams</p>
-        </div>
-        <div class="counter-card">
-          <h3 id="participantsCount">0</h3>
-          <p>Total Participants</p>
-        </div>
-      </div>
-
-      <form id="registrationForm">
-        <div class="section-card">
-          <div class="section-title">Team Details</div>
-          <div class="grid">
-            <div class="input-group">
-              <label>Team Name</label>
-              <input type="text" id="teamName" required placeholder="Enter team name">
-            </div>
-
-            <div class="input-group">
-              <label>Team Size</label>
-              <select id="teamSize" required>
-                <option value="">Select team size</option>
-                <option value="2">2 Members</option>
-                <option value="3">3 Members</option>
-                <option value="4">4 Members</option>
-              </select>
+            <div class="actions">
+              <button class="btn refresh-btn" onclick="loadAdminData()">Refresh</button>
+              <button class="btn export-btn" onclick="exportCSV()">Export CSV</button>
+              <button class="btn logout-btn" onclick="logoutAdmin()">Logout</button>
             </div>
           </div>
 
-          <div class="fee-box" id="feeBox">Registration Fee: ₹0</div>
-        </div>
-
-        <div class="section-card">
-          <div class="section-title">Team Leader Details</div>
-          <div class="grid">
-            <div class="input-group">
-              <label>Leader Name</label>
-              <input type="text" id="leaderName" required placeholder="Enter leader name">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3 id="dashTeams">0</h3>
+              <p>Total Teams</p>
             </div>
 
-            <div class="input-group">
-              <label>Leader Email</label>
-              <input type="email" id="leaderEmail" required placeholder="Enter email">
-            </div>
-
-            <div class="input-group">
-              <label>Leader Phone</label>
-              <input type="tel" id="leaderPhone" required placeholder="Enter phone number">
-            </div>
-
-            <div class="input-group">
-              <label>Leader Department</label>
-              <input type="text" id="leaderDept" required placeholder="Enter department">
-            </div>
-
-            <div class="input-group">
-              <label>Leader College Name</label>
-              <input type="text" id="leaderCollege" required placeholder="Enter college name">
-            </div>
-
-            <div class="input-group">
-              <label>Leader Year of Study</label>
-              <select id="leaderYear" required>
-                <option value="">Select year</option>
-                <option value="1st Year">1st Year</option>
-                <option value="2nd Year">2nd Year</option>
-                <option value="3rd Year">3rd Year</option>
-                <option value="4th Year">4th Year</option>
-              </select>
+            <div class="stat-card">
+              <h3 id="dashParticipants">0</h3>
+              <p>Total Participants</p>
             </div>
           </div>
-        </div>
 
-        <div class="section-card" id="membersSection" style="display:none;">
-          <div class="section-title">Remaining Team Members Details</div>
-          <div id="membersContainer"></div>
-        </div>
+          <div class="toolbar">
+            <input type="text" id="searchInput" placeholder="Search by team name, leader, phone, college, transaction ID..." oninput="filterTable()">
+            <select id="paymentFilter" onchange="filterTable()">
+              <option value="">All Payment Methods</option>
+              <option value="UPI">UPI</option>
+              <option value="PhonePe">PhonePe</option>
+              <option value="Google Pay">Google Pay</option>
+              <option value="Paytm">Paytm</option>
+              <option value="Other UPI">Other UPI</option>
+            </select>
+          </div>
 
-        <div class="section-card">
-          <div class="section-title">QR Code Payment</div>
-          <div class="payment-wrap">
-            <div class="payment-card">
-              <div class="qr-shell">
-                <div class="qr-top-badge">Scan & Pay</div>
-                <div class="qr-box">
-                  <img src="payment-qr.png" alt="Payment QR Code">
-                </div>
-                <div class="qr-caption">
-                  Pay the <span>registration fee</span> using this QR code,<br>
-                  then enter the <span>transaction ID</span> and upload the payment screenshot.
-                </div>
-              </div>
-            </div>
-
-            <div class="payment-info">
-              <div class="payment-note">
-                <h4>Payment Instructions</h4>
-                <p>
-                  After selecting team size, your registration fee will be shown automatically.
-                  Complete the payment using the QR code, then fill the transaction details below.
-                </p>
-              </div>
-
-              <div class="grid">
-                <div class="input-group">
-                  <label>Payment Transaction ID</label>
-                  <input type="text" id="transactionId" required placeholder="Enter UPI / transaction ID">
-                </div>
-
-                <div class="input-group">
-                  <label>Payment Method</label>
-                  <select id="paymentMethod" required>
-                    <option value="">Select payment method</option>
-                    <option value="UPI">UPI</option>
-                    <option value="PhonePe">PhonePe</option>
-                    <option value="Google Pay">Google Pay</option>
-                    <option value="Paytm">Paytm</option>
-                    <option value="Other UPI">Other UPI</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="input-group">
-                <label>Upload Payment Screenshot</label>
-                <input type="file" id="paymentScreenshot" accept="image/*" required>
-              </div>
-
-              <div class="preview-box" id="previewBox">
-                <img id="previewImage" alt="Payment Screenshot Preview">
-              </div>
-            </div>
+          <div class="table-wrap">
+            <table id="adminTable">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Application ID</th>
+                  <th>Team Name</th>
+                  <th>Team Size</th>
+                  <th>Fee</th>
+                  <th>Leader Name</th>
+                  <th>Leader Email</th>
+                  <th>Leader Phone</th>
+                  <th>Leader Department</th>
+                  <th>Leader College</th>
+                  <th>Leader Year</th>
+                  <th>Transaction ID</th>
+                  <th>Payment Method</th>
+                  <th>Screenshot File Name</th>
+                  <th>Screenshot File URL</th>
+                  <th>Team Members Details</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody">
+                <tr><td colspan="16" class="empty-state">No data loaded yet.</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-
-        <div class="btn-row">
-          <button type="submit" class="submit-btn">Submit Registration</button>
-          <button type="reset" class="reset-btn">Reset</button>
-        </div>
-
-        <div class="loading" id="loadingText">Submitting registration, please wait...</div>
-      </form>
+      </div>
     </div>
   </div>
 
-  <!-- Success / Ticket Popup -->
-  <div class="ticket-modal" id="ticketModal">
-    <div class="ticket-card" id="ticketCard">
-      <div class="ticket-header">
-        <h2>Hackverse 1.O</h2>
-        <p>HACKATHON Registration Ticket</p>
-      </div>
-
-      <div class="ticket-body">
-        <div class="ticket-grid">
-          <div class="ticket-item"><strong>Application ID</strong><span id="ticketAppId"></span></div>
-          <div class="ticket-item"><strong>Team Name</strong><span id="ticketTeamName"></span></div>
-          <div class="ticket-item"><strong>Team Size</strong><span id="ticketTeamSize"></span></div>
-          <div class="ticket-item"><strong>Registration Fee</strong><span id="ticketFee"></span></div>
-          <div class="ticket-item"><strong>Leader Name</strong><span id="ticketLeaderName"></span></div>
-          <div class="ticket-item"><strong>Leader Phone</strong><span id="ticketPhone"></span></div>
-          <div class="ticket-item"><strong>Leader College</strong><span id="ticketLeaderCollege"></span></div>
-          <div class="ticket-item"><strong>Leader Year</strong><span id="ticketLeaderYear"></span></div>
-          <div class="ticket-item"><strong>Transaction ID</strong><span id="ticketTransactionId"></span></div>
-          <div class="ticket-item"><strong>Payment Method</strong><span id="ticketPaymentMethod"></span></div>
-        </div>
-
-        <div class="member-list">
-          <h4>Team Members</h4>
-          <ul id="ticketMembersList"></ul>
-        </div>
-
-        <div class="success-message">
-          Registration submitted successfully. Use the buttons below to download your ticket and join the WhatsApp group.
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-content">
+      <div class="preview-actions">
+        <h3>Payment Screenshot Preview</h3>
+        <div class="actions">
+          <button class="btn preview-open" id="openScreenshotBtn" type="button">Open in New Tab</button>
+          <button class="btn preview-close" type="button" onclick="closePreview()">Close</button>
         </div>
       </div>
-
-      <div class="ticket-actions">
-        <button type="button" class="download-btn" id="downloadTicketBtn">Download Ticket</button>
-        <button type="button" class="whatsapp-btn" id="joinWhatsappBtn">Join WhatsApp Group</button>
-        <button type="button" class="close-btn" onclick="closeTicket()">Close</button>
-      </div>
+      <img id="previewImage" class="preview-image" alt="Payment Screenshot Preview">
     </div>
   </div>
 
   <script>
     const GAS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
-    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/IkGdFlQv1wmAE5tStHLCOJ";
+    const ADMIN_SESSION_KEY = "hackverse_admin_logged_in";
 
-    const teamSize = document.getElementById("teamSize");
-    const feeBox = document.getElementById("feeBox");
-    const membersContainer = document.getElementById("membersContainer");
-    const membersSection = document.getElementById("membersSection");
-    const form = document.getElementById("registrationForm");
-    const loadingText = document.getElementById("loadingText");
-    const ticketModal = document.getElementById("ticketModal");
-    const paymentScreenshot = document.getElementById("paymentScreenshot");
-    const previewBox = document.getElementById("previewBox");
-    const previewImage = document.getElementById("previewImage");
-    const downloadTicketBtn = document.getElementById("downloadTicketBtn");
-    const joinWhatsappBtn = document.getElementById("joinWhatsappBtn");
+    let allRows = [];
+    let filteredRows = [];
+    let currentScreenshotUrl = "";
 
-    function getFee(size) {
-      if (size === "2") return 600;
-      if (size === "3") return 750;
-      if (size === "4") return 900;
-      return 0;
-    }
+    function loginAdmin() {
+      const adminId = document.getElementById("adminId").value.trim();
+      const adminPassword = document.getElementById("adminPassword").value.trim();
+      const loginMsg = document.getElementById("loginMsg");
 
-    function renderMemberFields(size) {
-      membersContainer.innerHTML = "";
-      const extraMembers = parseInt(size || 0) - 1;
-
-      if (extraMembers > 0) {
-        membersSection.style.display = "block";
-
-        for (let i = 1; i <= extraMembers; i++) {
-          const row = document.createElement("div");
-          row.className = "grid";
-          row.style.marginBottom = "14px";
-          row.innerHTML = `
-            <div class="input-group">
-              <label>Member ${i + 1} Name</label>
-              <input type="text" id="memberName${i}" required placeholder="Enter member ${i + 1} name">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} Department</label>
-              <input type="text" id="memberDept${i}" required placeholder="Enter department">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} Phone</label>
-              <input type="tel" id="memberPhone${i}" required placeholder="Enter phone number">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} College Name</label>
-              <input type="text" id="memberCollege${i}" required placeholder="Enter college name">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} Year of Study</label>
-              <select id="memberYear${i}" required>
-                <option value="">Select year</option>
-                <option value="1st Year">1st Year</option>
-                <option value="2nd Year">2nd Year</option>
-                <option value="3rd Year">3rd Year</option>
-                <option value="4th Year">4th Year</option>
-              </select>
-            </div>
-          `;
-          membersContainer.appendChild(row);
-        }
-      } else {
-        membersSection.style.display = "none";
+      if (!adminId || !adminPassword) {
+        loginMsg.textContent = "Enter admin ID and password.";
+        return;
       }
-    }
 
-    async function loadStats() {
-      if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") return;
-      try {
-        const res = await fetch(GAS_URL + "?action=stats");
-        const data = await res.json();
+      loginMsg.textContent = "Checking...";
+
+      fetch(GAS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "adminLogin",
+          adminId,
+          adminPassword
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
         if (data.status === "success") {
-          document.getElementById("teamsCount").textContent = data.teams;
-          document.getElementById("participantsCount").textContent = data.participants;
-        }
-      } catch (e) {
-        console.log("Stats not loaded");
-      }
-    }
-
-    paymentScreenshot.addEventListener("change", function () {
-      const file = this.files[0];
-      if (!file) {
-        previewBox.style.display = "none";
-        previewImage.src = "";
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        previewImage.src = e.target.result;
-        previewBox.style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    });
-
-    teamSize.addEventListener("change", function () {
-      feeBox.textContent = `Registration Fee: ₹${getFee(this.value)}`;
-      renderMemberFields(this.value);
-    });
-
-    form.addEventListener("reset", () => {
-      setTimeout(() => {
-        feeBox.textContent = "Registration Fee: ₹0";
-        membersContainer.innerHTML = "";
-        membersSection.style.display = "none";
-        previewBox.style.display = "none";
-        previewImage.src = "";
-      }, 50);
-    });
-
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const size = teamSize.value;
-      const fee = getFee(size);
-      const extraMembers = parseInt(size) - 1;
-
-      const members = [];
-      members.push({
-        role: "Team Leader",
-        name: document.getElementById("leaderName").value,
-        dept: document.getElementById("leaderDept").value,
-        phone: document.getElementById("leaderPhone").value,
-        college: document.getElementById("leaderCollege").value,
-        year: document.getElementById("leaderYear").value
-      });
-
-      for (let i = 1; i <= extraMembers; i++) {
-        members.push({
-          role: `Member ${i + 1}`,
-          name: document.getElementById(`memberName${i}`).value,
-          dept: document.getElementById(`memberDept${i}`).value,
-          phone: document.getElementById(`memberPhone${i}`).value,
-          college: document.getElementById(`memberCollege${i}`).value,
-          year: document.getElementById(`memberYear${i}`).value
-        });
-      }
-
-      const file = paymentScreenshot.files[0];
-      if (!file) {
-        alert("Please upload payment screenshot.");
-        return;
-      }
-
-      const screenshotBase64 = await fileToBase64(file);
-
-      const payload = {
-        action: "register",
-        teamName: document.getElementById("teamName").value,
-        teamSize: size,
-        fee: fee,
-        leaderName: document.getElementById("leaderName").value,
-        leaderEmail: document.getElementById("leaderEmail").value,
-        leaderPhone: document.getElementById("leaderPhone").value,
-        leaderDept: document.getElementById("leaderDept").value,
-        leaderCollege: document.getElementById("leaderCollege").value,
-        leaderYear: document.getElementById("leaderYear").value,
-        transactionId: document.getElementById("transactionId").value,
-        paymentMethod: document.getElementById("paymentMethod").value,
-        paymentScreenshotName: file.name,
-        paymentScreenshotMimeType: file.type,
-        paymentScreenshotBase64: screenshotBase64,
-        members: members
-      };
-
-      if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
-        showTicket("HV-DEMO-001", payload);
-        return;
-      }
-
-      loadingText.style.display = "block";
-
-      try {
-        const response = await fetch(GAS_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        loadingText.style.display = "none";
-
-        if (result.status === "success") {
-          showTicket(result.applicationId, payload);
-          form.reset();
-          feeBox.textContent = "Registration Fee: ₹0";
-          membersContainer.innerHTML = "";
-          membersSection.style.display = "none";
-          previewBox.style.display = "none";
-          previewImage.src = "";
-          loadStats();
+          sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
+          document.getElementById("loginBox").style.display = "none";
+          document.getElementById("dashboard").style.display = "block";
+          loginMsg.textContent = "";
+          loadAdminData();
         } else {
-          alert("Submission failed: " + result.message);
+          loginMsg.textContent = data.message || "Invalid login.";
         }
-      } catch (error) {
-        loadingText.style.display = "none";
-        alert("Error submitting form. Check your Google Apps Script deployment.");
-        console.error(error);
+      })
+      .catch(() => {
+        loginMsg.textContent = "Login failed. Check GAS URL or deployment.";
+      });
+    }
+
+    function loadAdminData() {
+      fetch(GAS_URL + "?action=adminData")
+        .then(res => res.json())
+        .then(data => {
+          if (data.status !== "success") return;
+
+          allRows = data.rows || [];
+          filteredRows = [...allRows];
+
+          document.getElementById("dashTeams").textContent = data.teams || 0;
+          document.getElementById("dashParticipants").textContent = data.participants || 0;
+
+          renderTable(filteredRows);
+        })
+        .catch(() => {
+          renderEmpty("Unable to load admin data.");
+        });
+    }
+
+    function renderTable(rows) {
+      const tbody = document.getElementById("adminTableBody");
+      tbody.innerHTML = "";
+
+      if (!rows.length) {
+        renderEmpty("No matching registrations found.");
+        return;
+      }
+
+      rows.forEach(row => {
+        const tr = document.createElement("tr");
+
+        for (let i = 0; i < row.length; i++) {
+          const td = document.createElement("td");
+
+          if (i === 14) {
+            const url = row[i] || "";
+            if (url) {
+              const span = document.createElement("span");
+              span.className = "screenshot-link";
+              span.textContent = "View Screenshot";
+              span.onclick = () => previewScreenshot(url);
+              td.appendChild(span);
+            } else {
+              td.textContent = "-";
+            }
+          } else {
+            td.textContent = row[i] ?? "";
+          }
+
+          tr.appendChild(td);
+        }
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEmpty(message) {
+      const tbody = document.getElementById("adminTableBody");
+      tbody.innerHTML = `<tr><td colspan="16" class="empty-state">${message}</td></tr>`;
+    }
+
+    function filterTable() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase().trim();
+      const paymentValue = document.getElementById("paymentFilter").value.toLowerCase().trim();
+
+      filteredRows = allRows.filter(row => {
+        const rowText = row.join(" ").toLowerCase();
+        const paymentMethod = String(row[12] || "").toLowerCase();
+
+        const matchesSearch = !searchValue || rowText.includes(searchValue);
+        const matchesPayment = !paymentValue || paymentMethod === paymentValue;
+
+        return matchesSearch && matchesPayment;
+      });
+
+      renderTable(filteredRows);
+    }
+
+    function exportCSV() {
+      const headers = [
+        "Timestamp",
+        "Application ID",
+        "Team Name",
+        "Team Size",
+        "Fee",
+        "Leader Name",
+        "Leader Email",
+        "Leader Phone",
+        "Leader Department",
+        "Leader College",
+        "Leader Year",
+        "Transaction ID",
+        "Payment Method",
+        "Payment Screenshot File Name",
+        "Payment Screenshot File URL",
+        "Team Members Details"
+      ];
+
+      const rows = filteredRows.length ? filteredRows : allRows;
+      const csv = [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "hackverse_registrations.csv";
+      link.click();
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+      document.getElementById("loginMsg").textContent = "";
+      document.getElementById("adminId").value = "";
+      document.getElementById("adminPassword").value = "";
+    }
+
+    function previewScreenshot(url) {
+      currentScreenshotUrl = url;
+      document.getElementById("previewImage").src = url;
+      document.getElementById("previewModal").style.display = "flex";
+    }
+
+    function closePreview() {
+      document.getElementById("previewModal").style.display = "none";
+      document.getElementById("previewImage").src = "";
+      currentScreenshotUrl = "";
+    }
+
+    document.getElementById("openScreenshotBtn").addEventListener("click", () => {
+      if (currentScreenshotUrl) {
+        window.open(currentScreenshotUrl, "_blank");
       }
     });
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result.split(",")[1];
-          resolve(result);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function showTicket(applicationId, payload) {
-      document.getElementById("ticketAppId").textContent = applicationId;
-      document.getElementById("ticketTeamName").textContent = payload.teamName;
-      document.getElementById("ticketTeamSize").textContent = payload.teamSize + " Members";
-      document.getElementById("ticketFee").textContent = "₹" + payload.fee;
-      document.getElementById("ticketLeaderName").textContent = payload.leaderName;
-      document.getElementById("ticketPhone").textContent = payload.leaderPhone;
-      document.getElementById("ticketLeaderCollege").textContent = payload.leaderCollege;
-      document.getElementById("ticketLeaderYear").textContent = payload.leaderYear;
-      document.getElementById("ticketTransactionId").textContent = payload.transactionId;
-      document.getElementById("ticketPaymentMethod").textContent = payload.paymentMethod;
-
-      const list = document.getElementById("ticketMembersList");
-      list.innerHTML = "";
-
-      payload.members.forEach(member => {
-        const li = document.createElement("li");
-        li.textContent = `${member.role}: ${member.name} | ${member.dept} | ${member.phone} | ${member.college} | ${member.year}`;
-        list.appendChild(li);
-      });
-
-      downloadTicketBtn.onclick = function () {
-        window.print();
-      };
-
-      joinWhatsappBtn.onclick = function () {
-        window.open(WHATSAPP_GROUP_LINK, "_blank");
-      };
-
-      ticketModal.style.display = "flex";
-    }
-
-    function closeTicket() {
-      ticketModal.style.display = "none";
-    }
 
     window.addEventListener("click", function(e) {
-      if (e.target === ticketModal) closeTicket();
+      const modal = document.getElementById("previewModal");
+      if (e.target === modal) {
+        closePreview();
+      }
     });
 
-    loadStats();
+    window.onload = function() {
+      if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadAdminData();
+      }
+    };
   </script>
 </body>
 </html>
