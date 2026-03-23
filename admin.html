@@ -96,7 +96,7 @@
     }
 
     .page-wrap{
-      max-width:1600px;
+      max-width:1700px;
       margin:auto;
       position:relative;
       z-index:1;
@@ -182,7 +182,7 @@
     }
 
     .login-box{
-      max-width:480px;
+      max-width:500px;
       margin:0 auto;
       background:linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.05));
       border:1px solid rgba(255,255,255,0.14);
@@ -350,7 +350,7 @@
 
     .toolbar{
       display:grid;
-      grid-template-columns: 1fr 240px;
+      grid-template-columns: 1fr 260px;
       gap:14px;
       margin-bottom:18px;
     }
@@ -392,7 +392,7 @@
 
     table{
       width:100%;
-      min-width:2200px;
+      min-width:2600px;
       border-collapse:collapse;
     }
 
@@ -411,6 +411,7 @@
       color:#fff;
       font-weight:900;
       z-index:2;
+      white-space:nowrap;
     }
 
     td{
@@ -425,13 +426,13 @@
     }
 
     .members-box{
-      min-width:280px;
-      max-width:420px;
+      min-width:360px;
+      max-width:520px;
       background:rgba(255,255,255,0.06);
       border:1px solid rgba(255,255,255,0.08);
       border-radius:12px;
-      padding:10px;
-      line-height:1.65;
+      padding:12px;
+      line-height:1.75;
       color:#f8fafc;
       font-weight:700;
     }
@@ -439,7 +440,14 @@
     .members-box .sep{
       display:block;
       border-top:1px dashed rgba(255,255,255,0.18);
-      margin:8px 0;
+      margin:10px 0;
+    }
+
+    .member-role{
+      color:#fde68a;
+      font-weight:900;
+      margin-bottom:6px;
+      display:block;
     }
 
     .screenshot-link{
@@ -576,7 +584,12 @@
           </div>
 
           <div class="toolbar">
-            <input type="text" id="searchInput" placeholder="Search by team name, leader, college, phone, transaction ID, members..." oninput="filterTable()">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by team name, leader, college, phone, transaction ID, members..."
+              oninput="filterTable()"
+            >
 
             <select id="paymentFilter" onchange="filterTable()">
               <option value="">All Payment Methods</option>
@@ -612,7 +625,9 @@
                   </tr>
                 </thead>
                 <tbody id="adminTableBody">
-                  <tr><td colspan="16" class="empty-state">No data loaded yet.</td></tr>
+                  <tr>
+                    <td colspan="16" class="empty-state">No data loaded yet.</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -715,20 +730,20 @@
       rows.forEach(row => {
         const tr = document.createElement("tr");
 
-        tr.appendChild(makeCell(row[0]));
-        tr.appendChild(makeCell(row[1]));
-        tr.appendChild(makeCell(row[2]));
-        tr.appendChild(makeCell(row[3]));
-        tr.appendChild(makeCell(row[4]));
-        tr.appendChild(makeCell(row[5]));
-        tr.appendChild(makeCell(row[6]));
-        tr.appendChild(makeCell(row[7]));
-        tr.appendChild(makeCell(row[8]));
-        tr.appendChild(makeCell(row[9]));
-        tr.appendChild(makeCell(row[10]));
-        tr.appendChild(makeCell(row[11]));
-        tr.appendChild(makeCell(row[12]));
-        tr.appendChild(makeCell(row[13]));
+        tr.appendChild(makeCell(row[0]));   // Timestamp
+        tr.appendChild(makeCell(row[1]));   // Application ID
+        tr.appendChild(makeCell(row[2]));   // Team Name
+        tr.appendChild(makeCell(row[3]));   // Team Size
+        tr.appendChild(makeCell(row[4]));   // Fee
+        tr.appendChild(makeCell(row[5]));   // Leader Name
+        tr.appendChild(makeCell(row[6]));   // Leader Email
+        tr.appendChild(makeCell(row[7]));   // Leader Phone
+        tr.appendChild(makeCell(row[8]));   // Leader Department
+        tr.appendChild(makeCell(row[9]));   // Leader College
+        tr.appendChild(makeCell(row[10]));  // Leader Year
+        tr.appendChild(makeCell(row[11]));  // Transaction ID
+        tr.appendChild(makeCell(row[12]));  // Payment Method
+        tr.appendChild(makeCell(row[13]));  // Screenshot File Name
 
         const screenshotTd = document.createElement("td");
         const url = row[14] || "";
@@ -758,14 +773,43 @@
     }
 
     function formatMembersHTML(text) {
-      if (!text) return `<div class="members-box">-</div>`;
+      if (!text) {
+        return `<div class="members-box">-</div>`;
+      }
 
-      const escaped = escapeHtml(String(text));
-      const formatted = escaped
-        .replace(/----------------------/g, '<span class="sep"></span>')
-        .replace(/\n/g, '<br>');
+      const raw = String(text).trim();
+      const blocks = raw.split(/-{10,}/g).map(item => item.trim()).filter(Boolean);
 
-      return `<div class="members-box">${formatted}</div>`;
+      if (!blocks.length) {
+        return `<div class="members-box">${escapeHtml(raw).replace(/\n/g, "<br>")}</div>`;
+      }
+
+      const html = blocks.map(block => {
+        const lines = block.split("\n").map(line => line.trim()).filter(Boolean);
+        if (!lines.length) return "";
+
+        const firstLine = lines[0];
+        const otherLines = lines.slice(1);
+
+        let roleHtml = "";
+        let detailHtml = "";
+
+        if (/team leader|member\s*\d+/i.test(firstLine)) {
+          roleHtml = `<span class="member-role">${escapeHtml(firstLine)}</span>`;
+          detailHtml = otherLines.map(line => escapeHtml(line)).join("<br>");
+        } else {
+          detailHtml = lines.map(line => escapeHtml(line)).join("<br>");
+        }
+
+        return `
+          <div>
+            ${roleHtml}
+            ${detailHtml}
+          </div>
+        `;
+      }).filter(Boolean).join(`<span class="sep"></span>`);
+
+      return `<div class="members-box">${html}</div>`;
     }
 
     function escapeHtml(str) {
@@ -814,7 +858,7 @@
         "Payment Method",
         "Payment Screenshot File Name",
         "Payment Screenshot File URL",
-        "Team Members Details"
+        "Entire Team Members Details"
       ];
 
       const rows = filteredRows.length ? filteredRows : allRows;
