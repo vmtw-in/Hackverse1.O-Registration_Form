@@ -25,6 +25,12 @@
       --pink:#ec4899;
       --border:rgba(255,255,255,0.18);
       --shadow:0 20px 50px rgba(0,0,0,0.35);
+      --text:#ffffff;
+      --muted:#dbeafe;
+    }
+
+    html{
+      scroll-behavior:smooth;
     }
 
     body{
@@ -44,7 +50,7 @@
     .bg-orb{
       position:fixed;
       border-radius:50%;
-      filter:blur(6px);
+      filter:blur(8px);
       opacity:0.35;
       pointer-events:none;
       z-index:0;
@@ -93,7 +99,7 @@
     }
 
     .container{
-      max-width:1180px;
+      max-width:1200px;
       margin:auto;
       border-radius:30px;
       overflow:hidden;
@@ -122,6 +128,20 @@
       border-bottom:4px solid #2563eb;
       position:relative;
       overflow:hidden;
+    }
+
+    .college-header::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent, rgba(37,99,235,0.06), transparent);
+      animation:headerShine 5s linear infinite;
+      pointer-events:none;
+    }
+
+    @keyframes headerShine{
+      0%{transform:translateX(-100%);}
+      100%{transform:translateX(100%);}
     }
 
     .logo-box{
@@ -181,10 +201,33 @@
 
     .hero{
       position:relative;
-      padding:30px 28px 24px;
+      padding:34px 28px 28px;
       text-align:center;
-      background:linear-gradient(135deg, rgba(124,58,237,0.94), rgba(37,99,235,0.92));
+      background:linear-gradient(135deg, rgba(124,58,237,0.95), rgba(37,99,235,0.93));
       overflow:hidden;
+    }
+
+    .hero::before,
+    .hero::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,0.08);
+      pointer-events:none;
+    }
+
+    .hero::before{
+      width:180px;
+      height:180px;
+      top:-70px;
+      left:-40px;
+    }
+
+    .hero::after{
+      width:220px;
+      height:220px;
+      right:-80px;
+      bottom:-100px;
     }
 
     .hero h2{
@@ -195,6 +238,7 @@
       margin-bottom:10px;
       text-shadow:0 6px 18px rgba(0,0,0,0.25);
       z-index:1;
+      letter-spacing:1px;
     }
 
     .hero h3{
@@ -203,6 +247,15 @@
       line-height:1.5;
       font-weight:800;
       color:#fef3c7;
+      z-index:1;
+    }
+
+    .hero p{
+      position:relative;
+      margin-top:10px;
+      font-size:14px;
+      font-weight:700;
+      color:#e0e7ff;
       z-index:1;
     }
 
@@ -222,6 +275,7 @@
       text-align:center;
       background:rgba(0,0,0,0.18);
       text-transform:uppercase;
+      letter-spacing:1px;
     }
 
     .flash-track{
@@ -265,6 +319,13 @@
       font-size:34px;
       font-weight:900;
       color:#fff;
+      margin-bottom:4px;
+    }
+
+    .form-main-title p{
+      color:#dbeafe;
+      font-weight:700;
+      font-size:14px;
     }
 
     .counter-bar{
@@ -311,6 +372,20 @@
       overflow:hidden;
     }
 
+    .section-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.04), transparent);
+      transform:translateX(-100%);
+      transition:0.8s ease;
+      pointer-events:none;
+    }
+
+    .section-card:hover::before{
+      transform:translateX(100%);
+    }
+
     .section-card:hover{
       transform:translateY(-5px);
       box-shadow:0 22px 45px rgba(0,0,0,0.24);
@@ -323,6 +398,15 @@
       border-left:5px solid #60a5fa;
       padding-left:12px;
       margin-bottom:18px;
+      letter-spacing:0.3px;
+    }
+
+    .sub-note{
+      margin-top:-4px;
+      margin-bottom:16px;
+      color:#cbd5e1;
+      font-size:14px;
+      font-weight:700;
     }
 
     .grid{
@@ -335,12 +419,15 @@
     .input-group{
       display:flex;
       flex-direction:column;
+      position:relative;
     }
 
     .input-group label{
       margin-bottom:8px;
       font-weight:800;
       color:#e2e8f0;
+      font-size:14px;
+      letter-spacing:0.2px;
     }
 
     .input-group input,
@@ -353,6 +440,7 @@
       color:#fff;
       font-size:15px;
       transition:0.28s ease;
+      min-height:50px;
     }
 
     .input-group input[type="file"]{
@@ -375,6 +463,29 @@
       color:#111827;
     }
 
+    .member-card{
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:20px;
+      padding:18px 18px 6px;
+      margin-bottom:18px;
+      background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(236,72,153,0.05));
+      box-shadow:0 10px 28px rgba(0,0,0,0.16);
+    }
+
+    .member-card-title{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      margin-bottom:16px;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      color:#fff;
+      font-weight:900;
+      font-size:15px;
+      box-shadow:0 10px 20px rgba(37,99,235,0.25);
+    }
+
     .fee-box{
       margin-top:10px;
       padding:18px;
@@ -395,7 +506,7 @@
 
     .payment-wrap{
       display:grid;
-      grid-template-columns: minmax(260px, 340px) 1fr;
+      grid-template-columns:minmax(260px, 340px) 1fr;
       gap:22px;
       align-items:center;
     }
@@ -647,8 +758,14 @@
       font-size:18px;
     }
 
-    .member-list ul{ padding-left:18px; }
-    .member-list li{ margin-bottom:8px; line-height:1.6; }
+    .member-list ul{
+      padding-left:18px;
+    }
+
+    .member-list li{
+      margin-bottom:10px;
+      line-height:1.7;
+    }
 
     .ticket-actions{
       padding:18px 24px 26px;
@@ -705,6 +822,7 @@
       .form-area{ padding:18px; }
       .form-main-title h2{ font-size:24px; }
       .payment-card{ min-height:auto; }
+      .member-card{ padding:16px 16px 4px; }
     }
   </style>
 </head>
@@ -732,24 +850,26 @@
 
     <div class="hero">
       <h2>Hackverse 1.O</h2>
-      <h3>Coding usibg AI Tool - A 24 hours HACKATHON</h3>
+      <h3>Coding using AI Tool - A 24 Hours Hackathon</h3>
+      <p>Premium Team Registration Portal</p>
     </div>
 
     <div class="flash-news">
       <div class="flash-label">Flash News</div>
       <div class="flash-track">
         <div class="flash-content">
-          Starting Date: 01-04-2026 to 02-04-2026 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-          Event Venue: VMTW_Campus_Ghatkesar_kondapur(V), Hyderabad, Medchal Dist-501301 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-          For more details contact Dr. J. Ranjith - 6369043983 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-          Student Coordinator Ms. Hema Sri - 8125617760
+          Event Date: 01-04-2026 to 02-04-2026 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          Venue: VMTW Campus, Ghatkesar, Kondapur (V), Medchal Dist, Telangana - 501301 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          Faculty Coordinator: Dr. J. Ranjith - 6369043983 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          Student Coordinator: Ms. Hema Sri - 8125617760
         </div>
       </div>
     </div>
 
     <div class="form-area">
       <div class="form-main-title">
-        <h2>HACKATHON Registration Form</h2>
+        <h2>Hackathon Registration Form</h2>
+        <p>All team member details are aligned in the same order as team leader details.</p>
       </div>
 
       <div class="counter-bar">
@@ -768,12 +888,12 @@
           <div class="section-title">Team Details</div>
           <div class="grid">
             <div class="input-group">
-              <label>Team Name</label>
+              <label for="teamName">Team Name</label>
               <input type="text" id="teamName" required placeholder="Enter team name">
             </div>
 
             <div class="input-group">
-              <label>Team Size</label>
+              <label for="teamSize">Team Size</label>
               <select id="teamSize" required>
                 <option value="">Select team size</option>
                 <option value="2">2 Members</option>
@@ -788,34 +908,36 @@
 
         <div class="section-card">
           <div class="section-title">Team Leader Details</div>
+          <div class="sub-note">Order maintained: Name → Email → Phone → Department → College Name → Year of Study</div>
+
           <div class="grid">
             <div class="input-group">
-              <label>Leader Name</label>
+              <label for="leaderName">Leader Name</label>
               <input type="text" id="leaderName" required placeholder="Enter leader name">
             </div>
 
             <div class="input-group">
-              <label>Leader Email</label>
+              <label for="leaderEmail">Leader Email</label>
               <input type="email" id="leaderEmail" required placeholder="Enter email">
             </div>
 
             <div class="input-group">
-              <label>Leader Phone</label>
+              <label for="leaderPhone">Leader Phone</label>
               <input type="tel" id="leaderPhone" required placeholder="Enter phone number">
             </div>
 
             <div class="input-group">
-              <label>Leader Department</label>
+              <label for="leaderDept">Leader Department</label>
               <input type="text" id="leaderDept" required placeholder="Enter department">
             </div>
 
             <div class="input-group">
-              <label>Leader College Name</label>
+              <label for="leaderCollege">Leader College Name</label>
               <input type="text" id="leaderCollege" required placeholder="Enter college name">
             </div>
 
             <div class="input-group">
-              <label>Leader Year of Study</label>
+              <label for="leaderYear">Leader Year of Study</label>
               <select id="leaderYear" required>
                 <option value="">Select year</option>
                 <option value="1st Year">1st Year</option>
@@ -828,7 +950,8 @@
         </div>
 
         <div class="section-card" id="membersSection" style="display:none;">
-          <div class="section-title">Remaining Team Members Details</div>
+          <div class="section-title">Other Team Members Details</div>
+          <div class="sub-note">Same order as team leader details is maintained for all members.</div>
           <div id="membersContainer"></div>
         </div>
 
@@ -842,9 +965,10 @@
                   <img src="payment-qr.png" alt="Payment QR Code">
                 </div>
                 <div class="qr-caption">
-                  Pay the <span>registration fee</span> using this QR code,<br>
-				  The <span> Registration_fee </span> should be deposited in favour of <br> <span> Hackverse1.O-vmtw </span> <br>
-                  then enter the <span>transaction ID</span> and upload the payment screenshot.
+                  Pay the <span>registration fee</span> using this QR code.<br>
+                  The <span>registration fee</span> should be deposited in favour of<br>
+                  <span>Hackverse1.O-vmtw</span><br>
+                  Then enter the <span>transaction ID</span> and upload the payment screenshot.
                 </div>
               </div>
             </div>
@@ -860,12 +984,12 @@
 
               <div class="grid">
                 <div class="input-group">
-                  <label>Payment Transaction ID</label>
+                  <label for="transactionId">Payment Transaction ID</label>
                   <input type="text" id="transactionId" required placeholder="Enter UPI / transaction ID">
                 </div>
 
                 <div class="input-group">
-                  <label>Payment Method</label>
+                  <label for="paymentMethod">Payment Method</label>
                   <select id="paymentMethod" required>
                     <option value="">Select payment method</option>
                     <option value="UPI">UPI</option>
@@ -878,7 +1002,7 @@
               </div>
 
               <div class="input-group">
-                <label>Upload Payment Screenshot</label>
+                <label for="paymentScreenshot">Upload Payment Screenshot</label>
                 <input type="file" id="paymentScreenshot" accept="image/*" required>
               </div>
 
@@ -903,7 +1027,7 @@
     <div class="ticket-card" id="ticketCard">
       <div class="ticket-header">
         <h2>Hackverse 1.O</h2>
-        <p>HACKATHON Registration Ticket</p>
+        <p>Hackathon Registration Ticket</p>
       </div>
 
       <div class="ticket-body">
@@ -913,7 +1037,9 @@
           <div class="ticket-item"><strong>Team Size</strong><span id="ticketTeamSize"></span></div>
           <div class="ticket-item"><strong>Registration Fee</strong><span id="ticketFee"></span></div>
           <div class="ticket-item"><strong>Leader Name</strong><span id="ticketLeaderName"></span></div>
+          <div class="ticket-item"><strong>Leader Email</strong><span id="ticketLeaderEmail"></span></div>
           <div class="ticket-item"><strong>Leader Phone</strong><span id="ticketPhone"></span></div>
+          <div class="ticket-item"><strong>Leader Department</strong><span id="ticketLeaderDept"></span></div>
           <div class="ticket-item"><strong>Leader College</strong><span id="ticketLeaderCollege"></span></div>
           <div class="ticket-item"><strong>Leader Year</strong><span id="ticketLeaderYear"></span></div>
           <div class="ticket-item"><strong>Transaction ID</strong><span id="ticketTransactionId"></span></div>
@@ -964,6 +1090,16 @@
       return 0;
     }
 
+    function createYearOptions() {
+      return `
+        <option value="">Select year</option>
+        <option value="1st Year">1st Year</option>
+        <option value="2nd Year">2nd Year</option>
+        <option value="3rd Year">3rd Year</option>
+        <option value="4th Year">4th Year</option>
+      `;
+    }
+
     function renderMemberFields(size) {
       membersContainer.innerHTML = "";
       const extraMembers = parseInt(size || 0) - 1;
@@ -972,38 +1108,48 @@
         membersSection.style.display = "block";
 
         for (let i = 1; i <= extraMembers; i++) {
-          const row = document.createElement("div");
-          row.className = "grid";
-          row.style.marginBottom = "14px";
-          row.innerHTML = `
-            <div class="input-group">
-              <label>Member ${i + 1} Name</label>
-              <input type="text" id="memberName${i}" required placeholder="Enter member ${i + 1} name">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} Department</label>
-              <input type="text" id="memberDept${i}" required placeholder="Enter department">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} Phone</label>
-              <input type="tel" id="memberPhone${i}" required placeholder="Enter phone number">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} College Name</label>
-              <input type="text" id="memberCollege${i}" required placeholder="Enter college name">
-            </div>
-            <div class="input-group">
-              <label>Member ${i + 1} Year of Study</label>
-              <select id="memberYear${i}" required>
-                <option value="">Select year</option>
-                <option value="1st Year">1st Year</option>
-                <option value="2nd Year">2nd Year</option>
-                <option value="3rd Year">3rd Year</option>
-                <option value="4th Year">4th Year</option>
-              </select>
+          const memberNo = i + 1;
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "member-card";
+          wrapper.innerHTML = `
+            <div class="member-card-title">Member ${memberNo} Details</div>
+
+            <div class="grid">
+              <div class="input-group">
+                <label for="memberName${i}">Member ${memberNo} Name</label>
+                <input type="text" id="memberName${i}" required placeholder="Enter member ${memberNo} name">
+              </div>
+
+              <div class="input-group">
+                <label for="memberEmail${i}">Member ${memberNo} Email</label>
+                <input type="email" id="memberEmail${i}" required placeholder="Enter member ${memberNo} email">
+              </div>
+
+              <div class="input-group">
+                <label for="memberPhone${i}">Member ${memberNo} Phone</label>
+                <input type="tel" id="memberPhone${i}" required placeholder="Enter phone number">
+              </div>
+
+              <div class="input-group">
+                <label for="memberDept${i}">Member ${memberNo} Department</label>
+                <input type="text" id="memberDept${i}" required placeholder="Enter department">
+              </div>
+
+              <div class="input-group">
+                <label for="memberCollege${i}">Member ${memberNo} College Name</label>
+                <input type="text" id="memberCollege${i}" required placeholder="Enter college name">
+              </div>
+
+              <div class="input-group">
+                <label for="memberYear${i}">Member ${memberNo} Year of Study</label>
+                <select id="memberYear${i}" required>
+                  ${createYearOptions()}
+                </select>
+              </div>
             </div>
           `;
-          membersContainer.appendChild(row);
+          membersContainer.appendChild(wrapper);
         }
       } else {
         membersSection.style.display = "none";
@@ -1062,11 +1208,13 @@
       const extraMembers = parseInt(size) - 1;
 
       const members = [];
+
       members.push({
         role: "Team Leader",
         name: document.getElementById("leaderName").value,
-        dept: document.getElementById("leaderDept").value,
+        email: document.getElementById("leaderEmail").value,
         phone: document.getElementById("leaderPhone").value,
+        dept: document.getElementById("leaderDept").value,
         college: document.getElementById("leaderCollege").value,
         year: document.getElementById("leaderYear").value
       });
@@ -1075,8 +1223,9 @@
         members.push({
           role: `Member ${i + 1}`,
           name: document.getElementById(`memberName${i}`).value,
-          dept: document.getElementById(`memberDept${i}`).value,
+          email: document.getElementById(`memberEmail${i}`).value,
           phone: document.getElementById(`memberPhone${i}`).value,
+          dept: document.getElementById(`memberDept${i}`).value,
           college: document.getElementById(`memberCollege${i}`).value,
           year: document.getElementById(`memberYear${i}`).value
         });
@@ -1133,7 +1282,7 @@
           previewImage.src = "";
           loadStats();
         } else {
-          alert("Submission failed.");
+          alert(result.message || "Submission failed.");
         }
       } catch (error) {
         loadingText.style.display = "none";
@@ -1160,7 +1309,9 @@
       document.getElementById("ticketTeamSize").textContent = payload.teamSize + " Members";
       document.getElementById("ticketFee").textContent = "₹" + payload.fee;
       document.getElementById("ticketLeaderName").textContent = payload.leaderName;
+      document.getElementById("ticketLeaderEmail").textContent = payload.leaderEmail;
       document.getElementById("ticketPhone").textContent = payload.leaderPhone;
+      document.getElementById("ticketLeaderDept").textContent = payload.leaderDept;
       document.getElementById("ticketLeaderCollege").textContent = payload.leaderCollege;
       document.getElementById("ticketLeaderYear").textContent = payload.leaderYear;
       document.getElementById("ticketTransactionId").textContent = payload.transactionId;
@@ -1171,7 +1322,7 @@
 
       payload.members.forEach(member => {
         const li = document.createElement("li");
-        li.textContent = `${member.role}: ${member.name} | ${member.dept} | ${member.phone} | ${member.college} | ${member.year}`;
+        li.textContent = `${member.role}: ${member.name} | ${member.email} | ${member.phone} | ${member.dept} | ${member.college} | ${member.year}`;
         list.appendChild(li);
       });
 
