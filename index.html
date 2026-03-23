@@ -83,10 +83,12 @@
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
       50%{transform:translateY(-18px) translateX(12px) scale(1.06);}
     }
+
     @keyframes floatOrb2{
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
       50%{transform:translateY(18px) translateX(-15px) scale(1.08);}
     }
+
     @keyframes floatOrb3{
       0%,100%{transform:translateY(0) scale(1);}
       50%{transform:translateY(-14px) scale(1.07);}
@@ -662,6 +664,17 @@
     .whatsapp-btn{ background:linear-gradient(135deg, #22c55e, #16a34a); color:#fff; }
     .close-btn{ background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; }
 
+    .success-message{
+      margin-top:16px;
+      padding:14px 16px;
+      border-radius:14px;
+      background:#eefcf2;
+      color:#14532d;
+      font-weight:800;
+      text-align:center;
+      border:1px solid #bbf7d0;
+    }
+
     @media print{
       body *{visibility:hidden;}
       #ticketCard, #ticketCard *{visibility:visible;}
@@ -672,7 +685,7 @@
         width:100%;
         box-shadow:none;
       }
-      .ticket-actions{display:none !important;}
+      .ticket-actions,.close-btn,.success-message{display:none !important;}
     }
 
     @media (max-width: 900px){
@@ -721,7 +734,7 @@
 
     <div class="hero">
       <h2>Hackverse 1.O</h2>
-      <h3>Coding Using AI Tools - a 24 hours Hackathon</h3>
+      <h3>Organizing by VIGNAN'S INSTITUTE OF MANAGEMENT AND TECHNOLOGY FOR WOMEN</h3>
     </div>
 
     <div class="flash-news">
@@ -828,11 +841,10 @@
               <div class="qr-shell">
                 <div class="qr-top-badge">Scan & Pay</div>
                 <div class="qr-box">
-                  <img src="payment_qr.png" alt="Payment QR Code">
+                  <img src="payment-qr.png" alt="Payment QR Code">
                 </div>
                 <div class="qr-caption">
                   Pay the <span>registration fee</span> using this QR code,<br>
-				 <span> The Registration fee </span> should be deposited in the name of <span>VMTW-Hackverse1.O</span> <br>
                   then enter the <span>transaction ID</span> and upload the payment screenshot.
                 </div>
               </div>
@@ -879,7 +891,7 @@
         </div>
 
         <div class="btn-row">
-          <button type="submit" class="submit-btn">Submit & Generate Ticket</button>
+          <button type="submit" class="submit-btn">Submit Registration</button>
           <button type="reset" class="reset-btn">Reset</button>
         </div>
 
@@ -888,6 +900,7 @@
     </div>
   </div>
 
+  <!-- Success / Ticket Popup -->
   <div class="ticket-modal" id="ticketModal">
     <div class="ticket-card" id="ticketCard">
       <div class="ticket-header">
@@ -913,18 +926,22 @@
           <h4>Team Members</h4>
           <ul id="ticketMembersList"></ul>
         </div>
+
+        <div class="success-message">
+          Registration submitted successfully. Use the buttons below to download your ticket and join the WhatsApp group.
+        </div>
       </div>
 
       <div class="ticket-actions">
-        <button class="download-btn" onclick="window.print()">Download Ticket</button>
-        <button class="whatsapp-btn" id="joinWhatsappBtn">Join WhatsApp Group</button>
-        <button class="close-btn" onclick="closeTicket()">Close</button>
+        <button type="button" class="download-btn" id="downloadTicketBtn">Download Ticket</button>
+        <button type="button" class="whatsapp-btn" id="joinWhatsappBtn">Join WhatsApp Group</button>
+        <button type="button" class="close-btn" onclick="closeTicket()">Close</button>
       </div>
     </div>
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxk6g93TQsuSiU3VaLmvLp7tw9Kbqw2X-lhBEcVx_MCHk6J6S5SXgh1dWGMhapYSHEe6w/exec";
+    const GAS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
     const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/IkGdFlQv1wmAE5tStHLCOJ";
 
     const teamSize = document.getElementById("teamSize");
@@ -937,6 +954,8 @@
     const paymentScreenshot = document.getElementById("paymentScreenshot");
     const previewBox = document.getElementById("previewBox");
     const previewImage = document.getElementById("previewImage");
+    const downloadTicketBtn = document.getElementById("downloadTicketBtn");
+    const joinWhatsappBtn = document.getElementById("joinWhatsappBtn");
 
     function getFee(size) {
       if (size === "2") return 600;
@@ -1093,7 +1112,6 @@
 
       if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
         showTicket("HV-DEMO-001", payload);
-        window.open(WHATSAPP_GROUP_LINK, "_blank");
         return;
       }
 
@@ -1111,7 +1129,6 @@
 
         if (result.status === "success") {
           showTicket(result.applicationId, payload);
-          window.open(WHATSAPP_GROUP_LINK, "_blank");
           form.reset();
           feeBox.textContent = "Registration Fee: ₹0";
           membersContainer.innerHTML = "";
@@ -1162,7 +1179,11 @@
         list.appendChild(li);
       });
 
-      document.getElementById("joinWhatsappBtn").onclick = function () {
+      downloadTicketBtn.onclick = function () {
+        window.print();
+      };
+
+      joinWhatsappBtn.onclick = function () {
         window.open(WHATSAPP_GROUP_LINK, "_blank");
       };
 
