@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hackverse Admin Panel</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Arial}
+
+body{
+  background:linear-gradient(135deg,#070b1a,#111c3d,#3d0a62);
+  color:#fff;
+  min-height:100vh;
+  padding:20px;
+}
+
+.card{
+  background:rgba(255,255,255,0.08);
+  border-radius:20px;
+  padding:25px;
+  backdrop-filter:blur(15px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+
+h1{text-align:center;margin-bottom:20px;}
+
+.input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:none;
+}
+
+.btn{
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:5px;
+}
+
+.login-btn{background:#f59e0b;color:#fff;width:100%}
+.refresh-btn{background:#2563eb;color:#fff}
+.export-btn{background:#16a34a;color:#fff}
+.logout-btn{background:#dc2626;color:#fff}
+
+.dashboard{display:none;margin-top:20px;}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:rgba(255,255,255,0.08);
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat h3{font-size:28px;color:#fde68a;}
+
+.search-box{
+  margin-bottom:15px;
+}
+
+.search-box input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+}
+
+.table-wrap{
+  overflow:auto;
+  max-height:500px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:1400px;
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  font-size:13px;
+}
+
+th{
+  background:#2563eb;
+  position:sticky;
+  top:0;
+}
+
+td{color:#e5e7eb;}
+
+.link{
+  color:#22c55e;
+  cursor:pointer;
+  text-decoration:underline;
+}
+
+.preview-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.preview-modal img{
+  max-width:80%;
+  max-height:80%;
+  border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Hackverse Admin Panel</h1>
+
+<div id="loginBox">
+  <input class="input" id="adminId" placeholder="Admin ID">
+  <input class="input" id="adminPassword" type="password" placeholder="Password">
+  <button class="btn login-btn" onclick="login()">Login</button>
+</div>
+
+<div class="dashboard" id="dashboard">
+
+<div class="stats">
+  <div class="stat"><h3 id="teams">0</h3><p>Teams</p></div>
+  <div class="stat"><h3 id="participants">0</h3><p>Participants</p></div>
+</div>
+
+<div>
+  <button class="btn refresh-btn" onclick="loadData()">Refresh</button>
+  <button class="btn export-btn" onclick="exportCSV()">Export CSV</button>
+  <button class="btn logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="search-box">
+  <input id="search" placeholder="Search..." onkeyup="filterTable()">
+</div>
+
+<div class="table-wrap">
+<table id="table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Team</th>
+<th>Size</th>
+<th>Leader</th>
+<th>Phone</th>
+<th>College</th>
+<th>Txn ID</th>
+<th>Payment</th>
+<th>Screenshot</th>
+<th>Members</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+<div class="preview-modal" id="previewModal" onclick="this.style.display='none'">
+  <img id="previewImg">
+</div>
+
+<script>
+
+const GAS_URL="PASTE_YOUR_WEB_APP_URL_HERE";
+
+let tableData=[];
+
+function login(){
+  fetch(GAS_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"adminLogin",
+      adminId:adminId.value,
+      adminPassword:adminPassword.value
+    })
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    if(d.status==="success"){
+      loginBox.style.display="none";
+      dashboard.style.display="block";
+      loadData();
+    }else alert("Invalid login");
+  });
+}
+
+function loadData(){
+  fetch(GAS_URL+"?action=adminData")
+  .then(r=>r.json())
+  .then(d=>{
+    tableData=d.rows;
+    teams.innerText=d.teams;
+    participants.innerText=d.participants;
+    renderTable(tableData);
+  });
+}
+
+function renderTable(data){
+  const tbody=document.querySelector("tbody");
+  tbody.innerHTML="";
+
+  data.forEach(row=>{
+    const tr=document.createElement("tr");
+
+    tr.innerHTML=`
+      <td>${row[1]}</td>
+      <td>${row[2]}</td>
+      <td>${row[3]}</td>
+      <td>${row[5]}</td>
+      <td>${row[7]}</td>
+      <td>${row[9]}</td>
+      <td>${row[11]}</td>
+      <td>${row[12]}</td>
+      <td class="link" onclick="preview('${row[14]}')">View</td>
+      <td>${row[15]}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+function preview(url){
+  previewModal.style.display="flex";
+  previewImg.src=url;
+}
+
+function filterTable(){
+  const value=search.value.toLowerCase();
+  const filtered=tableData.filter(row=>row.join(" ").toLowerCase().includes(value));
+  renderTable(filtered);
+}
+
+function exportCSV(){
+  let csv="";
+
+  tableData.forEach(r=>{
+    csv+=r.join(",")+"\n";
+  });
+
+  const blob=new Blob([csv]);
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="hackverse.csv";
+  a.click();
+}
+
+function logout(){
+  location.reload();
+}
+
+</script>
+
+</body>
+</html>

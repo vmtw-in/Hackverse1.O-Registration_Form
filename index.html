@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hackverse 1.O Registration Form</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Segoe UI", Arial, sans-serif;
+    }
+
+    :root{
+      --bg1:#070b1a;
+      --bg2:#111c3d;
+      --bg3:#3d0a62;
+      --primary:#2563eb;
+      --secondary:#7c3aed;
+      --accent:#f59e0b;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --cyan:#06b6d4;
+      --pink:#ec4899;
+      --border:rgba(255,255,255,0.18);
+      --shadow:0 20px 50px rgba(0,0,0,0.35);
+    }
+
+    body{
+      min-height:100vh;
+      color:#fff;
+      background:
+        radial-gradient(circle at 10% 15%, rgba(37,99,235,0.20), transparent 18%),
+        radial-gradient(circle at 85% 12%, rgba(124,58,237,0.22), transparent 20%),
+        radial-gradient(circle at 50% 85%, rgba(245,158,11,0.12), transparent 18%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      background-attachment: fixed;
+      padding:24px;
+      overflow-x:hidden;
+      position:relative;
+    }
+
+    .bg-orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(6px);
+      opacity:0.35;
+      pointer-events:none;
+      z-index:0;
+      animation-timing-function:ease-in-out;
+      animation-iteration-count:infinite;
+    }
+
+    .orb1{
+      width:180px;
+      height:180px;
+      background:linear-gradient(135deg, #2563eb, #60a5fa);
+      top:80px;
+      left:40px;
+      animation:floatOrb1 8s infinite;
+    }
+
+    .orb2{
+      width:230px;
+      height:230px;
+      background:linear-gradient(135deg, #7c3aed, #c084fc);
+      top:240px;
+      right:40px;
+      animation:floatOrb2 10s infinite;
+    }
+
+    .orb3{
+      width:150px;
+      height:150px;
+      background:linear-gradient(135deg, #f59e0b, #fcd34d);
+      bottom:40px;
+      left:18%;
+      animation:floatOrb3 9s infinite;
+    }
+
+    @keyframes floatOrb1{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);}
+      50%{transform:translateY(-18px) translateX(12px) scale(1.06);}
+    }
+    @keyframes floatOrb2{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);}
+      50%{transform:translateY(18px) translateX(-15px) scale(1.08);}
+    }
+    @keyframes floatOrb3{
+      0%,100%{transform:translateY(0) scale(1);}
+      50%{transform:translateY(-14px) scale(1.07);}
+    }
+
+    .container{
+      max-width:1180px;
+      margin:auto;
+      border-radius:30px;
+      overflow:hidden;
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+      position:relative;
+      z-index:1;
+      animation:containerFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes containerFloat{
+      0%,100%{transform:translateY(0px);}
+      50%{transform:translateY(-4px);}
+    }
+
+    .college-header{
+      display:grid;
+      grid-template-columns:120px 1fr 120px;
+      gap:16px;
+      align-items:center;
+      padding:24px 26px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.97), rgba(248,250,252,0.96));
+      color:#0f172a;
+      border-bottom:4px solid #2563eb;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .logo-box{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index:1;
+    }
+
+    .college-logo,.naac-logo{
+      width:98px;
+      height:98px;
+      object-fit:contain;
+      background:#fff;
+      padding:8px;
+      border-radius:22px;
+      box-shadow:
+        0 16px 30px rgba(15,23,42,0.18),
+        inset 0 2px 8px rgba(255,255,255,0.9);
+      transform:perspective(900px) rotateX(10deg);
+      transition:0.35s ease;
+    }
+
+    .college-logo:hover,.naac-logo:hover{
+      transform:perspective(900px) rotateX(0deg) translateY(-6px) scale(1.04);
+    }
+
+    .college-text{
+      text-align:center;
+      position:relative;
+      z-index:1;
+    }
+
+    .college-text h1{
+      font-size:26px;
+      line-height:1.3;
+      font-weight:900;
+      text-transform:uppercase;
+      margin-bottom:6px;
+    }
+
+    .college-text h2{
+      font-size:15px;
+      line-height:1.5;
+      color:#334155;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .college-text p{
+      font-size:14px;
+      line-height:1.5;
+      color:#475569;
+      font-weight:700;
+    }
+
+    .hero{
+      position:relative;
+      padding:30px 28px 24px;
+      text-align:center;
+      background:linear-gradient(135deg, rgba(124,58,237,0.94), rgba(37,99,235,0.92));
+      overflow:hidden;
+    }
+
+    .hero h2{
+      position:relative;
+      font-size:42px;
+      line-height:1.25;
+      font-weight:900;
+      margin-bottom:10px;
+      text-shadow:0 6px 18px rgba(0,0,0,0.25);
+      z-index:1;
+    }
+
+    .hero h3{
+      position:relative;
+      font-size:22px;
+      line-height:1.5;
+      font-weight:800;
+      color:#fef3c7;
+      z-index:1;
+    }
+
+    .flash-news{
+      background:linear-gradient(90deg, #f59e0b, #ea580c, #dc2626);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+    }
+
+    .flash-label{
+      min-width:180px;
+      padding:14px 18px;
+      font-size:17px;
+      font-weight:900;
+      text-align:center;
+      background:rgba(0,0,0,0.18);
+      text-transform:uppercase;
+    }
+
+    .flash-track{
+      overflow:hidden;
+      white-space:nowrap;
+      flex:1;
+    }
+
+    .flash-content{
+      display:inline-block;
+      white-space:nowrap;
+      padding-left:100%;
+      animation:marqueeMove 28s linear infinite;
+      font-size:16px;
+      font-weight:800;
+      padding-top:14px;
+      padding-bottom:14px;
+    }
+
+    @keyframes marqueeMove{
+      0%{transform:translateX(0);}
+      100%{transform:translateX(-100%);}
+    }
+
+    .form-area{
+      padding:34px;
+    }
+
+    .form-main-title{
+      text-align:center;
+      margin-bottom:26px;
+      padding:18px 20px;
+      border-radius:22px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.14);
+      box-shadow:0 14px 34px rgba(0,0,0,0.18);
+      transform:perspective(1000px) rotateX(6deg);
+    }
+
+    .form-main-title h2{
+      font-size:34px;
+      font-weight:900;
+      color:#fff;
+    }
+
+    .counter-bar{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .counter-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:20px;
+      padding:18px;
+      text-align:center;
+      box-shadow:0 14px 34px rgba(0,0,0,0.18);
+      transition:0.3s ease;
+    }
+
+    .counter-card:hover{
+      transform:translateY(-4px) scale(1.02);
+    }
+
+    .counter-card h3{
+      font-size:28px;
+      color:#fde68a;
+      margin-bottom:6px;
+    }
+
+    .counter-card p{
+      font-weight:800;
+      color:#e2e8f0;
+    }
+
+    .section-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.13);
+      border-radius:24px;
+      padding:24px;
+      margin-bottom:24px;
+      box-shadow:0 14px 34px rgba(0,0,0,0.18);
+      transition:0.35s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .section-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 22px 45px rgba(0,0,0,0.24);
+    }
+
+    .section-title{
+      font-size:22px;
+      font-weight:900;
+      color:#bfdbfe;
+      border-left:5px solid #60a5fa;
+      padding-left:12px;
+      margin-bottom:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+      gap:18px;
+      margin-bottom:16px;
+    }
+
+    .input-group{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .input-group label{
+      margin-bottom:8px;
+      font-weight:800;
+      color:#e2e8f0;
+    }
+
+    .input-group input,
+    .input-group select{
+      padding:14px 15px;
+      border-radius:15px;
+      border:1px solid rgba(255,255,255,0.18);
+      outline:none;
+      background:linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+      color:#fff;
+      font-size:15px;
+      transition:0.28s ease;
+    }
+
+    .input-group input[type="file"]{
+      padding:12px;
+      cursor:pointer;
+    }
+
+    .input-group input::placeholder{
+      color:#cbd5e1;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus{
+      transform:translateY(-2px) scale(1.01);
+      border-color:#93c5fd;
+      box-shadow:0 0 0 4px rgba(147,197,253,0.15);
+    }
+
+    select option{
+      color:#111827;
+    }
+
+    .fee-box{
+      margin-top:10px;
+      padding:18px;
+      border-radius:20px;
+      text-align:center;
+      font-size:24px;
+      font-weight:900;
+      background:linear-gradient(135deg, #16a34a, #15803d);
+      box-shadow:0 18px 30px rgba(22,163,74,0.28);
+      transform:perspective(1000px) rotateX(8deg);
+      animation:feePulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes feePulse{
+      0%,100%{transform:perspective(1000px) rotateX(8deg) scale(1);}
+      50%{transform:perspective(1000px) rotateX(8deg) scale(1.015);}
+    }
+
+    .payment-wrap{
+      display:grid;
+      grid-template-columns: minmax(260px, 340px) 1fr;
+      gap:22px;
+      align-items:center;
+    }
+
+    .payment-card{
+      position:relative;
+      min-height:360px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform-style:preserve-3d;
+      perspective:1200px;
+    }
+
+    .qr-shell{
+      width:100%;
+      max-width:320px;
+      padding:18px;
+      border-radius:26px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow:
+        0 24px 45px rgba(0,0,0,0.22),
+        inset 0 1px 12px rgba(255,255,255,0.12);
+      animation:rollFloat 5s ease-in-out infinite;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .qr-shell::before{
+      content:"";
+      position:absolute;
+      width:180%;
+      height:60%;
+      left:-40%;
+      top:-20%;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.18), transparent);
+      transform:rotate(15deg);
+      animation:shine 3.4s linear infinite;
+    }
+
+    .qr-shell::after{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,0.10);
+      pointer-events:none;
+    }
+
+    @keyframes rollFloat{
+      0%,100%{transform:rotateY(0deg) rotateX(8deg) translateY(0);}
+      25%{transform:rotateY(8deg) rotateX(10deg) translateY(-6px);}
+      50%{transform:rotateY(0deg) rotateX(6deg) translateY(-10px);}
+      75%{transform:rotateY(-8deg) rotateX(10deg) translateY(-6px);}
+    }
+
+    @keyframes shine{
+      0%{transform:translateX(-120%) rotate(15deg);}
+      100%{transform:translateX(120%) rotate(15deg);}
+    }
+
+    .qr-top-badge{
+      text-align:center;
+      font-size:14px;
+      font-weight:900;
+      letter-spacing:1px;
+      color:#fef3c7;
+      margin-bottom:12px;
+      text-transform:uppercase;
+    }
+
+    .qr-box{
+      background:#fff;
+      border-radius:20px;
+      padding:16px;
+      box-shadow:inset 0 1px 8px rgba(0,0,0,0.06);
+    }
+
+    .qr-box img{
+      width:100%;
+      display:block;
+      border-radius:12px;
+      object-fit:contain;
+    }
+
+    .qr-caption{
+      text-align:center;
+      margin-top:12px;
+      font-size:14px;
+      line-height:1.6;
+      color:#e2e8f0;
+      font-weight:800;
+    }
+
+    .qr-caption span{
+      color:#fde68a;
+    }
+
+    .payment-info{
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .payment-note{
+      padding:16px;
+      border-radius:18px;
+      background:linear-gradient(135deg, rgba(6,182,212,0.14), rgba(236,72,153,0.10));
+      border:1px solid rgba(255,255,255,0.14);
+      box-shadow:0 12px 28px rgba(0,0,0,0.15);
+    }
+
+    .payment-note h4{
+      margin-bottom:8px;
+      font-size:18px;
+      color:#fef3c7;
+    }
+
+    .payment-note p{
+      color:#e5e7eb;
+      line-height:1.7;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .preview-box{
+      margin-top:10px;
+      display:none;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.14);
+      text-align:center;
+    }
+
+    .preview-box img{
+      max-width:220px;
+      width:100%;
+      border-radius:12px;
+      box-shadow:0 8px 18px rgba(0,0,0,0.18);
+    }
+
+    .btn-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:24px;
+    }
+
+    button{
+      border:none;
+      border-radius:16px;
+      padding:15px 24px;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+      transition:all 0.28s ease;
+      box-shadow:0 12px 24px rgba(0,0,0,0.16);
+    }
+
+    button:hover{
+      transform:translateY(-4px) scale(1.02);
+    }
+
+    .submit-btn{ background:linear-gradient(135deg, #f59e0b, #ea580c); color:#fff; }
+    .reset-btn{ background:linear-gradient(135deg, #475569, #334155); color:#fff; }
+
+    .loading{
+      display:none;
+      margin-top:14px;
+      font-weight:800;
+      color:#fde68a;
+      font-size:15px;
+    }
+
+    .ticket-modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.78);
+      backdrop-filter:blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+    }
+
+    .ticket-card{
+      width:100%;
+      max-width:980px;
+      background:#fff;
+      color:#111827;
+      border-radius:26px;
+      overflow:hidden;
+      box-shadow:0 28px 60px rgba(0,0,0,0.42);
+      animation:zoomIn 0.35s ease;
+    }
+
+    @keyframes zoomIn{
+      from{opacity:0; transform:scale(0.92);}
+      to{opacity:1; transform:scale(1);}
+    }
+
+    .ticket-header{
+      text-align:center;
+      padding:26px 22px;
+      color:#fff;
+      background:linear-gradient(135deg, #7c3aed, #2563eb);
+    }
+
+    .ticket-header h2{
+      font-size:30px;
+      line-height:1.4;
+      margin-bottom:8px;
+    }
+
+    .ticket-body{ padding:24px; }
+
+    .ticket-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:14px;
+    }
+
+    .ticket-item{
+      background:#f8fafc;
+      border-left:4px solid #2563eb;
+      padding:14px;
+      border-radius:12px;
+    }
+
+    .ticket-item strong{
+      display:block;
+      color:#1d4ed8;
+      margin-bottom:6px;
+    }
+
+    .member-list{
+      margin-top:18px;
+      background:#f8fafc;
+      padding:16px;
+      border-radius:14px;
+    }
+
+    .member-list h4{
+      color:#1d4ed8;
+      margin-bottom:10px;
+      font-size:18px;
+    }
+
+    .member-list ul{ padding-left:18px; }
+    .member-list li{ margin-bottom:8px; line-height:1.6; }
+
+    .ticket-actions{
+      padding:18px 24px 26px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:12px;
+    }
+
+    .download-btn{ background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; }
+    .whatsapp-btn{ background:linear-gradient(135deg, #22c55e, #16a34a); color:#fff; }
+    .close-btn{ background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; }
+
+    @media print{
+      body *{visibility:hidden;}
+      #ticketCard, #ticketCard *{visibility:visible;}
+      #ticketCard{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        box-shadow:none;
+      }
+      .ticket-actions{display:none !important;}
+    }
+
+    @media (max-width: 900px){
+      .payment-wrap{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 768px){
+      body{ padding:14px; }
+      .college-header{ grid-template-columns:1fr; text-align:center; }
+      .logo-box{ margin:auto; }
+      .college-text h1{ font-size:18px; }
+      .college-text h2,.college-text p{ font-size:13px; }
+      .hero h2{ font-size:24px; }
+      .hero h3{ font-size:15px; }
+      .flash-news{ flex-direction:column; align-items:stretch; }
+      .flash-label{ min-width:100%; }
+      .form-area{ padding:18px; }
+      .form-main-title h2{ font-size:24px; }
+      .payment-card{ min-height:auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <div class="container">
+    <div class="college-header">
+      <div class="logo-box">
+        <img src="vmtw-logo.png" alt="VMTW Logo" class="college-logo">
+      </div>
+
+      <div class="college-text">
+        <h1>VIGNAN'S INSTITUTE OF MANAGEMENT AND TECHNOLOGY FOR WOMEN</h1>
+        <h2>An Autonomous Institution, Approved by AICTE and Affiliated to JNTUH</h2>
+        <p>Kondapur (V), Ghatkesar (M), Medchal (D), Telangana - 501301</p>
+      </div>
+
+      <div class="logo-box">
+        <img src="NAAC-logo.png" alt="NAAC Logo" class="naac-logo">
+      </div>
+    </div>
+
+    <div class="hero">
+      <h2>Hackverse 1.O</h2>
+      <h3>Coding Using AI Tools - a 24 hours Hackathon</h3>
+    </div>
+
+    <div class="flash-news">
+      <div class="flash-label">Flash News</div>
+      <div class="flash-track">
+        <div class="flash-content">
+          Starting Date: 01-04-2026 to 02-04-2026 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          Event Venue: VMTW_Campus_Ghatkesar_kondapur(V), Hyderabad, Medchal Dist-501301 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          For more details contact Dr. J. Ranjith - 6369043983 &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+          Student Coordinator Ms. Hema Sri - 8125617760
+        </div>
+      </div>
+    </div>
+
+    <div class="form-area">
+      <div class="form-main-title">
+        <h2>HACKATHON Registration Form</h2>
+      </div>
+
+      <div class="counter-bar">
+        <div class="counter-card">
+          <h3 id="teamsCount">0</h3>
+          <p>Registered Teams</p>
+        </div>
+        <div class="counter-card">
+          <h3 id="participantsCount">0</h3>
+          <p>Total Participants</p>
+        </div>
+      </div>
+
+      <form id="registrationForm">
+        <div class="section-card">
+          <div class="section-title">Team Details</div>
+          <div class="grid">
+            <div class="input-group">
+              <label>Team Name</label>
+              <input type="text" id="teamName" required placeholder="Enter team name">
+            </div>
+
+            <div class="input-group">
+              <label>Team Size</label>
+              <select id="teamSize" required>
+                <option value="">Select team size</option>
+                <option value="2">2 Members</option>
+                <option value="3">3 Members</option>
+                <option value="4">4 Members</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fee-box" id="feeBox">Registration Fee: ₹0</div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-title">Team Leader Details</div>
+          <div class="grid">
+            <div class="input-group">
+              <label>Leader Name</label>
+              <input type="text" id="leaderName" required placeholder="Enter leader name">
+            </div>
+
+            <div class="input-group">
+              <label>Leader Email</label>
+              <input type="email" id="leaderEmail" required placeholder="Enter email">
+            </div>
+
+            <div class="input-group">
+              <label>Leader Phone</label>
+              <input type="tel" id="leaderPhone" required placeholder="Enter phone number">
+            </div>
+
+            <div class="input-group">
+              <label>Leader Department</label>
+              <input type="text" id="leaderDept" required placeholder="Enter department">
+            </div>
+
+            <div class="input-group">
+              <label>Leader College Name</label>
+              <input type="text" id="leaderCollege" required placeholder="Enter college name">
+            </div>
+
+            <div class="input-group">
+              <label>Leader Year of Study</label>
+              <select id="leaderYear" required>
+                <option value="">Select year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card" id="membersSection" style="display:none;">
+          <div class="section-title">Remaining Team Members Details</div>
+          <div id="membersContainer"></div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-title">QR Code Payment</div>
+          <div class="payment-wrap">
+            <div class="payment-card">
+              <div class="qr-shell">
+                <div class="qr-top-badge">Scan & Pay</div>
+                <div class="qr-box">
+                  <img src="payment_qr.png" alt="Payment QR Code">
+                </div>
+                <div class="qr-caption">
+                  Pay the <span>registration fee</span> using this QR code,<br>
+				 <span> The Registration fee </span> should be deposited in the name of <span>VMTW-Hackverse1.O</span> <br>
+                  then enter the <span>transaction ID</span> and upload the payment screenshot.
+                </div>
+              </div>
+            </div>
+
+            <div class="payment-info">
+              <div class="payment-note">
+                <h4>Payment Instructions</h4>
+                <p>
+                  After selecting team size, your registration fee will be shown automatically.
+                  Complete the payment using the QR code, then fill the transaction details below.
+                </p>
+              </div>
+
+              <div class="grid">
+                <div class="input-group">
+                  <label>Payment Transaction ID</label>
+                  <input type="text" id="transactionId" required placeholder="Enter UPI / transaction ID">
+                </div>
+
+                <div class="input-group">
+                  <label>Payment Method</label>
+                  <select id="paymentMethod" required>
+                    <option value="">Select payment method</option>
+                    <option value="UPI">UPI</option>
+                    <option value="PhonePe">PhonePe</option>
+                    <option value="Google Pay">Google Pay</option>
+                    <option value="Paytm">Paytm</option>
+                    <option value="Other UPI">Other UPI</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label>Upload Payment Screenshot</label>
+                <input type="file" id="paymentScreenshot" accept="image/*" required>
+              </div>
+
+              <div class="preview-box" id="previewBox">
+                <img id="previewImage" alt="Payment Screenshot Preview">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="submit-btn">Submit & Generate Ticket</button>
+          <button type="reset" class="reset-btn">Reset</button>
+        </div>
+
+        <div class="loading" id="loadingText">Submitting registration, please wait...</div>
+      </form>
+    </div>
+  </div>
+
+  <div class="ticket-modal" id="ticketModal">
+    <div class="ticket-card" id="ticketCard">
+      <div class="ticket-header">
+        <h2>Hackverse 1.O</h2>
+        <p>HACKATHON Registration Ticket</p>
+      </div>
+
+      <div class="ticket-body">
+        <div class="ticket-grid">
+          <div class="ticket-item"><strong>Application ID</strong><span id="ticketAppId"></span></div>
+          <div class="ticket-item"><strong>Team Name</strong><span id="ticketTeamName"></span></div>
+          <div class="ticket-item"><strong>Team Size</strong><span id="ticketTeamSize"></span></div>
+          <div class="ticket-item"><strong>Registration Fee</strong><span id="ticketFee"></span></div>
+          <div class="ticket-item"><strong>Leader Name</strong><span id="ticketLeaderName"></span></div>
+          <div class="ticket-item"><strong>Leader Phone</strong><span id="ticketPhone"></span></div>
+          <div class="ticket-item"><strong>Leader College</strong><span id="ticketLeaderCollege"></span></div>
+          <div class="ticket-item"><strong>Leader Year</strong><span id="ticketLeaderYear"></span></div>
+          <div class="ticket-item"><strong>Transaction ID</strong><span id="ticketTransactionId"></span></div>
+          <div class="ticket-item"><strong>Payment Method</strong><span id="ticketPaymentMethod"></span></div>
+        </div>
+
+        <div class="member-list">
+          <h4>Team Members</h4>
+          <ul id="ticketMembersList"></ul>
+        </div>
+      </div>
+
+      <div class="ticket-actions">
+        <button class="download-btn" onclick="window.print()">Download Ticket</button>
+        <button class="whatsapp-btn" id="joinWhatsappBtn">Join WhatsApp Group</button>
+        <button class="close-btn" onclick="closeTicket()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+    const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/IkGdFlQv1wmAE5tStHLCOJ";
+
+    const teamSize = document.getElementById("teamSize");
+    const feeBox = document.getElementById("feeBox");
+    const membersContainer = document.getElementById("membersContainer");
+    const membersSection = document.getElementById("membersSection");
+    const form = document.getElementById("registrationForm");
+    const loadingText = document.getElementById("loadingText");
+    const ticketModal = document.getElementById("ticketModal");
+    const paymentScreenshot = document.getElementById("paymentScreenshot");
+    const previewBox = document.getElementById("previewBox");
+    const previewImage = document.getElementById("previewImage");
+
+    function getFee(size) {
+      if (size === "2") return 600;
+      if (size === "3") return 750;
+      if (size === "4") return 900;
+      return 0;
+    }
+
+    function renderMemberFields(size) {
+      membersContainer.innerHTML = "";
+      const extraMembers = parseInt(size || 0) - 1;
+
+      if (extraMembers > 0) {
+        membersSection.style.display = "block";
+
+        for (let i = 1; i <= extraMembers; i++) {
+          const row = document.createElement("div");
+          row.className = "grid";
+          row.style.marginBottom = "14px";
+          row.innerHTML = `
+            <div class="input-group">
+              <label>Member ${i + 1} Name</label>
+              <input type="text" id="memberName${i}" required placeholder="Enter member ${i + 1} name">
+            </div>
+            <div class="input-group">
+              <label>Member ${i + 1} Department</label>
+              <input type="text" id="memberDept${i}" required placeholder="Enter department">
+            </div>
+            <div class="input-group">
+              <label>Member ${i + 1} Phone</label>
+              <input type="tel" id="memberPhone${i}" required placeholder="Enter phone number">
+            </div>
+            <div class="input-group">
+              <label>Member ${i + 1} College Name</label>
+              <input type="text" id="memberCollege${i}" required placeholder="Enter college name">
+            </div>
+            <div class="input-group">
+              <label>Member ${i + 1} Year of Study</label>
+              <select id="memberYear${i}" required>
+                <option value="">Select year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+              </select>
+            </div>
+          `;
+          membersContainer.appendChild(row);
+        }
+      } else {
+        membersSection.style.display = "none";
+      }
+    }
+
+    async function loadStats() {
+      if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") return;
+      try {
+        const res = await fetch(GAS_URL + "?action=stats");
+        const data = await res.json();
+        if (data.status === "success") {
+          document.getElementById("teamsCount").textContent = data.teams;
+          document.getElementById("participantsCount").textContent = data.participants;
+        }
+      } catch (e) {
+        console.log("Stats not loaded");
+      }
+    }
+
+    paymentScreenshot.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) {
+        previewBox.style.display = "none";
+        previewImage.src = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImage.src = e.target.result;
+        previewBox.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    teamSize.addEventListener("change", function () {
+      feeBox.textContent = `Registration Fee: ₹${getFee(this.value)}`;
+      renderMemberFields(this.value);
+    });
+
+    form.addEventListener("reset", () => {
+      setTimeout(() => {
+        feeBox.textContent = "Registration Fee: ₹0";
+        membersContainer.innerHTML = "";
+        membersSection.style.display = "none";
+        previewBox.style.display = "none";
+        previewImage.src = "";
+      }, 50);
+    });
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const size = teamSize.value;
+      const fee = getFee(size);
+      const extraMembers = parseInt(size) - 1;
+
+      const members = [];
+      members.push({
+        role: "Team Leader",
+        name: document.getElementById("leaderName").value,
+        dept: document.getElementById("leaderDept").value,
+        phone: document.getElementById("leaderPhone").value,
+        college: document.getElementById("leaderCollege").value,
+        year: document.getElementById("leaderYear").value
+      });
+
+      for (let i = 1; i <= extraMembers; i++) {
+        members.push({
+          role: `Member ${i + 1}`,
+          name: document.getElementById(`memberName${i}`).value,
+          dept: document.getElementById(`memberDept${i}`).value,
+          phone: document.getElementById(`memberPhone${i}`).value,
+          college: document.getElementById(`memberCollege${i}`).value,
+          year: document.getElementById(`memberYear${i}`).value
+        });
+      }
+
+      const file = paymentScreenshot.files[0];
+      if (!file) {
+        alert("Please upload payment screenshot.");
+        return;
+      }
+
+      const screenshotBase64 = await fileToBase64(file);
+
+      const payload = {
+        action: "register",
+        teamName: document.getElementById("teamName").value,
+        teamSize: size,
+        fee: fee,
+        leaderName: document.getElementById("leaderName").value,
+        leaderEmail: document.getElementById("leaderEmail").value,
+        leaderPhone: document.getElementById("leaderPhone").value,
+        leaderDept: document.getElementById("leaderDept").value,
+        leaderCollege: document.getElementById("leaderCollege").value,
+        leaderYear: document.getElementById("leaderYear").value,
+        transactionId: document.getElementById("transactionId").value,
+        paymentMethod: document.getElementById("paymentMethod").value,
+        paymentScreenshotName: file.name,
+        paymentScreenshotMimeType: file.type,
+        paymentScreenshotBase64: screenshotBase64,
+        members: members
+      };
+
+      if (GAS_URL === "PASTE_YOUR_WEB_APP_URL_HERE") {
+        showTicket("HV-DEMO-001", payload);
+        window.open(WHATSAPP_GROUP_LINK, "_blank");
+        return;
+      }
+
+      loadingText.style.display = "block";
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        loadingText.style.display = "none";
+
+        if (result.status === "success") {
+          showTicket(result.applicationId, payload);
+          window.open(WHATSAPP_GROUP_LINK, "_blank");
+          form.reset();
+          feeBox.textContent = "Registration Fee: ₹0";
+          membersContainer.innerHTML = "";
+          membersSection.style.display = "none";
+          previewBox.style.display = "none";
+          previewImage.src = "";
+          loadStats();
+        } else {
+          alert("Submission failed: " + result.message);
+        }
+      } catch (error) {
+        loadingText.style.display = "none";
+        alert("Error submitting form. Check your Google Apps Script deployment.");
+        console.error(error);
+      }
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result.split(",")[1];
+          resolve(result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function showTicket(applicationId, payload) {
+      document.getElementById("ticketAppId").textContent = applicationId;
+      document.getElementById("ticketTeamName").textContent = payload.teamName;
+      document.getElementById("ticketTeamSize").textContent = payload.teamSize + " Members";
+      document.getElementById("ticketFee").textContent = "₹" + payload.fee;
+      document.getElementById("ticketLeaderName").textContent = payload.leaderName;
+      document.getElementById("ticketPhone").textContent = payload.leaderPhone;
+      document.getElementById("ticketLeaderCollege").textContent = payload.leaderCollege;
+      document.getElementById("ticketLeaderYear").textContent = payload.leaderYear;
+      document.getElementById("ticketTransactionId").textContent = payload.transactionId;
+      document.getElementById("ticketPaymentMethod").textContent = payload.paymentMethod;
+
+      const list = document.getElementById("ticketMembersList");
+      list.innerHTML = "";
+
+      payload.members.forEach(member => {
+        const li = document.createElement("li");
+        li.textContent = `${member.role}: ${member.name} | ${member.dept} | ${member.phone} | ${member.college} | ${member.year}`;
+        list.appendChild(li);
+      });
+
+      document.getElementById("joinWhatsappBtn").onclick = function () {
+        window.open(WHATSAPP_GROUP_LINK, "_blank");
+      };
+
+      ticketModal.style.display = "flex";
+    }
+
+    function closeTicket() {
+      ticketModal.style.display = "none";
+    }
+
+    window.addEventListener("click", function(e) {
+      if (e.target === ticketModal) closeTicket();
+    });
+
+    loadStats();
+  </script>
+</body>
+</html>
