@@ -328,36 +328,111 @@
       font-size:14px;
     }
 
-    .counter-bar{
+    .timer-bar{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      grid-template-columns:1.2fr 2fr;
       gap:16px;
       margin-bottom:24px;
+      align-items:stretch;
     }
 
-    .counter-card{
+    .timer-title-card,
+    .timer-card{
       background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
       border:1px solid rgba(255,255,255,0.14);
       border-radius:20px;
       padding:18px;
-      text-align:center;
       box-shadow:0 14px 34px rgba(0,0,0,0.18);
-      transition:0.3s ease;
+      position:relative;
+      overflow:hidden;
     }
 
-    .counter-card:hover{
-      transform:translateY(-4px) scale(1.02);
+    .timer-title-card::before,
+    .timer-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform:translateX(-100%);
+      animation:timerShine 4s linear infinite;
+      pointer-events:none;
     }
 
-    .counter-card h3{
+    @keyframes timerShine{
+      0%{transform:translateX(-100%);}
+      100%{transform:translateX(100%);}
+    }
+
+    .timer-title-card{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      animation:heartbeat 1.4s ease-in-out infinite;
+    }
+
+    .timer-title-card h3{
       font-size:28px;
       color:#fde68a;
-      margin-bottom:6px;
+      margin-bottom:8px;
+      font-weight:900;
+      letter-spacing:1px;
     }
 
-    .counter-card p{
-      font-weight:800;
+    .timer-title-card p{
       color:#e2e8f0;
+      font-weight:800;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .timer-card{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      align-items:center;
+    }
+
+    .time-box{
+      text-align:center;
+      padding:16px 10px;
+      border-radius:18px;
+      background:linear-gradient(135deg, rgba(37,99,235,0.18), rgba(124,58,237,0.16));
+      border:1px solid rgba(255,255,255,0.12);
+      animation:heartbeat 1.4s ease-in-out infinite;
+    }
+
+    .time-box:nth-child(2){ animation-delay:0.15s; }
+    .time-box:nth-child(3){ animation-delay:0.3s; }
+    .time-box:nth-child(4){ animation-delay:0.45s; }
+
+    .time-box span{
+      display:block;
+    }
+
+    .time-value{
+      font-size:32px;
+      font-weight:900;
+      color:#ffffff;
+      text-shadow:0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    .time-label{
+      margin-top:6px;
+      font-size:13px;
+      font-weight:800;
+      color:#cbd5e1;
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    @keyframes heartbeat{
+      0%,100%{ transform:scale(1); }
+      14%{ transform:scale(1.04); }
+      28%{ transform:scale(1); }
+      42%{ transform:scale(1.05); }
+      70%{ transform:scale(1); }
     }
 
     .section-card{
@@ -683,128 +758,221 @@
       font-size:15px;
     }
 
-    .ticket-modal{
+    /* Floating Offer Blast Window */
+    .offer-blast{
       position:fixed;
+      right:18px;
+      bottom:18px;
+      width:340px;
+      max-width:calc(100vw - 24px);
+      border-radius:24px;
+      overflow:hidden;
+      z-index:9999;
+      background:linear-gradient(135deg, rgba(239,68,68,0.96), rgba(124,58,237,0.96), rgba(37,99,235,0.96));
+      border:1px solid rgba(255,255,255,0.22);
+      box-shadow:0 24px 60px rgba(0,0,0,0.38);
+      backdrop-filter:blur(16px);
+      animation:offerEntry 1s ease, offerBeat 1.8s infinite;
+      transform-origin:bottom right;
+    }
+
+    .offer-blast::before{
+      content:"";
+      position:absolute;
       inset:0;
-      background:rgba(0,0,0,0.78);
-      backdrop-filter:blur(8px);
-      display:none;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.12), transparent);
+      transform:translateX(-120%);
+      animation:offerShine 4s linear infinite;
+      pointer-events:none;
+    }
+
+    .offer-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 14px;
+      background:rgba(0,0,0,0.15);
+      border-bottom:1px solid rgba(255,255,255,0.14);
+      position:relative;
+      z-index:1;
+    }
+
+    .offer-badge{
+      font-size:14px;
+      font-weight:900;
+      color:#fff7ed;
+      letter-spacing:0.4px;
+      text-transform:uppercase;
+    }
+
+    .offer-actions{
+      display:flex;
+      gap:8px;
+    }
+
+    .offer-mini,
+    .offer-close{
+      width:30px;
+      height:30px;
+      border:none;
+      border-radius:50%;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+      color:#fff;
+      background:rgba(255,255,255,0.16);
+      box-shadow:none;
+      padding:0;
+    }
+
+    .offer-mini:hover,
+    .offer-close:hover{
+      transform:scale(1.08);
+      background:rgba(255,255,255,0.24);
+    }
+
+    .offer-body{
+      position:relative;
+      padding:18px 18px 18px;
+      overflow:hidden;
+    }
+
+    .offer-pulse-ring{
+      position:absolute;
+      width:120px;
+      height:120px;
+      right:-25px;
+      top:18px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%);
+      animation:offerRing 2s infinite;
+      pointer-events:none;
+    }
+
+    .offer-body h3{
+      font-size:22px;
+      line-height:1.35;
+      margin-bottom:10px;
+      color:#fff;
+      font-weight:900;
+      padding-right:52px;
+      text-shadow:0 6px 14px rgba(0,0,0,0.22);
+    }
+
+    .offer-body p{
+      font-size:14px;
+      line-height:1.7;
+      color:#f8fafc;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .offer-highlight{
+      padding:12px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.16);
+      color:#fef3c7;
+      font-size:13px;
+      font-weight:900;
+      line-height:1.6;
+      margin-bottom:14px;
+      animation:offerTextFlash 2s ease-in-out infinite;
+    }
+
+    .offer-cta-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .offer-register-btn{
+      flex:1;
+      min-width:140px;
+      background:linear-gradient(135deg, #facc15, #f97316);
+      color:#fff;
+      padding:13px 16px;
+      border-radius:14px;
+      font-size:15px;
+      font-weight:900;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 14px 28px rgba(0,0,0,0.18);
+      animation:offerBtnPulse 1.5s infinite;
+    }
+
+    .offer-link-btn{
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      z-index:9999;
-      padding:20px;
-    }
-
-    .ticket-card{
-      width:100%;
-      max-width:980px;
-      background:#fff;
-      color:#111827;
-      border-radius:26px;
-      overflow:hidden;
-      box-shadow:0 28px 60px rgba(0,0,0,0.42);
-      animation:zoomIn 0.35s ease;
-    }
-
-    @keyframes zoomIn{
-      from{opacity:0; transform:scale(0.92);}
-      to{opacity:1; transform:scale(1);}
-    }
-
-    .ticket-header{
-      text-align:center;
-      padding:26px 22px;
+      min-width:120px;
+      padding:13px 16px;
+      border-radius:14px;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:900;
       color:#fff;
-      background:linear-gradient(135deg, #7c3aed, #2563eb);
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.16);
     }
 
-    .ticket-header h2{
-      font-size:30px;
-      line-height:1.4;
-      margin-bottom:8px;
+    .offer-register-btn:hover,
+    .offer-link-btn:hover{
+      transform:translateY(-3px) scale(1.02);
     }
 
-    .ticket-body{ padding:24px; }
-
-    .ticket-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:14px;
+    .offer-blast.minimized{
+      width:220px;
+      animation:offerBeat 1.8s infinite;
     }
 
-    .ticket-item{
-      background:#f8fafc;
-      border-left:4px solid #2563eb;
-      padding:14px;
-      border-radius:12px;
+    .offer-blast.minimized .offer-body{
+      display:none;
     }
 
-    .ticket-item strong{
-      display:block;
-      color:#1d4ed8;
-      margin-bottom:6px;
+    .offer-blast.closed{
+      display:none;
     }
 
-    .member-list{
-      margin-top:18px;
-      background:#f8fafc;
-      padding:16px;
-      border-radius:14px;
+    @keyframes offerEntry{
+      0%{opacity:0; transform:translateY(40px) scale(0.85);}
+      100%{opacity:1; transform:translateY(0) scale(1);}
     }
 
-    .member-list h4{
-      color:#1d4ed8;
-      margin-bottom:10px;
-      font-size:18px;
+    @keyframes offerBeat{
+      0%,100%{transform:scale(1);}
+      15%{transform:scale(1.03);}
+      30%{transform:scale(1);}
+      45%{transform:scale(1.04);}
+      70%{transform:scale(1);}
     }
 
-    .member-list ul{
-      padding-left:18px;
+    @keyframes offerBtnPulse{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.04);}
     }
 
-    .member-list li{
-      margin-bottom:10px;
-      line-height:1.7;
+    @keyframes offerRing{
+      0%{transform:scale(0.8); opacity:0.65;}
+      100%{transform:scale(1.5); opacity:0;}
     }
 
-    .ticket-actions{
-      padding:18px 24px 26px;
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:12px;
+    @keyframes offerShine{
+      0%{transform:translateX(-120%);}
+      100%{transform:translateX(120%);}
     }
 
-    .download-btn{ background:linear-gradient(135deg, #16a34a, #15803d); color:#fff; }
-    .whatsapp-btn{ background:linear-gradient(135deg, #22c55e, #16a34a); color:#fff; }
-    .close-btn{ background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; }
-
-    .success-message{
-      margin-top:16px;
-      padding:14px 16px;
-      border-radius:14px;
-      background:#eefcf2;
-      color:#14532d;
-      font-weight:800;
-      text-align:center;
-      border:1px solid #bbf7d0;
-    }
-
-    @media print{
-      body *{visibility:hidden;}
-      #ticketCard, #ticketCard *{visibility:visible;}
-      #ticketCard{
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        box-shadow:none;
-      }
-      .ticket-actions,.close-btn,.success-message{display:none !important;}
+    @keyframes offerTextFlash{
+      0%,100%{box-shadow:0 0 0 rgba(255,255,255,0);}
+      50%{box-shadow:0 0 16px rgba(255,255,255,0.12);}
     }
 
     @media (max-width: 900px){
       .payment-wrap{
+        grid-template-columns:1fr;
+      }
+
+      .timer-bar{
         grid-template-columns:1fr;
       }
     }
@@ -823,6 +991,28 @@
       .form-main-title h2{ font-size:24px; }
       .payment-card{ min-height:auto; }
       .member-card{ padding:16px 16px 4px; }
+
+      .timer-card{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .time-value{
+        font-size:26px;
+      }
+
+      .offer-blast{
+        right:12px;
+        bottom:12px;
+        width:300px;
+      }
+
+      .offer-body h3{
+        font-size:19px;
+      }
+
+      .offer-body p{
+        font-size:13px;
+      }
     }
   </style>
 </head>
@@ -872,14 +1062,29 @@
         <p>All team member details are aligned in the same order as team leader details.</p>
       </div>
 
-      <div class="counter-bar">
-        <div class="counter-card">
-          <h3 id="teamsCount">0</h3>
-          <p>Registered Teams</p>
+      <div class="timer-bar">
+        <div class="timer-title-card">
+          <h3>Registration Timer</h3>
+          <p>Hurry up and complete your Hackverse 1.O registration before the countdown ends.</p>
         </div>
-        <div class="counter-card">
-          <h3 id="participantsCount">0</h3>
-          <p>Total Participants</p>
+
+        <div class="timer-card">
+          <div class="time-box">
+            <span class="time-value" id="days">00</span>
+            <span class="time-label">Days</span>
+          </div>
+          <div class="time-box">
+            <span class="time-value" id="hours">00</span>
+            <span class="time-label">Hours</span>
+          </div>
+          <div class="time-box">
+            <span class="time-value" id="minutes">00</span>
+            <span class="time-label">Minutes</span>
+          </div>
+          <div class="time-box">
+            <span class="time-value" id="seconds">00</span>
+            <span class="time-label">Seconds</span>
+          </div>
         </div>
       </div>
 
@@ -1023,43 +1228,30 @@
     </div>
   </div>
 
-  <div class="ticket-modal" id="ticketModal">
-    <div class="ticket-card" id="ticketCard">
-      <div class="ticket-header">
-        <h2>Hackverse 1.O</h2>
-        <p>Hackathon Registration Ticket</p>
+  <!-- Floating Offer Blast Window -->
+  <div class="offer-blast" id="offerBlast">
+    <div class="offer-head">
+      <div class="offer-badge">🔥 Hot Offer</div>
+      <div class="offer-actions">
+        <button type="button" class="offer-mini" id="offerMiniBtn">—</button>
+        <button type="button" class="offer-close" id="offerCloseBtn">×</button>
+      </div>
+    </div>
+
+    <div class="offer-body" id="offerBody">
+      <div class="offer-pulse-ring"></div>
+      <h3 id="offerTitle">🚀 Hurry Up! Limited Registration Slots</h3>
+      <p id="offerMessage">
+        Register your team now and secure your chance to participate in Hackverse 1.O before slots fill fast.
+      </p>
+
+      <div class="offer-highlight" id="offerHighlight">
+        Early teams get better visibility and faster confirmation.
       </div>
 
-      <div class="ticket-body">
-        <div class="ticket-grid">
-          <div class="ticket-item"><strong>Application ID</strong><span id="ticketAppId"></span></div>
-          <div class="ticket-item"><strong>Team Name</strong><span id="ticketTeamName"></span></div>
-          <div class="ticket-item"><strong>Team Size</strong><span id="ticketTeamSize"></span></div>
-          <div class="ticket-item"><strong>Registration Fee</strong><span id="ticketFee"></span></div>
-          <div class="ticket-item"><strong>Leader Name</strong><span id="ticketLeaderName"></span></div>
-          <div class="ticket-item"><strong>Leader Email</strong><span id="ticketLeaderEmail"></span></div>
-          <div class="ticket-item"><strong>Leader Phone</strong><span id="ticketPhone"></span></div>
-          <div class="ticket-item"><strong>Leader Department</strong><span id="ticketLeaderDept"></span></div>
-          <div class="ticket-item"><strong>Leader College</strong><span id="ticketLeaderCollege"></span></div>
-          <div class="ticket-item"><strong>Leader Year</strong><span id="ticketLeaderYear"></span></div>
-          <div class="ticket-item"><strong>Transaction ID</strong><span id="ticketTransactionId"></span></div>
-          <div class="ticket-item"><strong>Payment Method</strong><span id="ticketPaymentMethod"></span></div>
-        </div>
-
-        <div class="member-list">
-          <h4>Team Members</h4>
-          <ul id="ticketMembersList"></ul>
-        </div>
-
-        <div class="success-message">
-          Registration submitted successfully. Use the buttons below to download your ticket and join the WhatsApp group.
-        </div>
-      </div>
-
-      <div class="ticket-actions">
-        <button type="button" class="download-btn" id="downloadTicketBtn">Download Ticket</button>
-        <button type="button" class="whatsapp-btn" id="joinWhatsappBtn">Join WhatsApp Group</button>
-        <button type="button" class="close-btn" onclick="closeTicket()">Close</button>
+      <div class="offer-cta-row">
+        <button type="button" class="offer-register-btn" id="offerRegisterBtn">Register Now</button>
+        <a href="#registrationForm" class="offer-link-btn">Open Form</a>
       </div>
     </div>
   </div>
@@ -1074,12 +1266,9 @@
     const membersSection = document.getElementById("membersSection");
     const form = document.getElementById("registrationForm");
     const loadingText = document.getElementById("loadingText");
-    const ticketModal = document.getElementById("ticketModal");
     const paymentScreenshot = document.getElementById("paymentScreenshot");
     const previewBox = document.getElementById("previewBox");
     const previewImage = document.getElementById("previewImage");
-    const downloadTicketBtn = document.getElementById("downloadTicketBtn");
-    const joinWhatsappBtn = document.getElementById("joinWhatsappBtn");
 
     let latestTicketUrl = "";
 
@@ -1156,17 +1345,34 @@
       }
     }
 
-    async function loadStats() {
-      try {
-        const res = await fetch(GAS_URL + "?action=stats");
-        const data = await res.json();
-        if (data.status === "success") {
-          document.getElementById("teamsCount").textContent = data.teams;
-          document.getElementById("participantsCount").textContent = data.participants;
+    function startCountdown() {
+      const targetDate = new Date("2026-04-01T00:00:00");
+
+      function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+          document.getElementById("days").textContent = "00";
+          document.getElementById("hours").textContent = "00";
+          document.getElementById("minutes").textContent = "00";
+          document.getElementById("seconds").textContent = "00";
+          return;
         }
-      } catch (e) {
-        console.log("Stats not loaded");
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("days").textContent = String(days).padStart(2, "0");
+        document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+        document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
       }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
     }
 
     paymentScreenshot.addEventListener("change", function () {
@@ -1206,7 +1412,6 @@
       const size = teamSize.value;
       const fee = getFee(size);
       const extraMembers = parseInt(size) - 1;
-
       const members = [];
 
       members.push({
@@ -1272,7 +1477,7 @@
 
         if (result.status === "success") {
           latestTicketUrl = result.ticketUrl || "";
-          showTicket(result.applicationId, payload);
+          openSuccessWindow(result.applicationId, payload);
 
           form.reset();
           feeBox.textContent = "Registration Fee: ₹0";
@@ -1280,7 +1485,6 @@
           membersSection.style.display = "none";
           previewBox.style.display = "none";
           previewImage.src = "";
-          loadStats();
         } else {
           alert(result.message || "Submission failed.");
         }
@@ -1303,53 +1507,258 @@
       });
     }
 
-    function showTicket(applicationId, payload) {
-      document.getElementById("ticketAppId").textContent = applicationId;
-      document.getElementById("ticketTeamName").textContent = payload.teamName;
-      document.getElementById("ticketTeamSize").textContent = payload.teamSize + " Members";
-      document.getElementById("ticketFee").textContent = "₹" + payload.fee;
-      document.getElementById("ticketLeaderName").textContent = payload.leaderName;
-      document.getElementById("ticketLeaderEmail").textContent = payload.leaderEmail;
-      document.getElementById("ticketPhone").textContent = payload.leaderPhone;
-      document.getElementById("ticketLeaderDept").textContent = payload.leaderDept;
-      document.getElementById("ticketLeaderCollege").textContent = payload.leaderCollege;
-      document.getElementById("ticketLeaderYear").textContent = payload.leaderYear;
-      document.getElementById("ticketTransactionId").textContent = payload.transactionId;
-      document.getElementById("ticketPaymentMethod").textContent = payload.paymentMethod;
+    function openSuccessWindow(applicationId, payload) {
+      const successWindow = window.open("", "_blank", "width=900,height=750");
 
-      const list = document.getElementById("ticketMembersList");
-      list.innerHTML = "";
+      if (!successWindow) {
+        alert("Popup blocked. Please allow popups for this site.");
+        return;
+      }
 
-      payload.members.forEach(member => {
-        const li = document.createElement("li");
-        li.textContent = `${member.role}: ${member.name} | ${member.email} | ${member.phone} | ${member.dept} | ${member.college} | ${member.year}`;
-        list.appendChild(li);
-      });
+      const memberItems = payload.members.map(member => `
+        <li><strong>${member.role}:</strong> ${member.name} | ${member.email} | ${member.phone} | ${member.dept} | ${member.college} | ${member.year}</li>
+      `).join("");
 
-      downloadTicketBtn.onclick = function () {
-        if (latestTicketUrl) {
-          window.open(latestTicketUrl, "_blank");
-        } else {
-          window.print();
-        }
-      };
+      const downloadAction = latestTicketUrl
+        ? `window.open('${latestTicketUrl}', '_blank')`
+        : `window.print()`;
 
-      joinWhatsappBtn.onclick = function () {
-        window.open(WHATSAPP_GROUP_LINK, "_blank");
-      };
+      successWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Registration Success</title>
+          <style>
+            *{
+              box-sizing:border-box;
+              font-family:"Segoe UI", Arial, sans-serif;
+            }
+            body{
+              margin:0;
+              padding:24px;
+              background:linear-gradient(135deg, #070b1a, #111c3d, #3d0a62);
+              color:#fff;
+            }
+            .wrap{
+              max-width:900px;
+              margin:auto;
+              background:rgba(255,255,255,0.08);
+              border:1px solid rgba(255,255,255,0.14);
+              border-radius:26px;
+              overflow:hidden;
+              box-shadow:0 20px 50px rgba(0,0,0,0.35);
+              backdrop-filter:blur(12px);
+            }
+            .head{
+              text-align:center;
+              padding:24px;
+              background:linear-gradient(135deg, #7c3aed, #2563eb);
+            }
+            .head h2{
+              margin:0 0 8px;
+              font-size:32px;
+            }
+            .head p{
+              margin:0;
+              font-size:16px;
+              color:#e0e7ff;
+              font-weight:700;
+            }
+            .body{
+              padding:24px;
+            }
+            .success-box{
+              background:rgba(34,197,94,0.14);
+              border:1px solid rgba(134,239,172,0.35);
+              color:#dcfce7;
+              padding:16px;
+              border-radius:16px;
+              font-weight:800;
+              text-align:center;
+              margin-bottom:20px;
+            }
+            .grid{
+              display:grid;
+              grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+              gap:14px;
+            }
+            .item{
+              background:rgba(255,255,255,0.08);
+              border-left:4px solid #60a5fa;
+              padding:14px;
+              border-radius:14px;
+            }
+            .item strong{
+              display:block;
+              margin-bottom:6px;
+              color:#fde68a;
+            }
+            .member-list{
+              margin-top:20px;
+              background:rgba(255,255,255,0.08);
+              padding:18px;
+              border-radius:16px;
+            }
+            .member-list h3{
+              margin-top:0;
+              color:#bfdbfe;
+            }
+            .member-list ul{
+              padding-left:20px;
+              margin-bottom:0;
+            }
+            .member-list li{
+              margin-bottom:10px;
+              line-height:1.7;
+            }
+            .action-row{
+              display:flex;
+              flex-wrap:wrap;
+              gap:14px;
+              justify-content:center;
+              margin-top:24px;
+            }
+            .btn{
+              border:none;
+              padding:15px 24px;
+              border-radius:16px;
+              color:#fff;
+              font-size:16px;
+              font-weight:900;
+              cursor:pointer;
+              box-shadow:0 12px 24px rgba(0,0,0,0.18);
+            }
+            .download-btn{
+              background:linear-gradient(135deg, #16a34a, #15803d);
+            }
+            .whatsapp-btn{
+              background:linear-gradient(135deg, #22c55e, #16a34a);
+            }
+            .close-btn{
+              background:linear-gradient(135deg, #ef4444, #dc2626);
+            }
+          </style>
+        </head>
+        <body>
+          <div class="wrap">
+            <div class="head">
+              <h2>Hackverse 1.O</h2>
+              <p>Hackathon Registration Ticket</p>
+            </div>
 
-      ticketModal.style.display = "flex";
+            <div class="body">
+              <div class="success-box">
+                Registration submitted successfully. Use the buttons below to download your ticket and join the WhatsApp group.
+              </div>
+
+              <div class="grid">
+                <div class="item"><strong>Application ID</strong>${applicationId}</div>
+                <div class="item"><strong>Team Name</strong>${payload.teamName}</div>
+                <div class="item"><strong>Team Size</strong>${payload.teamSize} Members</div>
+                <div class="item"><strong>Registration Fee</strong>₹${payload.fee}</div>
+                <div class="item"><strong>Leader Name</strong>${payload.leaderName}</div>
+                <div class="item"><strong>Leader Email</strong>${payload.leaderEmail}</div>
+                <div class="item"><strong>Leader Phone</strong>${payload.leaderPhone}</div>
+                <div class="item"><strong>Leader Department</strong>${payload.leaderDept}</div>
+                <div class="item"><strong>Leader College</strong>${payload.leaderCollege}</div>
+                <div class="item"><strong>Leader Year</strong>${payload.leaderYear}</div>
+                <div class="item"><strong>Transaction ID</strong>${payload.transactionId}</div>
+                <div class="item"><strong>Payment Method</strong>${payload.paymentMethod}</div>
+              </div>
+
+              <div class="member-list">
+                <h3>Team Members</h3>
+                <ul>${memberItems}</ul>
+              </div>
+
+              <div class="action-row">
+                <button class="btn download-btn" onclick="${downloadAction}">Download Ticket</button>
+                <button class="btn whatsapp-btn" onclick="window.open('${WHATSAPP_GROUP_LINK}','_blank')">Join WhatsApp Group</button>
+                <button class="btn close-btn" onclick="window.close()">Close Window</button>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `);
+
+      successWindow.document.close();
     }
 
-    function closeTicket() {
-      ticketModal.style.display = "none";
+    const offerBlast = document.getElementById("offerBlast");
+    const offerMiniBtn = document.getElementById("offerMiniBtn");
+    const offerCloseBtn = document.getElementById("offerCloseBtn");
+    const offerRegisterBtn = document.getElementById("offerRegisterBtn");
+    const offerTitle = document.getElementById("offerTitle");
+    const offerMessage = document.getElementById("offerMessage");
+    const offerHighlight = document.getElementById("offerHighlight");
+
+    const offerSlides = [
+      {
+        title: "🚀 Hurry Up! Limited Registration Slots",
+        message: "Register your team now and secure your chance to participate in Hackverse 1.O before slots fill fast.",
+        highlight: "Early teams get better visibility and faster confirmation."
+      },
+      {
+        title: "⚡ 24 Hours to Build. One Chance to Shine.",
+        message: "Bring your idea, build with AI tools, and present your innovation on a real hackathon stage.",
+        highlight: "Your next big opportunity may start from this registration."
+      },
+      {
+        title: "🏆 Don’t Miss the Competition Energy",
+        message: "Join teams from different colleges, compete, collaborate, and make your project stand out.",
+        highlight: "More teams are registering now. Reserve your slot today."
+      },
+      {
+        title: "🔥 Register Today. Get Ready to Lead Tomorrow.",
+        message: "A strong team, a strong idea, and one bold registration can take you to the next level.",
+        highlight: "Complete your registration before the final rush begins."
+      }
+    ];
+
+    let offerIndex = 0;
+
+    function rotateOfferSlide() {
+      offerIndex = (offerIndex + 1) % offerSlides.length;
+      offerBlast.style.transform = "scale(0.96)";
+      setTimeout(() => {
+        offerTitle.textContent = offerSlides[offerIndex].title;
+        offerMessage.textContent = offerSlides[offerIndex].message;
+        offerHighlight.textContent = offerSlides[offerIndex].highlight;
+        offerBlast.style.transform = "";
+      }, 180);
     }
 
-    window.addEventListener("click", function(e) {
-      if (e.target === ticketModal) closeTicket();
+    setInterval(rotateOfferSlide, 5000);
+
+    offerMiniBtn.addEventListener("click", () => {
+      offerBlast.classList.toggle("minimized");
+      offerMiniBtn.textContent = offerBlast.classList.contains("minimized") ? "+" : "—";
     });
 
-    loadStats();
+    offerCloseBtn.addEventListener("click", () => {
+      offerBlast.classList.add("closed");
+    });
+
+    offerRegisterBtn.addEventListener("click", () => {
+      const regForm = document.getElementById("registrationForm");
+      if (regForm) {
+        regForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+
+    setInterval(() => {
+      if (!offerBlast.classList.contains("closed")) {
+        offerBlast.style.boxShadow = "0 28px 70px rgba(245,158,11,0.35)";
+        setTimeout(() => {
+          offerBlast.style.boxShadow = "0 24px 60px rgba(0,0,0,0.38)";
+        }, 800);
+      }
+    }, 4500);
+
+    startCountdown();
   </script>
 </body>
 </html>
