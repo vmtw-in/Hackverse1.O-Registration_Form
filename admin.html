@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hackverse Premium Admin Dashboard</title>
+  <title>Hackverse Admin Dashboard</title>
   <style>
     *{
       margin:0;
@@ -13,103 +13,95 @@
     }
 
     :root{
-      --bg1:#070b1a;
-      --bg2:#111c3d;
-      --bg3:#3d0a62;
+      --bg1:#050816;
+      --bg2:#0d1631;
+      --bg3:#2f0f56;
       --primary:#2563eb;
       --secondary:#7c3aed;
       --accent:#f59e0b;
-      --success:#16a34a;
-      --danger:#dc2626;
-      --cyan:#06b6d4;
+      --success:#10b981;
+      --danger:#ef4444;
+      --cyan:#22d3ee;
       --pink:#ec4899;
+      --white:#ffffff;
+      --text:#f8fafc;
+      --muted:#cbd5e1;
       --glass:rgba(255,255,255,0.08);
       --glass2:rgba(255,255,255,0.12);
-      --border:rgba(255,255,255,0.16);
-      --shadow:0 20px 50px rgba(0,0,0,0.35);
-      --text:#ffffff;
-      --muted:#dbeafe;
+      --border:rgba(255,255,255,0.14);
+      --shadow:0 20px 60px rgba(0,0,0,0.35);
+      --shadow2:0 12px 32px rgba(0,0,0,0.22);
     }
 
     body{
       min-height:100vh;
-      color:var(--text);
       background:
-        radial-gradient(circle at 8% 18%, rgba(37,99,235,0.22), transparent 18%),
-        radial-gradient(circle at 88% 15%, rgba(124,58,237,0.22), transparent 20%),
-        radial-gradient(circle at 50% 85%, rgba(245,158,11,0.14), transparent 18%),
+        radial-gradient(circle at 10% 15%, rgba(37,99,235,0.18), transparent 18%),
+        radial-gradient(circle at 85% 12%, rgba(124,58,237,0.20), transparent 20%),
+        radial-gradient(circle at 50% 85%, rgba(245,158,11,0.12), transparent 20%),
         linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-      padding:22px;
+      color:var(--text);
       overflow-x:hidden;
+      padding:22px;
       position:relative;
     }
 
     .bg-orb{
       position:fixed;
       border-radius:50%;
-      filter:blur(8px);
-      opacity:0.36;
-      pointer-events:none;
+      filter:blur(14px);
+      opacity:0.35;
       z-index:0;
-      animation-timing-function:ease-in-out;
-      animation-iteration-count:infinite;
+      pointer-events:none;
+      animation:floatOrb 10s ease-in-out infinite;
     }
 
     .orb1{
-      width:200px;
-      height:200px;
+      width:220px;
+      height:220px;
       background:linear-gradient(135deg,#2563eb,#60a5fa);
-      top:70px;
-      left:35px;
-      animation:floatOrb1 8s infinite;
+      top:60px;
+      left:30px;
     }
 
     .orb2{
-      width:230px;
-      height:230px;
+      width:260px;
+      height:260px;
       background:linear-gradient(135deg,#7c3aed,#c084fc);
-      top:220px;
       right:40px;
-      animation:floatOrb2 10s infinite;
+      top:180px;
+      animation-delay:1s;
     }
 
     .orb3{
-      width:160px;
-      height:160px;
-      background:linear-gradient(135deg,#f59e0b,#fcd34d);
-      bottom:35px;
+      width:180px;
+      height:180px;
+      background:linear-gradient(135deg,#f59e0b,#fde047);
       left:18%;
-      animation:floatOrb3 9s infinite;
+      bottom:30px;
+      animation-delay:2s;
     }
 
-    @keyframes floatOrb1{
+    @keyframes floatOrb{
       0%,100%{transform:translateY(0) translateX(0) scale(1);}
       50%{transform:translateY(-18px) translateX(12px) scale(1.06);}
     }
-    @keyframes floatOrb2{
-      0%,100%{transform:translateY(0) translateX(0) scale(1);}
-      50%{transform:translateY(18px) translateX(-16px) scale(1.08);}
-    }
-    @keyframes floatOrb3{
-      0%,100%{transform:translateY(0) scale(1);}
-      50%{transform:translateY(-14px) scale(1.07);}
-    }
 
     .page-wrap{
-      max-width:1700px;
+      max-width:1500px;
       margin:auto;
       position:relative;
       z-index:1;
     }
 
-    .panel{
+    .main-shell{
       background:rgba(255,255,255,0.06);
       border:1px solid var(--border);
       backdrop-filter:blur(18px);
-      border-radius:30px;
+      border-radius:28px;
       overflow:hidden;
       box-shadow:var(--shadow);
-      animation:mainFloat 6s ease-in-out infinite;
+      animation:mainFloat 7s ease-in-out infinite;
     }
 
     @keyframes mainFloat{
@@ -119,43 +111,39 @@
 
     .header{
       position:relative;
-      padding:30px 24px;
+      padding:28px 24px;
       text-align:center;
-      background:linear-gradient(135deg, rgba(124,58,237,0.94), rgba(37,99,235,0.92));
+      background:linear-gradient(135deg, rgba(124,58,237,0.95), rgba(37,99,235,0.92));
       overflow:hidden;
     }
 
-    .header::before{
-      content:"";
-      position:absolute;
-      width:240px;
-      height:240px;
-      top:-80px;
-      left:-70px;
-      border-radius:50%;
-      background:rgba(255,255,255,0.10);
-      animation:headerPulse1 8s ease-in-out infinite;
-    }
-
+    .header::before,
     .header::after{
       content:"";
       position:absolute;
-      width:280px;
-      height:280px;
-      right:-80px;
-      bottom:-120px;
       border-radius:50%;
-      background:rgba(255,255,255,0.08);
-      animation:headerPulse2 10s ease-in-out infinite;
+      background:rgba(255,255,255,0.09);
+      animation:pulseBubble 10s ease-in-out infinite;
     }
 
-    @keyframes headerPulse1{
+    .header::before{
+      width:240px;
+      height:240px;
+      left:-70px;
+      top:-90px;
+    }
+
+    .header::after{
+      width:280px;
+      height:280px;
+      right:-90px;
+      bottom:-130px;
+      animation-delay:1.5s;
+    }
+
+    @keyframes pulseBubble{
       0%,100%{transform:scale(1);}
       50%{transform:scale(1.08);}
-    }
-    @keyframes headerPulse2{
-      0%,100%{transform:scale(1);}
-      50%{transform:scale(1.06);}
     }
 
     .header h1,
@@ -167,49 +155,50 @@
     .header h1{
       font-size:38px;
       font-weight:900;
+      letter-spacing:0.4px;
       margin-bottom:8px;
-      text-shadow:0 6px 18px rgba(0,0,0,0.24);
+      text-shadow:0 8px 20px rgba(0,0,0,0.24);
     }
 
     .header p{
-      font-size:16px;
+      font-size:15px;
       font-weight:700;
-      color:#f8fafc;
+      color:#eef2ff;
     }
 
     .content{
-      padding:28px;
+      padding:26px;
     }
 
     .login-box{
       max-width:500px;
-      margin:0 auto;
-      background:linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.05));
+      margin:10px auto;
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
       border:1px solid rgba(255,255,255,0.14);
       border-radius:26px;
-      padding:26px;
-      box-shadow:0 16px 36px rgba(0,0,0,0.22);
+      padding:28px;
+      box-shadow:var(--shadow2);
       transform-style:preserve-3d;
-      animation:loginFloat 5s ease-in-out infinite;
+      animation:loginFloat 6s ease-in-out infinite;
     }
 
     @keyframes loginFloat{
       0%,100%{transform:translateY(0) rotateX(0deg);}
-      50%{transform:translateY(-4px) rotateX(1deg);}
+      50%{transform:translateY(-5px) rotateX(1deg);}
     }
 
     .login-box h2{
       text-align:center;
-      margin-bottom:18px;
       font-size:30px;
-      color:#fde68a;
       font-weight:900;
+      color:#fde68a;
+      margin-bottom:20px;
     }
 
     .input-group{
+      margin-bottom:16px;
       display:flex;
       flex-direction:column;
-      margin-bottom:16px;
     }
 
     .input-group label{
@@ -220,13 +209,13 @@
 
     .input-group input{
       padding:14px 15px;
-      border-radius:15px;
+      border-radius:14px;
       border:1px solid rgba(255,255,255,0.18);
       outline:none;
       background:linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
       color:#fff;
       font-size:15px;
-      transition:0.28s ease;
+      transition:0.25s ease;
     }
 
     .input-group input::placeholder{
@@ -234,25 +223,25 @@
     }
 
     .input-group input:focus{
-      box-shadow:0 0 0 4px rgba(147,197,253,0.15);
       border-color:#93c5fd;
+      box-shadow:0 0 0 4px rgba(147,197,253,0.16);
       transform:translateY(-2px);
     }
 
     .btn{
       border:none;
-      border-radius:15px;
-      padding:14px 20px;
-      font-size:15px;
+      border-radius:14px;
+      padding:13px 18px;
+      color:#fff;
+      font-size:14px;
       font-weight:900;
       cursor:pointer;
       transition:0.25s ease;
-      color:#fff;
-      box-shadow:0 12px 24px rgba(0,0,0,0.18);
+      box-shadow:0 10px 24px rgba(0,0,0,0.18);
     }
 
     .btn:hover{
-      transform:translateY(-2px) scale(1.01);
+      transform:translateY(-2px) scale(1.02);
     }
 
     .login-btn{
@@ -262,11 +251,11 @@
     }
 
     .login-msg{
+      min-height:20px;
       margin-top:12px;
       text-align:center;
       font-weight:800;
       color:#fde68a;
-      min-height:20px;
     }
 
     .dashboard{
@@ -275,17 +264,16 @@
 
     .top-bar{
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      gap:16px;
+      justify-content:space-between;
+      gap:14px;
       flex-wrap:wrap;
-      margin-bottom:22px;
+      margin-bottom:20px;
     }
 
     .top-bar h2{
       font-size:30px;
       font-weight:900;
-      color:#fff;
     }
 
     .actions{
@@ -295,37 +283,36 @@
     }
 
     .refresh-btn{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
-    .export-btn{background:linear-gradient(135deg,#16a34a,#15803d);}
+    .export-btn{background:linear-gradient(135deg,#10b981,#059669);}
     .logout-btn{background:linear-gradient(135deg,#ef4444,#dc2626);}
-    .preview-open{background:linear-gradient(135deg,#16a34a,#15803d);}
-    .preview-close{background:linear-gradient(135deg,#ef4444,#dc2626);}
 
     .stats-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
       gap:16px;
-      margin-bottom:22px;
+      margin-bottom:20px;
     }
 
     .stat-card{
       position:relative;
+      overflow:hidden;
       background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
       border:1px solid rgba(255,255,255,0.14);
       border-radius:22px;
       padding:22px;
       text-align:center;
-      box-shadow:0 14px 34px rgba(0,0,0,0.18);
-      transition:0.25s ease;
-      overflow:hidden;
+      box-shadow:var(--shadow2);
+      transition:0.28s ease;
+      transform-style:preserve-3d;
     }
 
     .stat-card::before{
       content:"";
       position:absolute;
       inset:0;
-      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.10) 40%, transparent 80%);
+      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.10) 45%, transparent 85%);
       transform:translateX(-120%);
-      transition:transform 0.8s ease;
+      transition:0.9s ease;
     }
 
     .stat-card:hover::before{
@@ -333,7 +320,7 @@
     }
 
     .stat-card:hover{
-      transform:translateY(-4px);
+      transform:translateY(-5px) rotateX(4deg);
     }
 
     .stat-card h3{
@@ -350,7 +337,7 @@
 
     .toolbar{
       display:grid;
-      grid-template-columns: 1fr 260px;
+      grid-template-columns:1fr 240px;
       gap:14px;
       margin-bottom:18px;
     }
@@ -358,7 +345,7 @@
     .toolbar input,
     .toolbar select{
       padding:14px 15px;
-      border-radius:15px;
+      border-radius:14px;
       border:1px solid rgba(255,255,255,0.18);
       outline:none;
       background:linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
@@ -379,83 +366,92 @@
       border:1px solid rgba(255,255,255,0.12);
       border-radius:24px;
       padding:16px;
-      box-shadow:0 14px 34px rgba(0,0,0,0.18);
+      box-shadow:var(--shadow2);
     }
 
     .table-wrap{
-      width:100%;
-      overflow:auto;
       border-radius:18px;
-      border:1px solid rgba(255,255,255,0.12);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
       background:rgba(255,255,255,0.04);
     }
 
     table{
       width:100%;
-      min-width:2600px;
       border-collapse:collapse;
+      min-width:100%;
     }
 
     th, td{
-      padding:12px 10px;
+      padding:16px 14px;
       border-bottom:1px solid rgba(255,255,255,0.08);
       text-align:left;
-      vertical-align:top;
-      font-size:13px;
+      font-size:14px;
     }
 
     th{
-      position:sticky;
-      top:0;
-      background:#2563eb;
+      background:#1d4ed8;
       color:#fff;
       font-weight:900;
-      z-index:2;
-      white-space:nowrap;
+      letter-spacing:0.3px;
     }
 
     td{
       color:#e5e7eb;
-      line-height:1.55;
-      white-space:pre-wrap;
-      word-break:break-word;
     }
 
-    tr:hover td{
-      background:rgba(255,255,255,0.04);
+    tr{
+      transition:0.25s ease;
     }
 
-    .members-box{
-      min-width:360px;
-      max-width:520px;
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.08);
-      border-radius:12px;
-      padding:12px;
-      line-height:1.75;
-      color:#f8fafc;
-      font-weight:700;
+    tr:hover{
+      background:rgba(255,255,255,0.05);
+      transform:scale(1.002);
     }
 
-    .members-box .sep{
-      display:block;
-      border-top:1px dashed rgba(255,255,255,0.18);
-      margin:10px 0;
-    }
-
-    .member-role{
-      color:#fde68a;
+    .serial-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:38px;
+      height:38px;
+      padding:0 12px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      color:#fff;
       font-weight:900;
-      margin-bottom:6px;
-      display:block;
+      box-shadow:0 10px 20px rgba(37,99,235,0.25);
     }
 
-    .screenshot-link{
-      color:#86efac;
-      font-weight:800;
-      text-decoration:underline;
+    .team-link{
+      display:inline-block;
+      color:#93c5fd;
+      font-weight:900;
       cursor:pointer;
-      word-break:break-word;
+      text-decoration:none;
+      position:relative;
+      transition:0.25s ease;
+    }
+
+    .team-link::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-4px;
+      width:0;
+      height:2px;
+      background:linear-gradient(135deg,#22d3ee,#f472b6);
+      transition:0.25s ease;
+    }
+
+    .team-link:hover{
+      color:#ffffff;
+      transform:translateX(4px);
+      text-shadow:0 0 12px rgba(147,197,253,0.35);
+    }
+
+    .team-link:hover::after{
+      width:100%;
     }
 
     .empty-state{
@@ -465,59 +461,242 @@
       font-weight:800;
     }
 
-    .preview-modal{
+    .drawer-overlay{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,0.84);
-      backdrop-filter:blur(6px);
-      display:none;
-      align-items:center;
-      justify-content:center;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter:blur(4px);
+      opacity:0;
+      pointer-events:none;
+      transition:0.3s ease;
+      z-index:9998;
+    }
+
+    .drawer-overlay.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .side-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:470px;
+      max-width:100%;
+      height:100vh;
+      background:
+        linear-gradient(180deg, rgba(11,18,40,0.96), rgba(32,12,58,0.98));
+      border-left:1px solid rgba(255,255,255,0.14);
+      box-shadow:-18px 0 40px rgba(0,0,0,0.35);
+      backdrop-filter:blur(20px);
+      transform:translateX(100%);
+      transition:transform 0.35s ease;
       z-index:9999;
-      padding:20px;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
     }
 
-    .preview-content{
+    .side-drawer.open{
+      transform:translateX(0);
+    }
+
+    .drawer-head{
+      padding:22px 20px 16px;
+      background:linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
       position:relative;
-      max-width:980px;
-      width:100%;
-      background:#fff;
-      border-radius:24px;
-      padding:18px;
-      box-shadow:0 20px 50px rgba(0,0,0,0.40);
-      animation:popupZoom 0.25s ease;
+      overflow:hidden;
     }
 
-    @keyframes popupZoom{
-      from{opacity:0; transform:scale(0.94);}
-      to{opacity:1; transform:scale(1);}
+    .drawer-head::before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.10);
+      top:-60px;
+      right:-40px;
+      animation:pulseBubble 8s ease-in-out infinite;
     }
 
-    .preview-actions{
+    .drawer-head-top{
+      position:relative;
+      z-index:1;
       display:flex;
       justify-content:space-between;
-      align-items:center;
-      gap:12px;
+      align-items:flex-start;
+      gap:14px;
+    }
+
+    .drawer-title h3{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .drawer-title p{
+      font-size:13px;
+      color:#eef2ff;
+      font-weight:700;
+    }
+
+    .close-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:12px;
+      background:rgba(255,255,255,0.18);
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      cursor:pointer;
+      transition:0.25s ease;
+    }
+
+    .close-btn:hover{
+      transform:rotate(90deg) scale(1.04);
+      background:rgba(255,255,255,0.24);
+    }
+
+    .drawer-body{
+      flex:1;
+      overflow-y:auto;
+      padding:18px;
+    }
+
+    .app-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:14px;
+      box-shadow:var(--shadow2);
+      transition:0.28s ease;
+      transform-style:preserve-3d;
+      animation:cardRise 0.45s ease both;
+    }
+
+    .app-card:hover{
+      transform:translateY(-4px) rotateX(4deg);
+    }
+
+    @keyframes cardRise{
+      from{opacity:0; transform:translateY(18px) scale(0.97);}
+      to{opacity:1; transform:translateY(0) scale(1);}
+    }
+
+    .app-card h4{
+      font-size:15px;
+      color:#fde68a;
       margin-bottom:12px;
-      flex-wrap:wrap;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
     }
 
-    .preview-actions h3{
-      color:#111827;
-      font-size:20px;
+    .detail-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
     }
 
-    .preview-image{
-      width:100%;
-      max-height:72vh;
-      object-fit:contain;
+    .detail-row{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.06);
       border-radius:14px;
-      background:#f8fafc;
+      padding:12px 14px;
+      transition:0.25s ease;
+    }
+
+    .detail-row:hover{
+      background:rgba(255,255,255,0.08);
+      transform:translateX(4px);
+    }
+
+    .detail-label{
+      display:block;
+      font-size:12px;
+      color:#93c5fd;
+      font-weight:900;
+      margin-bottom:4px;
+      text-transform:uppercase;
+      letter-spacing:0.3px;
+    }
+
+    .detail-value{
+      font-size:14px;
+      color:#f8fafc;
+      font-weight:700;
+      line-height:1.6;
+      word-break:break-word;
+      white-space:pre-wrap;
+    }
+
+    .screenshot-preview{
+      width:100%;
+      border-radius:16px;
+      overflow:hidden;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .screenshot-preview img{
+      width:100%;
+      display:block;
+      max-height:250px;
+      object-fit:cover;
+      transition:0.35s ease;
+    }
+
+    .screenshot-preview:hover img{
+      transform:scale(1.03);
+    }
+
+    .shot-btn{
+      margin-top:12px;
+      width:100%;
+      background:linear-gradient(135deg,#10b981,#059669);
+    }
+
+    .members-wrap{
+      display:grid;
+      gap:10px;
+    }
+
+    .member-box{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+
+    .member-role{
+      display:inline-block;
+      margin-bottom:8px;
+      font-size:12px;
+      font-weight:900;
+      color:#111827;
+      background:linear-gradient(135deg,#fde68a,#f59e0b);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+
+    .member-line{
+      font-size:14px;
+      color:#f8fafc;
+      font-weight:700;
+      line-height:1.7;
+      word-break:break-word;
     }
 
     @media (max-width: 900px){
       .toolbar{
         grid-template-columns:1fr;
+      }
+
+      .side-drawer{
+        width:100%;
       }
     }
 
@@ -536,10 +715,10 @@
   <div class="bg-orb orb3"></div>
 
   <div class="page-wrap">
-    <div class="panel">
+    <div class="main-shell">
       <div class="header">
-        <h1>Hackverse Premium Admin Dashboard</h1>
-        <p>Secure organizer panel with full team details and payment proof view</p>
+        <h1>Hackverse Admin Dashboard</h1>
+        <p>Minimal registrations view with premium side application panel</p>
       </div>
 
       <div class="content">
@@ -562,8 +741,7 @@
 
         <div class="dashboard" id="dashboard">
           <div class="top-bar">
-            <h2>Registrations Dashboard</h2>
-
+            <h2>Team Registrations</h2>
             <div class="actions">
               <button class="btn refresh-btn" onclick="loadAdminData()">Refresh</button>
               <button class="btn export-btn" onclick="exportCSV()">Export CSV</button>
@@ -587,7 +765,7 @@
             <input
               type="text"
               id="searchInput"
-              placeholder="Search by team name, leader, college, phone, transaction ID, members..."
+              placeholder="Search by team name, leader name, college, phone, members, transaction ID..."
               oninput="filterTable()"
             >
 
@@ -606,27 +784,13 @@
               <table id="adminTable">
                 <thead>
                   <tr>
-                    <th>Timestamp</th>
-                    <th>Application ID</th>
+                    <th>SI.No</th>
                     <th>Team Name</th>
-                    <th>Team Size</th>
-                    <th>Fee</th>
-                    <th>Leader Name</th>
-                    <th>Leader Email</th>
-                    <th>Leader Phone</th>
-                    <th>Leader Department</th>
-                    <th>Leader College</th>
-                    <th>Leader Year</th>
-                    <th>Transaction ID</th>
-                    <th>Payment Method</th>
-                    <th>Screenshot File Name</th>
-                    <th>Screenshot Preview</th>
-                    <th>Entire Team Members Details</th>
                   </tr>
                 </thead>
                 <tbody id="adminTableBody">
                   <tr>
-                    <td colspan="16" class="empty-state">No data loaded yet.</td>
+                    <td colspan="2" class="empty-state">No data loaded yet.</td>
                   </tr>
                 </tbody>
               </table>
@@ -637,18 +801,29 @@
     </div>
   </div>
 
-  <div class="preview-modal" id="previewModal">
-    <div class="preview-content">
-      <div class="preview-actions">
-        <h3>Payment Screenshot Preview</h3>
-        <div class="actions">
-          <button class="btn preview-open" id="openScreenshotBtn" type="button">Open in New Tab</button>
-          <button class="btn preview-close" type="button" onclick="closePreview()">Close</button>
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-head">
+      <div class="drawer-head-top">
+        <div class="drawer-title">
+          <h3 id="drawerTeamTitle">Application View</h3>
+          <p>Full team application details inside the side panel</p>
+        </div>
+        <button class="close-btn" onclick="closeDrawer()">×</button>
+      </div>
+    </div>
+
+    <div class="drawer-body" id="drawerBody">
+      <div class="app-card">
+        <h4>No Application Selected</h4>
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <div class="detail-value">Click on a team name from the table to view full application details.</div>
         </div>
       </div>
-      <img id="previewImage" class="preview-image" alt="Payment Screenshot Preview">
     </div>
-  </div>
+  </aside>
 
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbxLMs76dsPqgoFfhL-QnavlFDGY0G7bd6W-_VOfEQHzTL_HMlvU3fDbpzJGwCn0MF1YmQ/exec";
@@ -656,7 +831,6 @@
 
     let allRows = [];
     let filteredRows = [];
-    let currentScreenshotUrl = "";
 
     function loginAdmin() {
       const adminId = document.getElementById("adminId").value.trim();
@@ -727,101 +901,28 @@
         return;
       }
 
-      rows.forEach(row => {
+      rows.forEach((row, index) => {
         const tr = document.createElement("tr");
 
-        tr.appendChild(makeCell(row[0]));   // Timestamp
-        tr.appendChild(makeCell(row[1]));   // Application ID
-        tr.appendChild(makeCell(row[2]));   // Team Name
-        tr.appendChild(makeCell(row[3]));   // Team Size
-        tr.appendChild(makeCell(row[4]));   // Fee
-        tr.appendChild(makeCell(row[5]));   // Leader Name
-        tr.appendChild(makeCell(row[6]));   // Leader Email
-        tr.appendChild(makeCell(row[7]));   // Leader Phone
-        tr.appendChild(makeCell(row[8]));   // Leader Department
-        tr.appendChild(makeCell(row[9]));   // Leader College
-        tr.appendChild(makeCell(row[10]));  // Leader Year
-        tr.appendChild(makeCell(row[11]));  // Transaction ID
-        tr.appendChild(makeCell(row[12]));  // Payment Method
-        tr.appendChild(makeCell(row[13]));  // Screenshot File Name
+        const tdSerial = document.createElement("td");
+        tdSerial.innerHTML = `<span class="serial-badge">${index + 1}</span>`;
+        tr.appendChild(tdSerial);
 
-        const screenshotTd = document.createElement("td");
-        const url = row[14] || "";
-        if (url) {
-          const span = document.createElement("span");
-          span.className = "screenshot-link";
-          span.textContent = "View Screenshot";
-          span.onclick = () => previewScreenshot(url);
-          screenshotTd.appendChild(span);
-        } else {
-          screenshotTd.textContent = "-";
-        }
-        tr.appendChild(screenshotTd);
-
-        const membersTd = document.createElement("td");
-        membersTd.innerHTML = formatMembersHTML(row[15] || "");
-        tr.appendChild(membersTd);
+        const tdTeam = document.createElement("td");
+        const teamBtn = document.createElement("span");
+        teamBtn.className = "team-link";
+        teamBtn.textContent = row[2] || "Unnamed Team";
+        teamBtn.onclick = () => openApplicationDrawer(row, index + 1);
+        tdTeam.appendChild(teamBtn);
+        tr.appendChild(tdTeam);
 
         tbody.appendChild(tr);
       });
     }
 
-    function makeCell(value) {
-      const td = document.createElement("td");
-      td.textContent = value ?? "";
-      return td;
-    }
-
-    function formatMembersHTML(text) {
-      if (!text) {
-        return `<div class="members-box">-</div>`;
-      }
-
-      const raw = String(text).trim();
-      const blocks = raw.split(/-{10,}/g).map(item => item.trim()).filter(Boolean);
-
-      if (!blocks.length) {
-        return `<div class="members-box">${escapeHtml(raw).replace(/\n/g, "<br>")}</div>`;
-      }
-
-      const html = blocks.map(block => {
-        const lines = block.split("\n").map(line => line.trim()).filter(Boolean);
-        if (!lines.length) return "";
-
-        const firstLine = lines[0];
-        const otherLines = lines.slice(1);
-
-        let roleHtml = "";
-        let detailHtml = "";
-
-        if (/team leader|member\s*\d+/i.test(firstLine)) {
-          roleHtml = `<span class="member-role">${escapeHtml(firstLine)}</span>`;
-          detailHtml = otherLines.map(line => escapeHtml(line)).join("<br>");
-        } else {
-          detailHtml = lines.map(line => escapeHtml(line)).join("<br>");
-        }
-
-        return `
-          <div>
-            ${roleHtml}
-            ${detailHtml}
-          </div>
-        `;
-      }).filter(Boolean).join(`<span class="sep"></span>`);
-
-      return `<div class="members-box">${html}</div>`;
-    }
-
-    function escapeHtml(str) {
-      return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
-
     function renderEmpty(message) {
       const tbody = document.getElementById("adminTableBody");
-      tbody.innerHTML = `<tr><td colspan="16" class="empty-state">${message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="2" class="empty-state">${message}</td></tr>`;
     }
 
     function filterTable() {
@@ -839,6 +940,161 @@
       });
 
       renderTable(filteredRows);
+    }
+
+    function openApplicationDrawer(row, serialNo) {
+      document.getElementById("drawerTeamTitle").textContent = row[2] || "Application View";
+
+      const screenshotUrl = row[14] || "";
+      const membersHtml = formatMembersDrawer(row[15] || "");
+
+      const html = `
+        <div class="app-card" style="animation-delay:0.05s;">
+          <h4>Basic Details</h4>
+          <div class="detail-grid">
+            <div class="detail-row">
+              <span class="detail-label">SI.No</span>
+              <div class="detail-value">${serialNo}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Application ID</span>
+              <div class="detail-value">${escapeHtml(row[1] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Team Name</span>
+              <div class="detail-value">${escapeHtml(row[2] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Team Size</span>
+              <div class="detail-value">${escapeHtml(row[3] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Registration Time</span>
+              <div class="detail-value">${escapeHtml(row[0] || "-")}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card" style="animation-delay:0.10s;">
+          <h4>Team Leader Details</h4>
+          <div class="detail-grid">
+            <div class="detail-row">
+              <span class="detail-label">Leader Name</span>
+              <div class="detail-value">${escapeHtml(row[5] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Leader Email</span>
+              <div class="detail-value">${escapeHtml(row[6] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Leader Phone</span>
+              <div class="detail-value">${escapeHtml(row[7] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Department</span>
+              <div class="detail-value">${escapeHtml(row[8] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">College</span>
+              <div class="detail-value">${escapeHtml(row[9] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Year of Study</span>
+              <div class="detail-value">${escapeHtml(row[10] || "-")}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card" style="animation-delay:0.15s;">
+          <h4>Payment Details</h4>
+          <div class="detail-grid">
+            <div class="detail-row">
+              <span class="detail-label">Fee</span>
+              <div class="detail-value">${escapeHtml(row[4] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Transaction ID</span>
+              <div class="detail-value">${escapeHtml(row[11] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Payment Method</span>
+              <div class="detail-value">${escapeHtml(row[12] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Screenshot File Name</span>
+              <div class="detail-value">${escapeHtml(row[13] || "-")}</div>
+            </div>
+          </div>
+          ${screenshotUrl ? `
+            <div class="screenshot-preview" style="margin-top:14px;">
+              <img src="${screenshotUrl}" alt="Payment Screenshot">
+            </div>
+            <button class="btn shot-btn" onclick="window.open('${screenshotUrl}','_blank')">Open Screenshot</button>
+          ` : `
+            <div class="detail-row" style="margin-top:14px;">
+              <span class="detail-label">Screenshot</span>
+              <div class="detail-value">No screenshot uploaded.</div>
+            </div>
+          `}
+        </div>
+
+        <div class="app-card" style="animation-delay:0.20s;">
+          <h4>Full Team Members</h4>
+          <div class="members-wrap">
+            ${membersHtml}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("drawerBody").innerHTML = html;
+      document.getElementById("drawerOverlay").classList.add("show");
+      document.getElementById("sideDrawer").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDrawer() {
+      document.getElementById("drawerOverlay").classList.remove("show");
+      document.getElementById("sideDrawer").classList.remove("open");
+      document.body.style.overflow = "auto";
+    }
+
+    function formatMembersDrawer(text) {
+      if (!text) {
+        return `<div class="member-box"><div class="member-line">No member details available.</div></div>`;
+      }
+
+      const raw = String(text).trim();
+      const blocks = raw.split(/-{10,}/g).map(item => item.trim()).filter(Boolean);
+
+      if (!blocks.length) {
+        return `<div class="member-box"><div class="member-line">${escapeHtml(raw).replace(/\n/g, "<br>")}</div></div>`;
+      }
+
+      return blocks.map(block => {
+        const lines = block.split("\n").map(line => line.trim()).filter(Boolean);
+        if (!lines.length) return "";
+
+        const firstLine = lines[0];
+        const otherLines = lines.slice(1);
+
+        const isRole = /team leader|member\s*\d+/i.test(firstLine);
+
+        return `
+          <div class="member-box">
+            ${isRole ? `<span class="member-role">${escapeHtml(firstLine)}</span>` : ``}
+            <div class="member-line">
+              ${(isRole ? otherLines : lines).map(line => escapeHtml(line)).join("<br>")}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
     }
 
     function exportCSV() {
@@ -880,30 +1136,12 @@
       document.getElementById("loginMsg").textContent = "";
       document.getElementById("adminId").value = "";
       document.getElementById("adminPassword").value = "";
+      closeDrawer();
     }
 
-    function previewScreenshot(url) {
-      currentScreenshotUrl = url;
-      document.getElementById("previewImage").src = url;
-      document.getElementById("previewModal").style.display = "flex";
-    }
-
-    function closePreview() {
-      document.getElementById("previewModal").style.display = "none";
-      document.getElementById("previewImage").src = "";
-      currentScreenshotUrl = "";
-    }
-
-    document.getElementById("openScreenshotBtn").addEventListener("click", () => {
-      if (currentScreenshotUrl) {
-        window.open(currentScreenshotUrl, "_blank");
-      }
-    });
-
-    window.addEventListener("click", function(e) {
-      const modal = document.getElementById("previewModal");
-      if (e.target === modal) {
-        closePreview();
+    window.addEventListener("keydown", function(e){
+      if(e.key === "Escape"){
+        closeDrawer();
       }
     });
 
