@@ -101,7 +101,7 @@
     }
 
     .dashboard-shell{
-      max-width:1400px;
+      max-width:1500px;
       margin:0 auto;
       position:relative;
       z-index:1;
@@ -212,7 +212,7 @@
 
     .stats-grid{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(5,1fr);
       gap:16px;
       margin-bottom:20px;
     }
@@ -418,7 +418,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:860px;
+      min-width:900px;
     }
 
     thead th{
@@ -530,7 +530,7 @@
       position:fixed;
       top:0;
       right:-100%;
-      width:min(600px, 100%);
+      width:min(620px, 100%);
       height:100vh;
       z-index:9998;
       background:linear-gradient(180deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98));
@@ -643,7 +643,7 @@
 
     .screenshot-box img{
       width:100%;
-      max-height:260px;
+      max-height:300px;
       object-fit:contain;
       border-radius:18px;
       background:#fff;
@@ -873,7 +873,7 @@
         <div class="brand-badge">H</div>
         <div class="brand-text">
           <h1>Hackverse 1.O Admin Dashboard</h1>
-          <p>Premium mobile-friendly application viewer with ticket-only drawer and delete option.</p>
+          <p>Premium mobile-friendly application viewer with ticket-only drawer, screenshot viewer, total fee card, and delete option.</p>
         </div>
       </div>
 
@@ -901,6 +901,12 @@
         <div class="stat-title">Pending Review</div>
         <div class="stat-value" id="pendingTeams">0</div>
         <div class="stat-note">Applications needing admin verification or correction.</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Total Registered Fee</div>
+        <div class="stat-value" id="totalFee">₹0</div>
+        <div class="stat-note">Overall registration fee collected from all submitted applications.</div>
       </div>
 
       <div class="stat-card">
@@ -976,13 +982,14 @@
                 <th>Leader Name</th>
                 <th>College</th>
                 <th>Team Size</th>
+                <th>Fee</th>
                 <th>Payment</th>
                 <th>Delete</th>
               </tr>
             </thead>
             <tbody id="teamTableBody">
               <tr>
-                <td colspan="7">
+                <td colspan="8">
                   <div class="empty-state">Loading application data...</div>
                 </td>
               </tr>
@@ -1015,7 +1022,7 @@
   <div class="toast info" id="toast"></div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzVaWhCbo6GNfCWGLNUEifdLcdifdWldffnG9gEEMersSCazlylcGudmV4cdYa054178A/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxLMs76dsPqgoFfhL-QnavlFDGY0G7bd6W-_VOfEQHzTL_HMlvU3fDbpzJGwCn0MF1YmQ/exec";
 
     const teamTableBody = document.getElementById("teamTableBody");
     const searchInput = document.getElementById("searchInput");
@@ -1025,6 +1032,7 @@
     const totalTeams = document.getElementById("totalTeams");
     const paidTeams = document.getElementById("paidTeams");
     const pendingTeams = document.getElementById("pendingTeams");
+    const totalFee = document.getElementById("totalFee");
     const liveVisitors = document.getElementById("liveVisitors");
     const resultsBadge = document.getElementById("resultsBadge");
     const visibleResults = document.getElementById("visibleResults");
@@ -1086,7 +1094,7 @@
         .replace(/'/g, "&#039;");
     }
 
-    function normalizeTicketLink(team) {
+    function normalizeTicketPreviewLink(team) {
       const raw = team.ticketLink || team.directTicketUrl || team.ticketUrl || "";
       if (!raw) return "";
 
@@ -1107,14 +1115,31 @@
 
     function normalizeTicketOpenLink(team) {
       const raw = team.ticketLink || team.directTicketUrl || team.ticketUrl || "";
-      if (!raw) return "";
-      return String(raw).trim();
+      return raw ? String(raw).trim() : "";
+    }
+
+    function normalizeImageLink(url) {
+      if (!url) return "";
+
+      const clean = String(url).trim();
+
+      const driveFileMatch = clean.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveFileMatch && driveFileMatch[1]) {
+        return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
+      }
+
+      const driveIdMatch = clean.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (driveIdMatch && driveIdMatch[1]) {
+        return `https://drive.google.com/uc?export=view&id=${driveIdMatch[1]}`;
+      }
+
+      return clean;
     }
 
     async function loadTeams() {
       teamTableBody.innerHTML = `
         <tr>
-          <td colspan="7">
+          <td colspan="8">
             <div class="empty-state">Loading application data...</div>
           </td>
         </tr>
@@ -1147,6 +1172,7 @@
             rowNumber: 2,
             teamName: "Code Titans",
             teamSize: "4",
+            fee: 900,
             leaderName: "Ravi Teja",
             leaderEmail: "raviteja@gmail.com",
             leaderPhone: "9876543210",
@@ -1156,7 +1182,7 @@
             transactionId: "UPI882716",
             paymentMethod: "UPI",
             paymentStatus: "Paid",
-            paymentScreenshotUrl: "payment-qr.png",
+            paymentScreenshotUrl: "https://drive.google.com/uc?export=view&id=1ABCDEF1234567890",
             submittedAt: "2026-03-25 10:30 AM",
             ticketLink: "https://drive.google.com/file/d/1ABCDEF1234567890/view"
           },
@@ -1165,6 +1191,7 @@
             rowNumber: 3,
             teamName: "AI Sparks",
             teamSize: "3",
+            fee: 750,
             leaderName: "Sneha",
             leaderEmail: "sneha@gmail.com",
             leaderPhone: "9849012345",
@@ -1174,7 +1201,7 @@
             transactionId: "",
             paymentMethod: "PhonePe",
             paymentStatus: "Pending",
-            paymentScreenshotUrl: "payment-qr.png",
+            paymentScreenshotUrl: "",
             submittedAt: "2026-03-25 11:45 AM",
             ticketLink: ""
           }
@@ -1191,10 +1218,12 @@
       const total = allTeams.length;
       const paid = allTeams.filter(team => normalizeStatus(team) === "Paid").length;
       const pending = total - paid;
+      const feeSum = allTeams.reduce((sum, team) => sum + Number(team.fee || 0), 0);
 
       totalTeams.textContent = total;
       paidTeams.textContent = paid;
       pendingTeams.textContent = pending;
+      totalFee.textContent = `₹${feeSum}`;
     }
 
     function getFilteredTeams() {
@@ -1225,7 +1254,7 @@
       if (!filtered.length) {
         teamTableBody.innerHTML = `
           <tr>
-            <td colspan="7">
+            <td colspan="8">
               <div class="empty-state">No teams found for the current search or filter.</div>
             </td>
           </tr>
@@ -1244,6 +1273,7 @@
           <td>${escapeHtml(safe(team.leaderName))}</td>
           <td>${escapeHtml(safe(team.leaderCollege))}</td>
           <td>${escapeHtml(safe(team.teamSize))}</td>
+          <td>₹${escapeHtml(Number(team.fee || 0))}</td>
           <td>
             <span class="status-pill ${normalizeStatus(team) === 'Paid' ? 'paid' : 'pending'}">
               ${escapeHtml(normalizeStatus(team))}
@@ -1262,8 +1292,9 @@
       drawerTitle.textContent = team.teamName || "Team Details";
       drawerSubtitle.textContent = `Application ID: ${safe(team.applicationId)} • Submitted: ${safe(team.submittedAt)}`;
 
-      const ticketPreviewLink = normalizeTicketLink(team);
+      const ticketPreviewLink = normalizeTicketPreviewLink(team);
       const ticketOpenLink = normalizeTicketOpenLink(team);
+      const screenshotLink = normalizeImageLink(team.paymentScreenshotUrl);
 
       drawerContent.innerHTML = `
         <div class="detail-block">
@@ -1272,9 +1303,11 @@
             <div class="detail-item"><strong>Application ID</strong><span>${escapeHtml(safe(team.applicationId))}</span></div>
             <div class="detail-item"><strong>Team Name</strong><span>${escapeHtml(safe(team.teamName))}</span></div>
             <div class="detail-item"><strong>Team Size</strong><span>${escapeHtml(safe(team.teamSize))} Members</span></div>
+            <div class="detail-item"><strong>Registration Fee</strong><span>₹${escapeHtml(Number(team.fee || 0))}</span></div>
             <div class="detail-item"><strong>Payment Status</strong><span>${escapeHtml(normalizeStatus(team))}</span></div>
             <div class="detail-item"><strong>Transaction ID</strong><span>${escapeHtml(safe(team.transactionId))}</span></div>
             <div class="detail-item"><strong>Payment Method</strong><span>${escapeHtml(safe(team.paymentMethod))}</span></div>
+            <div class="detail-item"><strong>Submitted On</strong><span>${escapeHtml(safe(team.submittedAt))}</span></div>
           </div>
         </div>
 
@@ -1316,14 +1349,30 @@
 
         <div class="detail-block">
           <h4>Payment Screenshot</h4>
-          <div class="screenshot-box">
-            <img src="${escapeHtml(team.paymentScreenshotUrl || 'payment-qr.png')}" alt="Payment Screenshot">
-          </div>
-          <div class="drawer-action-row">
-            <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
-              Delete This Application
-            </button>
-          </div>
+          ${
+            screenshotLink
+              ? `
+                <div class="screenshot-box">
+                  <img src="${escapeHtml(screenshotLink)}" alt="Payment Screenshot">
+                </div>
+                <div class="drawer-action-row">
+                  <a href="${escapeHtml(screenshotLink)}" target="_blank" class="ticket-view-btn">Open Payment Screenshot</a>
+                  <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+                    Delete This Application
+                  </button>
+                </div>
+              `
+              : `
+                <div class="ticket-empty">
+                  Payment screenshot is not available.
+                </div>
+                <div class="drawer-action-row">
+                  <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+                    Delete This Application
+                  </button>
+                </div>
+              `
+          }
         </div>
       `;
 
@@ -1410,7 +1459,7 @@
       }
 
       const rows = [
-        ["SI.No", "Application ID", "Team Name", "Leader Name", "Leader Email", "Leader Phone", "Department", "College", "Year", "Team Size", "Transaction ID", "Payment Method", "Payment Status", "Ticket Link"]
+        ["SI.No", "Application ID", "Team Name", "Leader Name", "Leader Email", "Leader Phone", "Department", "College", "Year", "Team Size", "Fee", "Transaction ID", "Payment Method", "Payment Status", "Ticket Link", "Payment Screenshot URL"]
       ];
 
       filtered.forEach((team, index) => {
@@ -1425,10 +1474,12 @@
           safe(team.leaderCollege),
           safe(team.leaderYear),
           safe(team.teamSize),
+          Number(team.fee || 0),
           safe(team.transactionId),
           safe(team.paymentMethod),
           normalizeStatus(team),
-          safe(team.ticketLink || team.directTicketUrl || team.ticketUrl)
+          safe(team.ticketLink || team.directTicketUrl || team.ticketUrl),
+          safe(team.paymentScreenshotUrl)
         ]);
       });
 
