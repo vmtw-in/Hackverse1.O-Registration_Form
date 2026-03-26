@@ -1,240 +1,1220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Hackverse</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hackverse Admin Dashboard</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:"Segoe UI", Arial, sans-serif;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:#fff;
-}
+    :root{
+      --bg1:#050816;
+      --bg2:#0d1631;
+      --bg3:#2f0f56;
+      --primary:#2563eb;
+      --secondary:#7c3aed;
+      --accent:#f59e0b;
+      --success:#10b981;
+      --danger:#ef4444;
+      --cyan:#22d3ee;
+      --pink:#ec4899;
+      --white:#ffffff;
+      --text:#f8fafc;
+      --muted:#cbd5e1;
+      --glass:rgba(255,255,255,0.08);
+      --glass2:rgba(255,255,255,0.12);
+      --border:rgba(255,255,255,0.14);
+      --shadow:0 20px 60px rgba(0,0,0,0.35);
+      --shadow2:0 12px 32px rgba(0,0,0,0.22);
+    }
 
-/* HEADER */
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 25px;
-  background:#020617;
-  box-shadow:0 5px 20px rgba(0,0,0,0.5);
-}
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 10% 15%, rgba(37,99,235,0.18), transparent 18%),
+        radial-gradient(circle at 85% 12%, rgba(124,58,237,0.20), transparent 20%),
+        radial-gradient(circle at 50% 85%, rgba(245,158,11,0.12), transparent 20%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      color:var(--text);
+      overflow-x:hidden;
+      padding:22px;
+      position:relative;
+    }
 
-.logout-btn{
-  background:red;
-  border:none;
-  padding:10px 16px;
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
-}
+    .bg-orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(14px);
+      opacity:0.35;
+      z-index:0;
+      pointer-events:none;
+      animation:floatOrb 10s ease-in-out infinite;
+    }
 
-/* TABLE */
-.container{
-  padding:20px;
-}
+    .orb1{
+      width:220px;
+      height:220px;
+      background:linear-gradient(135deg,#2563eb,#60a5fa);
+      top:60px;
+      left:30px;
+    }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:rgba(255,255,255,0.05);
-  border-radius:10px;
-  overflow:hidden;
-}
+    .orb2{
+      width:260px;
+      height:260px;
+      background:linear-gradient(135deg,#7c3aed,#c084fc);
+      right:40px;
+      top:180px;
+      animation-delay:1s;
+    }
 
-th,td{
-  padding:12px;
-  text-align:left;
-  border-bottom:1px solid rgba(255,255,255,0.1);
-}
+    .orb3{
+      width:180px;
+      height:180px;
+      background:linear-gradient(135deg,#f59e0b,#fde047);
+      left:18%;
+      bottom:30px;
+      animation-delay:2s;
+    }
 
-tr:hover{
-  background:rgba(255,255,255,0.1);
-  cursor:pointer;
-}
+    @keyframes floatOrb{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);}
+      50%{transform:translateY(-18px) translateX(12px) scale(1.06);}
+    }
 
-/* SIDE PANEL */
-.side-panel{
-  position:fixed;
-  right:-100%;
-  top:0;
-  width:350px;
-  height:100%;
-  background:#020617;
-  padding:20px;
-  transition:0.4s;
-  overflow:auto;
-  box-shadow:-10px 0 20px rgba(0,0,0,0.5);
-}
+    .page-wrap{
+      max-width:1500px;
+      margin:auto;
+      position:relative;
+      z-index:1;
+    }
 
-.side-panel.active{
-  right:0;
-}
+    .main-shell{
+      background:rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      backdrop-filter:blur(18px);
+      border-radius:28px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      animation:mainFloat 7s ease-in-out infinite;
+    }
 
-.close-btn{
-  float:right;
-  cursor:pointer;
-  color:red;
-}
+    @keyframes mainFloat{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-4px);}
+    }
 
-/* DELETE */
-.delete-btn{
-  background:red;
-  padding:10px;
-  border:none;
-  color:white;
-  width:100%;
-  margin-top:20px;
-  cursor:pointer;
-}
+    .header{
+      position:relative;
+      padding:28px 24px;
+      text-align:center;
+      background:linear-gradient(135deg, rgba(124,58,237,0.95), rgba(37,99,235,0.92));
+      overflow:hidden;
+    }
 
-/* MOBILE */
-@media(max-width:768px){
-  .side-panel{
-    width:100%;
-  }
-}
-</style>
+    .header::before,
+    .header::after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,0.09);
+      animation:pulseBubble 10s ease-in-out infinite;
+    }
+
+    .header::before{
+      width:240px;
+      height:240px;
+      left:-70px;
+      top:-90px;
+    }
+
+    .header::after{
+      width:280px;
+      height:280px;
+      right:-90px;
+      bottom:-130px;
+      animation-delay:1.5s;
+    }
+
+    @keyframes pulseBubble{
+      0%,100%{transform:scale(1);}
+      50%{transform:scale(1.08);}
+    }
+
+    .header h1,
+    .header p{
+      position:relative;
+      z-index:1;
+    }
+
+    .header h1{
+      font-size:38px;
+      font-weight:900;
+      letter-spacing:0.4px;
+      margin-bottom:8px;
+      text-shadow:0 8px 20px rgba(0,0,0,0.24);
+    }
+
+    .header p{
+      font-size:15px;
+      font-weight:700;
+      color:#eef2ff;
+    }
+
+    .content{
+      padding:26px;
+    }
+
+    .login-box{
+      max-width:500px;
+      margin:10px auto;
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:26px;
+      padding:28px;
+      box-shadow:var(--shadow2);
+      transform-style:preserve-3d;
+      animation:loginFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes loginFloat{
+      0%,100%{transform:translateY(0) rotateX(0deg);}
+      50%{transform:translateY(-5px) rotateX(1deg);}
+    }
+
+    .login-box h2{
+      text-align:center;
+      font-size:30px;
+      font-weight:900;
+      color:#fde68a;
+      margin-bottom:20px;
+    }
+
+    .input-group{
+      margin-bottom:16px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .input-group label{
+      margin-bottom:8px;
+      font-weight:800;
+      color:#e2e8f0;
+    }
+
+    .input-group input{
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.18);
+      outline:none;
+      background:linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+      color:#fff;
+      font-size:15px;
+      transition:0.25s ease;
+    }
+
+    .input-group input::placeholder{
+      color:#cbd5e1;
+    }
+
+    .input-group input:focus{
+      border-color:#93c5fd;
+      box-shadow:0 0 0 4px rgba(147,197,253,0.16);
+      transform:translateY(-2px);
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:13px 18px;
+      color:#fff;
+      font-size:14px;
+      font-weight:900;
+      cursor:pointer;
+      transition:0.25s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,0.18);
+    }
+
+    .btn:hover{
+      transform:translateY(-2px) scale(1.02);
+    }
+
+    .login-btn{
+      width:100%;
+      background:linear-gradient(135deg,#f59e0b,#ea580c);
+      margin-top:8px;
+    }
+
+    .login-msg{
+      min-height:20px;
+      margin-top:12px;
+      text-align:center;
+      font-weight:800;
+      color:#fde68a;
+    }
+
+    .dashboard{
+      display:none;
+    }
+
+    .top-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+    }
+
+    .top-bar h2{
+      font-size:30px;
+      font-weight:900;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .refresh-btn{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
+    .export-btn{background:linear-gradient(135deg,#10b981,#059669);}
+    .logout-btn{background:linear-gradient(135deg,#ef4444,#dc2626);}
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .stat-card{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:22px;
+      padding:22px;
+      text-align:center;
+      box-shadow:var(--shadow2);
+      transition:0.28s ease;
+      transform-style:preserve-3d;
+    }
+
+    .stat-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.10) 45%, transparent 85%);
+      transform:translateX(-120%);
+      transition:0.9s ease;
+    }
+
+    .stat-card:hover::before{
+      transform:translateX(120%);
+    }
+
+    .stat-card:hover{
+      transform:translateY(-5px) rotateX(4deg);
+    }
+
+    .stat-card h3{
+      font-size:34px;
+      color:#fde68a;
+      margin-bottom:8px;
+      font-weight:900;
+    }
+
+    .stat-card p{
+      font-weight:800;
+      color:#e2e8f0;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:1fr 240px;
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .toolbar input,
+    .toolbar select{
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.18);
+      outline:none;
+      background:linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+      color:#fff;
+      font-size:15px;
+    }
+
+    .toolbar input::placeholder{
+      color:#cbd5e1;
+    }
+
+    .toolbar select option{
+      color:#111827;
+    }
+
+    .table-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:24px;
+      padding:16px;
+      box-shadow:var(--shadow2);
+    }
+
+    .table-wrap{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.04);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:100%;
+    }
+
+    th, td{
+      padding:16px 14px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      text-align:left;
+      font-size:14px;
+    }
+
+    th{
+      background:#1d4ed8;
+      color:#fff;
+      font-weight:900;
+      letter-spacing:0.3px;
+    }
+
+    td{
+      color:#e5e7eb;
+    }
+
+    tr{
+      transition:0.25s ease;
+    }
+
+    tr:hover{
+      background:rgba(255,255,255,0.05);
+      transform:scale(1.002);
+    }
+
+    .serial-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:38px;
+      height:38px;
+      padding:0 12px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#2563eb,#7c3aed);
+      color:#fff;
+      font-weight:900;
+      box-shadow:0 10px 20px rgba(37,99,235,0.25);
+    }
+
+    .team-link{
+      display:inline-block;
+      color:#93c5fd;
+      font-weight:900;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+      transition:0.25s ease;
+    }
+
+    .team-link::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-4px;
+      width:0;
+      height:2px;
+      background:linear-gradient(135deg,#22d3ee,#f472b6);
+      transition:0.25s ease;
+    }
+
+    .team-link:hover{
+      color:#ffffff;
+      transform:translateX(4px);
+      text-shadow:0 0 12px rgba(147,197,253,0.35);
+    }
+
+    .team-link:hover::after{
+      width:100%;
+    }
+
+    .empty-state{
+      padding:28px;
+      text-align:center;
+      color:#e2e8f0;
+      font-weight:800;
+    }
+
+    .drawer-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter:blur(4px);
+      opacity:0;
+      pointer-events:none;
+      transition:0.3s ease;
+      z-index:9998;
+    }
+
+    .drawer-overlay.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .side-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:470px;
+      max-width:100%;
+      height:100vh;
+      background:
+        linear-gradient(180deg, rgba(11,18,40,0.96), rgba(32,12,58,0.98));
+      border-left:1px solid rgba(255,255,255,0.14);
+      box-shadow:-18px 0 40px rgba(0,0,0,0.35);
+      backdrop-filter:blur(20px);
+      transform:translateX(100%);
+      transition:transform 0.35s ease;
+      z-index:9999;
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+
+    .side-drawer.open{
+      transform:translateX(0);
+    }
+
+    .drawer-head{
+      padding:22px 20px 16px;
+      background:linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
+      position:relative;
+      overflow:hidden;
+    }
+
+    .drawer-head::before{
+      content:"";
+      position:absolute;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:rgba(255,255,255,0.10);
+      top:-60px;
+      right:-40px;
+      animation:pulseBubble 8s ease-in-out infinite;
+    }
+
+    .drawer-head-top{
+      position:relative;
+      z-index:1;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+    }
+
+    .drawer-title h3{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .drawer-title p{
+      font-size:13px;
+      color:#eef2ff;
+      font-weight:700;
+    }
+
+    .close-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:12px;
+      background:rgba(255,255,255,0.18);
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      cursor:pointer;
+      transition:0.25s ease;
+    }
+
+    .close-btn:hover{
+      transform:rotate(90deg) scale(1.04);
+      background:rgba(255,255,255,0.24);
+    }
+
+    .drawer-body{
+      flex:1;
+      overflow-y:auto;
+      padding:18px;
+    }
+
+    .app-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border:1px solid rgba(255,255,255,0.10);
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:14px;
+      box-shadow:var(--shadow2);
+      transition:0.28s ease;
+      transform-style:preserve-3d;
+      animation:cardRise 0.45s ease both;
+    }
+
+    .app-card:hover{
+      transform:translateY(-4px) rotateX(4deg);
+    }
+
+    @keyframes cardRise{
+      from{opacity:0; transform:translateY(18px) scale(0.97);}
+      to{opacity:1; transform:translateY(0) scale(1);}
+    }
+
+    .app-card h4{
+      font-size:15px;
+      color:#fde68a;
+      margin-bottom:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+
+    .detail-row{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:14px;
+      padding:12px 14px;
+      transition:0.25s ease;
+    }
+
+    .detail-row:hover{
+      background:rgba(255,255,255,0.08);
+      transform:translateX(4px);
+    }
+
+    .detail-label{
+      display:block;
+      font-size:12px;
+      color:#93c5fd;
+      font-weight:900;
+      margin-bottom:4px;
+      text-transform:uppercase;
+      letter-spacing:0.3px;
+    }
+
+    .detail-value{
+      font-size:14px;
+      color:#f8fafc;
+      font-weight:700;
+      line-height:1.6;
+      word-break:break-word;
+      white-space:pre-wrap;
+    }
+
+    .screenshot-preview{
+      width:100%;
+      border-radius:16px;
+      overflow:hidden;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+
+    .screenshot-preview img{
+      width:100%;
+      display:block;
+      max-height:250px;
+      object-fit:cover;
+      transition:0.35s ease;
+    }
+
+    .screenshot-preview:hover img{
+      transform:scale(1.03);
+    }
+
+    .shot-btn{
+      margin-top:12px;
+      width:100%;
+      background:linear-gradient(135deg,#10b981,#059669);
+    }
+
+    .delete-btn{
+      margin-top:12px;
+      width:100%;
+      background:linear-gradient(135deg,#ef4444,#b91c1c);
+    }
+
+    .members-wrap{
+      display:grid;
+      gap:10px;
+    }
+
+    .member-box{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+
+    .member-role{
+      display:inline-block;
+      margin-bottom:8px;
+      font-size:12px;
+      font-weight:900;
+      color:#111827;
+      background:linear-gradient(135deg,#fde68a,#f59e0b);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+
+    .member-line{
+      font-size:14px;
+      color:#f8fafc;
+      font-weight:700;
+      line-height:1.7;
+      word-break:break-word;
+    }
+
+    @media (max-width: 900px){
+      .toolbar{
+        grid-template-columns:1fr;
+      }
+
+      .side-drawer{
+        width:100%;
+      }
+    }
+
+    @media (max-width: 768px){
+      body{padding:14px;}
+      .content{padding:18px;}
+      .header h1{font-size:28px;}
+      .top-bar h2{font-size:24px;}
+      .login-box h2{font-size:24px;}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
 
-<div class="header">
-  <h2>Admin Dashboard</h2>
-  <button class="logout-btn" onclick="logout()">Logout</button>
-</div>
+  <div class="page-wrap">
+    <div class="main-shell">
+      <div class="header">
+        <h1>Hackverse Admin Dashboard</h1>
+        <p>Minimal registrations view with premium side application panel</p>
+      </div>
 
-<div class="container">
-  <table id="dataTable">
-    <thead>
-      <tr>
-        <th>S.No</th>
-        <th>Team Name</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
+      <div class="content">
+        <div class="login-box" id="loginBox">
+          <h2>Admin Login</h2>
 
-<!-- SIDE PANEL -->
-<div class="side-panel" id="panel">
-  <span class="close-btn" onclick="closePanel()">✖</span>
-  <h3>Application Details</h3>
-  <div id="details"></div>
-  <button class="delete-btn" onclick="deleteRow()">Delete</button>
-</div>
+          <div class="input-group">
+            <label>Admin ID</label>
+            <input type="text" id="adminId" placeholder="Enter admin ID">
+          </div>
 
-<script>
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="Enter password">
+          </div>
 
-/* ================= LOGIN CHECK ================= */
+          <button class="btn login-btn" onclick="loginAdmin()">Login</button>
+          <div class="login-msg" id="loginMsg"></div>
+        </div>
 
-const LOGIN_PAGE = "admin-login.html"; // FIXED
+        <div class="dashboard" id="dashboard">
+          <div class="top-bar">
+            <h2>Team Registrations</h2>
+            <div class="actions">
+              <button class="btn refresh-btn" onclick="loadAdminData()">Refresh</button>
+              <button class="btn export-btn" onclick="exportCSV()">Export CSV</button>
+              <button class="btn logout-btn" onclick="logoutAdmin()">Logout</button>
+            </div>
+          </div>
 
-if(localStorage.getItem("isAdminLoggedIn") !== "true"){
-  window.location.href = LOGIN_PAGE;
-}
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3 id="dashTeams">0</h3>
+              <p>Total Teams</p>
+            </div>
 
-/* ================= LOGOUT ================= */
+            <div class="stat-card">
+              <h3 id="dashParticipants">0</h3>
+              <p>Total Participants</p>
+            </div>
 
-function logout(){
-  localStorage.clear();
-  window.location.href = LOGIN_PAGE;
-}
+            <div class="stat-card">
+              <h3 id="dashFee">₹0</h3>
+              <p>Overall Total Registered Fee</p>
+            </div>
+          </div>
 
-/* ================= FETCH DATA ================= */
+          <div class="toolbar">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search by team name, leader name, college, phone, members, transaction ID..."
+              oninput="filterTable()"
+            >
 
-/* 👉 Replace with your Web App URL */
-const API_URL = "https://script.google.com/macros/s/AKfycbwcmYkwGgM-gFYzTsq6aTkJ01cqF4o93OJlwgxidh5jsi5crxw4RzFlpJzVzElrbOLAhA/exec";
+            <select id="paymentFilter" onchange="filterTable()">
+              <option value="">All Payment Methods</option>
+              <option value="UPI">UPI</option>
+              <option value="PhonePe">PhonePe</option>
+              <option value="Google Pay">Google Pay</option>
+              <option value="Paytm">Paytm</option>
+              <option value="Other UPI">Other UPI</option>
+            </select>
+          </div>
 
-let allData = [];
-let currentIndex = null;
+          <div class="table-card">
+            <div class="table-wrap">
+              <table id="adminTable">
+                <thead>
+                  <tr>
+                    <th>SI.No</th>
+                    <th>Team Name</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                  <tr>
+                    <td colspan="2" class="empty-state">No data loaded yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-async function loadData(){
-  try{
-    const res = await fetch(API_URL);
-    const data = await res.json();
+  <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 
-    allData = data;
-    const tbody = document.querySelector("#dataTable tbody");
-    tbody.innerHTML = "";
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-head">
+      <div class="drawer-head-top">
+        <div class="drawer-title">
+          <h3 id="drawerTeamTitle">Application View</h3>
+          <p>Full team application details inside the side panel</p>
+        </div>
+        <button class="close-btn" onclick="closeDrawer()">×</button>
+      </div>
+    </div>
 
-    data.forEach((row,index)=>{
-      const tr = document.createElement("tr");
+    <div class="drawer-body" id="drawerBody">
+      <div class="app-card">
+        <h4>No Application Selected</h4>
+        <div class="detail-row">
+          <span class="detail-label">Status</span>
+          <div class="detail-value">Click on a team name from the table to view full application details.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
 
-      tr.innerHTML = `
-        <td>${index+1}</td>
-        <td>${row["Team Name"] || "-"}</td>
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxLMs76dsPqgoFfhL-QnavlFDGY0G7bd6W-_VOfEQHzTL_HMlvU3fDbpzJGwCn0MF1YmQ/exec";
+    const ADMIN_SESSION_KEY = "hackverse_admin_logged_in";
+
+    let allRows = [];
+    let filteredRows = [];
+    let currentApplicationId = "";
+
+    function formatCurrency(value){
+      return "₹" + Number(value || 0).toLocaleString("en-IN");
+    }
+
+    function parseFee(value){
+      const cleaned = String(value || "").replace(/[^\d.]/g, "");
+      const num = parseFloat(cleaned);
+      return isNaN(num) ? 0 : num;
+    }
+
+    function loginAdmin() {
+      const adminId = document.getElementById("adminId").value.trim();
+      const adminPassword = document.getElementById("adminPassword").value.trim();
+      const loginMsg = document.getElementById("loginMsg");
+
+      if (!adminId || !adminPassword) {
+        loginMsg.textContent = "Enter admin ID and password.";
+        return;
+      }
+
+      loginMsg.textContent = "Checking...";
+
+      fetch(GAS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "adminLogin",
+          adminId,
+          adminPassword
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          sessionStorage.setItem(ADMIN_SESSION_KEY, "yes");
+          document.getElementById("loginBox").style.display = "none";
+          document.getElementById("dashboard").style.display = "block";
+          loginMsg.textContent = "";
+          loadAdminData();
+        } else {
+          loginMsg.textContent = data.message || "Invalid login.";
+        }
+      })
+      .catch(() => {
+        loginMsg.textContent = "Login failed. Check GAS URL or deployment.";
+      });
+    }
+
+    function loadAdminData() {
+      fetch(GAS_URL + "?action=adminData")
+        .then(res => res.json())
+        .then(data => {
+          if (data.status !== "success") {
+            renderEmpty("Unable to load admin data.");
+            return;
+          }
+
+          allRows = data.rows || [];
+          filteredRows = [...allRows];
+
+          const teams = data.teams || allRows.length;
+          const participants = data.participants || allRows.reduce((sum, row) => sum + Number(row[3] || 0), 0);
+          const totalFee = allRows.reduce((sum, row) => sum + parseFee(row[4]), 0);
+
+          document.getElementById("dashTeams").textContent = teams;
+          document.getElementById("dashParticipants").textContent = participants;
+          document.getElementById("dashFee").textContent = formatCurrency(totalFee);
+
+          renderTable(filteredRows);
+        })
+        .catch(() => {
+          renderEmpty("Unable to load admin data.");
+        });
+    }
+
+    function renderTable(rows) {
+      const tbody = document.getElementById("adminTableBody");
+      tbody.innerHTML = "";
+
+      if (!rows.length) {
+        renderEmpty("No matching registrations found.");
+        return;
+      }
+
+      rows.forEach((row, index) => {
+        const tr = document.createElement("tr");
+
+        const tdSerial = document.createElement("td");
+        tdSerial.innerHTML = `<span class="serial-badge">${index + 1}</span>`;
+        tr.appendChild(tdSerial);
+
+        const tdTeam = document.createElement("td");
+        const teamBtn = document.createElement("span");
+        teamBtn.className = "team-link";
+        teamBtn.textContent = row[2] || "Unnamed Team";
+        teamBtn.onclick = () => openApplicationDrawer(row, index + 1);
+        tdTeam.appendChild(teamBtn);
+        tr.appendChild(tdTeam);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderEmpty(message) {
+      const tbody = document.getElementById("adminTableBody");
+      tbody.innerHTML = `<tr><td colspan="2" class="empty-state">${message}</td></tr>`;
+    }
+
+    function filterTable() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase().trim();
+      const paymentValue = document.getElementById("paymentFilter").value.toLowerCase().trim();
+
+      filteredRows = allRows.filter(row => {
+        const rowText = row.map(v => String(v ?? "")).join(" ").toLowerCase();
+        const paymentMethod = String(row[12] || "").toLowerCase();
+
+        const matchesSearch = !searchValue || rowText.includes(searchValue);
+        const matchesPayment = !paymentValue || paymentMethod === paymentValue;
+
+        return matchesSearch && matchesPayment;
+      });
+
+      renderTable(filteredRows);
+    }
+
+    function openApplicationDrawer(row, serialNo) {
+      currentApplicationId = row[1] || "";
+      document.getElementById("drawerTeamTitle").textContent = row[2] || "Application View";
+
+      const screenshotUrl = row[14] || "";
+      const membersHtml = formatMembersDrawer(row[15] || "");
+
+      const html = `
+        <div class="app-card" style="animation-delay:0.05s;">
+          <h4>Basic Details</h4>
+          <div class="detail-grid">
+            <div class="detail-row">
+              <span class="detail-label">SI.No</span>
+              <div class="detail-value">${serialNo}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Application ID</span>
+              <div class="detail-value">${escapeHtml(row[1] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Team Name</span>
+              <div class="detail-value">${escapeHtml(row[2] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Team Size</span>
+              <div class="detail-value">${escapeHtml(row[3] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Registration Time</span>
+              <div class="detail-value">${escapeHtml(row[0] || "-")}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card" style="animation-delay:0.10s;">
+          <h4>Team Leader Details</h4>
+          <div class="detail-grid">
+            <div class="detail-row">
+              <span class="detail-label">Leader Name</span>
+              <div class="detail-value">${escapeHtml(row[5] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Leader Email</span>
+              <div class="detail-value">${escapeHtml(row[6] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Leader Phone</span>
+              <div class="detail-value">${escapeHtml(row[7] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Department</span>
+              <div class="detail-value">${escapeHtml(row[8] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">College</span>
+              <div class="detail-value">${escapeHtml(row[9] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Year of Study</span>
+              <div class="detail-value">${escapeHtml(row[10] || "-")}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-card" style="animation-delay:0.15s;">
+          <h4>Payment Details</h4>
+          <div class="detail-grid">
+            <div class="detail-row">
+              <span class="detail-label">Fee</span>
+              <div class="detail-value">${escapeHtml(row[4] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Transaction ID</span>
+              <div class="detail-value">${escapeHtml(row[11] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Payment Method</span>
+              <div class="detail-value">${escapeHtml(row[12] || "-")}</div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Screenshot File Name</span>
+              <div class="detail-value">${escapeHtml(row[13] || "-")}</div>
+            </div>
+          </div>
+          ${screenshotUrl ? `
+            <div class="screenshot-preview" style="margin-top:14px;">
+              <img src="${screenshotUrl}" alt="Payment Screenshot">
+            </div>
+            <button class="btn shot-btn" onclick="window.open('${screenshotUrl}','_blank')">Open Screenshot</button>
+          ` : `
+            <div class="detail-row" style="margin-top:14px;">
+              <span class="detail-label">Screenshot</span>
+              <div class="detail-value">No screenshot uploaded.</div>
+            </div>
+          `}
+          <button class="btn delete-btn" onclick="deleteApplication()">Delete This Entry</button>
+        </div>
+
+        <div class="app-card" style="animation-delay:0.20s;">
+          <h4>Full Team Members</h4>
+          <div class="members-wrap">
+            ${membersHtml}
+          </div>
+        </div>
       `;
 
-      tr.onclick = ()=>openPanel(index);
+      document.getElementById("drawerBody").innerHTML = html;
+      document.getElementById("drawerOverlay").classList.add("show");
+      document.getElementById("sideDrawer").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
 
-      tbody.appendChild(tr);
+    function closeDrawer() {
+      document.getElementById("drawerOverlay").classList.remove("show");
+      document.getElementById("sideDrawer").classList.remove("open");
+      document.body.style.overflow = "auto";
+    }
+
+    function deleteApplication() {
+      if (!currentApplicationId) {
+        alert("Application ID not found.");
+        return;
+      }
+
+      const ok = confirm("Are you sure you want to delete this entry?");
+      if (!ok) return;
+
+      fetch(GAS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          action: "delete",
+          id: currentApplicationId
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Entry deleted successfully.");
+          closeDrawer();
+          loadAdminData();
+        } else {
+          alert(data.message || "Delete failed.");
+        }
+      })
+      .catch(() => {
+        alert("Delete failed. Check Apps Script code.");
+      });
+    }
+
+    function formatMembersDrawer(text) {
+      if (!text) {
+        return `<div class="member-box"><div class="member-line">No member details available.</div></div>`;
+      }
+
+      const raw = String(text).trim();
+      const blocks = raw.split(/-{10,}/g).map(item => item.trim()).filter(Boolean);
+
+      if (!blocks.length) {
+        return `<div class="member-box"><div class="member-line">${escapeHtml(raw).replace(/\n/g, "<br>")}</div></div>`;
+      }
+
+      return blocks.map(block => {
+        const lines = block.split("\n").map(line => line.trim()).filter(Boolean);
+        if (!lines.length) return "";
+
+        const firstLine = lines[0];
+        const otherLines = lines.slice(1);
+
+        const isRole = /team leader|member\s*\d+/i.test(firstLine);
+
+        return `
+          <div class="member-box">
+            ${isRole ? `<span class="member-role">${escapeHtml(firstLine)}</span>` : ``}
+            <div class="member-line">
+              ${(isRole ? otherLines : lines).map(line => escapeHtml(line)).join("<br>")}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function exportCSV() {
+      const headers = [
+        "Timestamp",
+        "Application ID",
+        "Team Name",
+        "Team Size",
+        "Fee",
+        "Leader Name",
+        "Leader Email",
+        "Leader Phone",
+        "Leader Department",
+        "Leader College",
+        "Leader Year",
+        "Transaction ID",
+        "Payment Method",
+        "Payment Screenshot File Name",
+        "Payment Screenshot File URL",
+        "Entire Team Members Details"
+      ];
+
+      const rows = filteredRows.length ? filteredRows : allRows;
+      const csv = [headers, ...rows]
+        .map(row => row.map(cell => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "hackverse_registrations.csv";
+      link.click();
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+      document.getElementById("loginMsg").textContent = "";
+      document.getElementById("adminId").value = "";
+      document.getElementById("adminPassword").value = "";
+      closeDrawer();
+    }
+
+    window.addEventListener("keydown", function(e){
+      if(e.key === "Escape"){
+        closeDrawer();
+      }
     });
 
-  }catch(err){
-    alert("Error loading data");
-    console.log(err);
-  }
-}
-
-/* ================= PANEL ================= */
-
-function openPanel(index){
-  currentIndex = index;
-
-  const row = allData[index];
-  const panel = document.getElementById("panel");
-  const details = document.getElementById("details");
-
-  let html = "";
-
-  for(let key in row){
-    html += `<p><b>${key}:</b> ${row[key]}</p>`;
-  }
-
-  /* SHOW PAYMENT SCREENSHOT */
-  if(row["Payment Screenshot File URL"]){
-    html += `<img src="${row["Payment Screenshot File URL"]}" width="100%">`;
-  }
-
-  details.innerHTML = html;
-  panel.classList.add("active");
-}
-
-function closePanel(){
-  document.getElementById("panel").classList.remove("active");
-}
-
-/* ================= DELETE ================= */
-
-async function deleteRow(){
-  if(currentIndex === null) return;
-
-  const confirmDelete = confirm("Delete this entry?");
-  if(!confirmDelete) return;
-
-  const id = allData[currentIndex]["Application ID"];
-
-  await fetch(API_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"delete",
-      id:id
-    })
-  });
-
-  alert("Deleted");
-  closePanel();
-  loadData();
-}
-
-/* ================= LOAD ================= */
-loadData();
-
-</script>
-
+    window.onload = function() {
+      if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "yes") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadAdminData();
+      }
+    };
+  </script>
 </body>
 </html>
