@@ -1,1 +1,1593 @@
-sdsd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hackverse 1.O Admin Dashboard</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --bg1:#06121f;
+      --bg2:#0b1730;
+      --card:rgba(10,16,31,0.72);
+      --card-2:rgba(13,21,40,0.82);
+      --stroke:rgba(255,255,255,0.08);
+      --text:#f8fbff;
+      --muted:#b9c4dc;
+      --blue:#2563eb;
+      --violet:#7c3aed;
+      --green:#16a34a;
+      --red:#dc2626;
+      --orange:#f59e0b;
+      --cyan:#06b6d4;
+      --shadow:0 20px 60px rgba(0,0,0,0.35);
+      --radius:26px;
+    }
+
+    body{
+      min-height:100vh;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,0.22), transparent 26%),
+        radial-gradient(circle at top right, rgba(124,58,237,0.22), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(6,182,212,0.14), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      padding:18px;
+      overflow-x:hidden;
+    }
+
+    .bg-orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(55px);
+      z-index:0;
+      pointer-events:none;
+      animation:floatOrb 12s ease-in-out infinite;
+    }
+
+    .orb1{
+      width:220px;
+      height:220px;
+      background:rgba(37,99,235,0.22);
+      top:40px;
+      left:20px;
+    }
+
+    .orb2{
+      width:260px;
+      height:260px;
+      background:rgba(124,58,237,0.22);
+      top:120px;
+      right:10px;
+      animation-delay:2s;
+    }
+
+    .orb3{
+      width:240px;
+      height:240px;
+      background:rgba(6,182,212,0.14);
+      bottom:20px;
+      left:32%;
+      animation-delay:4s;
+    }
+
+    @keyframes floatOrb{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);}
+      50%{transform:translateY(-15px) translateX(8px) scale(1.06);}
+    }
+
+    .dashboard-shell{
+      max-width:1500px;
+      margin:0 auto;
+      position:relative;
+      z-index:1;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:22px 24px;
+      background:linear-gradient(135deg, rgba(13,20,38,0.88), rgba(18,26,49,0.72));
+      border:1px solid var(--stroke);
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+      margin-bottom:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      min-width:0;
+    }
+
+    .brand-badge{
+      width:64px;
+      height:64px;
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      font-weight:900;
+      background:linear-gradient(135deg, var(--blue), var(--violet));
+      box-shadow:0 18px 30px rgba(37,99,235,0.3);
+      flex-shrink:0;
+    }
+
+    .brand-text h1{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+
+    .brand-text p{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .action-btn{
+      border:none;
+      color:#fff;
+      font-weight:800;
+      padding:13px 18px;
+      border-radius:16px;
+      cursor:pointer;
+      transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+      box-shadow:0 15px 28px rgba(0,0,0,0.24);
+      font-size:14px;
+    }
+
+    .action-btn:hover{
+      transform:translateY(-2px) scale(1.02);
+    }
+
+    .refresh-btn{ background:linear-gradient(135deg, #2563eb, #1d4ed8); }
+    .export-btn{ background:linear-gradient(135deg, #7c3aed, #6d28d9); }
+    .logout-btn{ background:linear-gradient(135deg, #dc2626, #b91c1c); }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .stat-card{
+      background:linear-gradient(145deg, rgba(16,24,46,0.85), rgba(10,15,29,0.78));
+      border:1px solid var(--stroke);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+      position:relative;
+      overflow:hidden;
+      isolation:isolate;
+    }
+
+    .stat-card::before{
+      content:"";
+      position:absolute;
+      inset:auto -30px -30px auto;
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.12), transparent 65%);
+      z-index:-1;
+    }
+
+    .stat-title{
+      color:#d7def0;
+      font-size:13px;
+      letter-spacing:.3px;
+      font-weight:700;
+      margin-bottom:10px;
+      text-transform:uppercase;
+    }
+
+    .stat-value{
+      font-size:34px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .stat-note{
+      color:var(--muted);
+      line-height:1.5;
+      font-size:13px;
+    }
+
+    .main-layout{
+      display:grid;
+      grid-template-columns:370px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .left-panel,
+    .right-panel{
+      background:linear-gradient(145deg, rgba(15,24,46,0.88), rgba(8,14,28,0.78));
+      border:1px solid var(--stroke);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      overflow:hidden;
+    }
+
+    .panel-head,
+    .filters,
+    .mini-status,
+    .table-toolbar{
+      padding:22px;
+    }
+
+    .panel-head h2,
+    .table-toolbar .title{
+      font-size:21px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .panel-head p,
+    .table-toolbar .sub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .filters{
+      display:grid;
+      gap:14px;
+      border-top:1px solid rgba(255,255,255,0.05);
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+
+    .input-wrap{
+      display:grid;
+      gap:8px;
+    }
+
+    .input-wrap label{
+      font-size:13px;
+      color:#dce4f7;
+      font-weight:700;
+    }
+
+    .input-wrap input,
+    .input-wrap select{
+      width:100%;
+      border:1px solid rgba(255,255,255,0.08);
+      outline:none;
+      color:#fff;
+      background:rgba(255,255,255,0.06);
+      border-radius:16px;
+      padding:14px 14px;
+      font-size:14px;
+      transition:border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+    }
+
+    .input-wrap input:focus,
+    .input-wrap select:focus{
+      border-color:rgba(96,165,250,0.75);
+      box-shadow:0 0 0 4px rgba(37,99,235,0.14);
+      transform:translateY(-1px);
+    }
+
+    .mini-status{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .mini-card{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .mini-card h4{
+      font-size:13px;
+      color:#dce4f7;
+      margin-bottom:10px;
+    }
+
+    .mini-value{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .mini-text{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .table-toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+
+    .results-badge{
+      padding:10px 14px;
+      background:linear-gradient(135deg, rgba(37,99,235,0.2), rgba(124,58,237,0.18));
+      color:#dbeafe;
+      border:1px solid rgba(96,165,250,0.18);
+      border-radius:14px;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .table-wrap{
+      width:100%;
+      overflow:auto;
+      padding:0 22px 22px 22px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:820px;
+    }
+
+    thead th{
+      position:sticky;
+      top:0;
+      background:rgba(10,17,32,0.95);
+      z-index:2;
+      color:#d8e0f2;
+      text-align:left;
+      font-size:13px;
+      letter-spacing:.2px;
+      padding:16px 14px;
+      border-bottom:1px solid rgba(255,255,255,0.07);
+    }
+
+    tbody td{
+      padding:15px 14px;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+      color:#f6f8ff;
+      font-size:14px;
+      vertical-align:middle;
+    }
+
+    tbody tr{
+      transition:background .22s ease, transform .22s ease;
+    }
+
+    tbody tr:hover{
+      background:rgba(255,255,255,0.03);
+    }
+
+    .serial-chip{
+      min-width:42px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.06);
+      font-weight:800;
+      font-size:12px;
+    }
+
+    .team-link-btn{
+      border:none;
+      background:none;
+      color:#93c5fd;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:900;
+      text-align:left;
+      line-height:1.5;
+    }
+
+    .team-link-btn:hover{
+      color:#bfdbfe;
+      text-decoration:underline;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.15px;
+      white-space:nowrap;
+    }
+
+    .status-pill.paid{
+      background:rgba(22,163,74,0.15);
+      color:#bbf7d0;
+      border:1px solid rgba(22,163,74,0.28);
+    }
+
+    .status-pill.pending{
+      background:rgba(245,158,11,0.14);
+      color:#fde68a;
+      border:1px solid rgba(245,158,11,0.28);
+    }
+
+    .table-delete-btn{
+      border:none;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:800;
+      color:#fff;
+      cursor:pointer;
+      background:linear-gradient(135deg, #dc2626, #b91c1c);
+    }
+
+    .empty-state{
+      padding:28px 14px;
+      color:var(--muted);
+      text-align:center;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .drawer-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(3,8,20,0.62);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:70;
+      backdrop-filter:blur(5px);
+    }
+
+    .drawer-overlay.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .detail-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(760px, 100%);
+      height:100vh;
+      background:linear-gradient(180deg, rgba(9,15,28,0.98), rgba(15,21,39,0.98));
+      border-left:1px solid rgba(255,255,255,0.08);
+      box-shadow:-28px 0 60px rgba(0,0,0,0.34);
+      transform:translateX(100%);
+      transition:transform .28s ease;
+      z-index:80;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .detail-drawer.open{
+      transform:translateX(0);
+    }
+
+    .drawer-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      padding:22px;
+      border-bottom:1px solid rgba(255,255,255,0.07);
+      background:linear-gradient(135deg, rgba(37,99,235,0.14), rgba(124,58,237,0.14));
+    }
+
+    .drawer-head h3{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .drawer-head p{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .drawer-close{
+      border:none;
+      cursor:pointer;
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      color:#fff;
+      background:rgba(255,255,255,0.08);
+      font-size:22px;
+      font-weight:900;
+      flex-shrink:0;
+    }
+
+    .drawer-content{
+      padding:22px;
+      overflow:auto;
+      display:grid;
+      gap:16px;
+    }
+
+    .detail-block{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.07);
+      border-radius:22px;
+      padding:18px;
+    }
+
+    .detail-block h4{
+      font-size:16px;
+      font-weight:900;
+      margin-bottom:14px;
+      color:#dbeafe;
+    }
+
+    .detail-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .info-card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:16px;
+      padding:14px;
+      min-width:0;
+    }
+
+    .info-card .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+      line-height:1.4;
+    }
+
+    .info-card .value{
+      font-size:14px;
+      font-weight:800;
+      line-height:1.55;
+      word-break:break-word;
+    }
+
+    .members-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .member-card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:18px;
+      padding:16px;
+    }
+
+    .member-card h5{
+      font-size:15px;
+      font-weight:900;
+      margin-bottom:10px;
+      color:#c4b5fd;
+    }
+
+    .member-card p{
+      line-height:1.7;
+      color:#e9eefc;
+      font-size:14px;
+      word-break:break-word;
+    }
+
+    .member-card strong{
+      color:#9cc3ff;
+    }
+
+    .screenshot-box{
+      display:grid;
+      gap:14px;
+    }
+
+    .screenshot-preview-wrap{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.03);
+      padding:12px;
+      min-height:280px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .screenshot-box img{
+      max-width:100%;
+      max-height:460px;
+      display:block;
+      border-radius:14px;
+      object-fit:contain;
+      box-shadow:0 20px 40px rgba(0,0,0,0.28);
+    }
+
+    .screenshot-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .shot-btn,
+    .drawer-delete-btn{
+      border:none;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      color:#fff;
+      font-weight:900;
+      padding:12px 16px;
+      border-radius:14px;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .shot-open{
+      background:linear-gradient(135deg, #2563eb, #1d4ed8);
+    }
+
+    .shot-download{
+      background:linear-gradient(135deg, #7c3aed, #6d28d9);
+    }
+
+    .shot-tab{
+      background:linear-gradient(135deg, #0891b2, #0e7490);
+    }
+
+    .drawer-action-row{
+      margin-top:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .drawer-delete-btn{
+      background:linear-gradient(135deg, #dc2626, #991b1b);
+    }
+
+    .screenshot-fallback{
+      display:none;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+      padding:18px;
+    }
+
+    .toast{
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:120;
+      min-width:260px;
+      max-width:380px;
+      padding:14px 16px;
+      border-radius:18px;
+      color:#fff;
+      font-size:14px;
+      font-weight:800;
+      box-shadow:0 18px 34px rgba(0,0,0,0.28);
+      transform:translateY(-12px);
+      opacity:0;
+      pointer-events:none;
+      transition:all .24s ease;
+      line-height:1.6;
+      backdrop-filter:blur(8px);
+    }
+
+    .toast.show{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .toast.success{
+      background:linear-gradient(135deg, rgba(22,163,74,0.95), rgba(21,128,61,0.95));
+    }
+
+    .toast.error{
+      background:linear-gradient(135deg, rgba(220,38,38,0.95), rgba(185,28,28,0.95));
+    }
+
+    .toast.info{
+      background:linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
+    }
+
+    @media (max-width:1180px){
+      .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+      .main-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:768px){
+      body{
+        padding:12px;
+      }
+
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:18px 16px;
+        border-radius:22px;
+      }
+
+      .brand{
+        width:100%;
+      }
+
+      .brand-badge{
+        width:56px;
+        height:56px;
+        border-radius:16px;
+        font-size:22px;
+      }
+
+      .brand-text h1{
+        font-size:22px;
+      }
+
+      .brand-text p{
+        font-size:13px;
+      }
+
+      .top-actions{
+        width:100%;
+        justify-content:stretch;
+      }
+
+      .top-actions .action-btn{
+        flex:1;
+      }
+
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+
+      .left-panel,
+      .right-panel{
+        border-radius:22px;
+      }
+
+      .panel-head,
+      .filters,
+      .mini-status,
+      .table-toolbar{
+        padding-left:16px;
+        padding-right:16px;
+      }
+
+      .mini-status{
+        grid-template-columns:1fr;
+      }
+
+      .table-toolbar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .results-badge{
+        width:100%;
+        text-align:center;
+      }
+
+      .detail-grid,
+      .members-grid{
+        grid-template-columns:1fr;
+      }
+
+      .drawer-head{
+        padding:18px 16px;
+      }
+
+      .drawer-head h3{
+        font-size:20px;
+      }
+
+      .drawer-content{
+        padding:16px;
+      }
+
+      .toast{
+        left:12px;
+        right:12px;
+        top:12px;
+        min-width:auto;
+        max-width:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <div class="dashboard-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">H</div>
+        <div class="brand-text">
+          <h1>Hackverse 1.O Admin Dashboard</h1>
+          <p>Premium mobile-friendly application viewer with payment screenshot preview and delete option.</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="action-btn refresh-btn" id="refreshBtn">Refresh Data</button>
+        <button class="action-btn export-btn" id="exportBtn">Export CSV</button>
+        <button class="action-btn logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-title">Total Teams</div>
+        <div class="stat-value" id="totalTeams">0</div>
+        <div class="stat-note">Overall team applications available in the dashboard.</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Paid Teams</div>
+        <div class="stat-value" id="paidTeams">0</div>
+        <div class="stat-note">Teams with confirmed payment transaction details.</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Pending Review</div>
+        <div class="stat-value" id="pendingTeams">0</div>
+        <div class="stat-note">Applications needing admin verification or correction.</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Total Fee</div>
+        <div class="stat-value" id="totalFee">₹0</div>
+        <div class="stat-note">Overall registered fee collected from all submitted teams.</div>
+      </div>
+    </section>
+
+    <section class="main-layout">
+      <aside class="left-panel">
+        <div class="panel-head">
+          <h2>Search and Filters</h2>
+          <p>Find teams quickly and open their full application in the side drawer.</p>
+        </div>
+
+        <div class="filters">
+          <div class="input-wrap">
+            <label for="searchInput">Search by team, leader, application ID, transaction ID</label>
+            <input type="text" id="searchInput" placeholder="Type team name, leader name, ID..." />
+          </div>
+
+          <div class="input-wrap">
+            <label for="teamSizeFilter">Filter by Team Size</label>
+            <select id="teamSizeFilter">
+              <option value="">All Team Sizes</option>
+              <option value="2">2 Members</option>
+              <option value="3">3 Members</option>
+              <option value="4">4 Members</option>
+            </select>
+          </div>
+
+          <div class="input-wrap">
+            <label for="paymentFilter">Filter by Payment Status</label>
+            <select id="paymentFilter">
+              <option value="">All Payment Status</option>
+              <option value="Paid">Paid</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mini-status">
+          <div class="mini-card">
+            <h4>Last Refresh</h4>
+            <div class="mini-value" id="lastRefreshTime">--:--</div>
+            <div class="mini-text">Shows the most recent dashboard sync time.</div>
+          </div>
+
+          <div class="mini-card">
+            <h4>Visible Results</h4>
+            <div class="mini-value" id="visibleResults">0</div>
+            <div class="mini-text">Count changes when search or filter values are updated.</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="right-panel">
+        <div class="table-toolbar">
+          <div>
+            <div class="title">Registered Teams Table</div>
+            <div class="sub">Click the team name to open the full application details.</div>
+          </div>
+          <div class="results-badge" id="resultsBadge">0 Teams</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>SI.No</th>
+                <th>Team Name</th>
+                <th>Leader Name</th>
+                <th>College</th>
+                <th>Team Size</th>
+                <th>Payment</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody id="teamTableBody">
+              <tr>
+                <td colspan="7">
+                  <div class="empty-state">Loading application data.</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </div>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="detail-drawer" id="detailDrawer">
+    <div class="drawer-head">
+      <div>
+        <h3 id="drawerTitle">Team Details</h3>
+        <p id="drawerSubtitle">Application information will appear here.</p>
+      </div>
+      <button class="drawer-close" id="drawerCloseBtn" type="button">&times;</button>
+    </div>
+
+    <div class="drawer-content" id="drawerContent">
+      <div class="empty-state">Select any team from the table to view full application details.</div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const GAS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+    const searchInput = document.getElementById("searchInput");
+    const teamSizeFilter = document.getElementById("teamSizeFilter");
+    const paymentFilter = document.getElementById("paymentFilter");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const totalTeamsEl = document.getElementById("totalTeams");
+    const paidTeamsEl = document.getElementById("paidTeams");
+    const pendingTeamsEl = document.getElementById("pendingTeams");
+    const totalFeeEl = document.getElementById("totalFee");
+
+    const lastRefreshTimeEl = document.getElementById("lastRefreshTime");
+    const visibleResultsEl = document.getElementById("visibleResults");
+    const resultsBadgeEl = document.getElementById("resultsBadge");
+    const teamTableBody = document.getElementById("teamTableBody");
+
+    const drawerOverlay = document.getElementById("drawerOverlay");
+    const detailDrawer = document.getElementById("detailDrawer");
+    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+    const drawerTitle = document.getElementById("drawerTitle");
+    const drawerSubtitle = document.getElementById("drawerSubtitle");
+    const drawerContent = document.getElementById("drawerContent");
+
+    const toast = document.getElementById("toast");
+
+    let allTeams = [];
+
+    function safe(value) {
+      return value === undefined || value === null ? "" : String(value).trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatCurrency(value) {
+      const num = Number(value || 0);
+      return "₹" + num.toLocaleString("en-IN");
+    }
+
+    function formatTime(dateObj) {
+      try {
+        return dateObj.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      } catch (err) {
+        return "--:--";
+      }
+    }
+
+    function showToast(message, type = "info") {
+      toast.textContent = message;
+      toast.className = "toast " + type + " show";
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => {
+        toast.className = "toast " + type;
+      }, 2600);
+    }
+
+    function normalizeStatus(team) {
+      if (safe(team.paymentStatus)) return safe(team.paymentStatus);
+      return safe(team.transactionId) ? "Paid" : "Pending";
+    }
+
+    function getStatusClass(status) {
+      return String(status).toLowerCase() === "paid" ? "paid" : "pending";
+    }
+
+    function parseMembersFromText(text) {
+      const raw = safe(text);
+      if (!raw) return [];
+
+      const blocks = raw.split("----------------------").map(part => part.trim()).filter(Boolean);
+
+      return blocks.map(block => {
+        const lines = block.split("\n").map(line => line.trim()).filter(Boolean);
+        const role = lines[0] || "Member";
+
+        const getVal = (prefix) => {
+          const line = lines.find(item => item.toLowerCase().startsWith(prefix.toLowerCase()));
+          return line ? line.split(":").slice(1).join(":").trim() : "";
+        };
+
+        return {
+          role,
+          name: getVal("Name"),
+          email: getVal("Email"),
+          phone: getVal("Phone"),
+          dept: getVal("Department"),
+          college: getVal("College Name"),
+          year: getVal("Year of Study")
+        };
+      });
+    }
+
+    function getFilteredTeams() {
+      const search = safe(searchInput.value).toLowerCase();
+      const teamSize = safe(teamSizeFilter.value);
+      const paymentStatus = safe(paymentFilter.value);
+
+      return allTeams.filter(team => {
+        const haystack = [
+          safe(team.applicationId),
+          safe(team.teamName),
+          safe(team.leaderName),
+          safe(team.leaderEmail),
+          safe(team.leaderPhone),
+          safe(team.leaderDept),
+          safe(team.leaderCollege),
+          safe(team.transactionId)
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = !search || haystack.includes(search);
+        const matchesTeamSize = !teamSize || String(team.teamSize) === String(teamSize);
+        const matchesPayment = !paymentStatus || normalizeStatus(team) === paymentStatus;
+
+        return matchesSearch && matchesTeamSize && matchesPayment;
+      });
+    }
+
+    function updateDashboardStats() {
+      const totalTeams = allTeams.length;
+      const paidTeams = allTeams.filter(team => normalizeStatus(team) === "Paid").length;
+      const pendingTeams = totalTeams - paidTeams;
+      const totalFee = allTeams.reduce((sum, team) => sum + Number(team.fee || 0), 0);
+
+      totalTeamsEl.textContent = totalTeams;
+      paidTeamsEl.textContent = paidTeams;
+      pendingTeamsEl.textContent = pendingTeams;
+      totalFeeEl.textContent = formatCurrency(totalFee);
+    }
+
+    function updateVisibleStats(filtered) {
+      visibleResultsEl.textContent = filtered.length;
+      resultsBadgeEl.textContent = filtered.length + (filtered.length === 1 ? " Team" : " Teams");
+    }
+
+    function renderTable() {
+      const filtered = getFilteredTeams();
+      updateVisibleStats(filtered);
+
+      if (!filtered.length) {
+        teamTableBody.innerHTML = `
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">No matching application data found.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      teamTableBody.innerHTML = filtered.map((team, index) => {
+        const status = normalizeStatus(team);
+        return `
+          <tr>
+            <td><span class="serial-chip">${index + 1}</span></td>
+            <td>
+              <button class="team-link-btn" onclick="openDrawerById('${escapeHtml(team.applicationId || team.teamName)}')">
+                ${escapeHtml(safe(team.teamName) || "Untitled Team")}
+              </button>
+            </td>
+            <td>${escapeHtml(safe(team.leaderName) || "-")}</td>
+            <td>${escapeHtml(safe(team.leaderCollege) || "-")}</td>
+            <td>${escapeHtml(safe(team.teamSize) || "-")}</td>
+            <td>
+              <span class="status-pill ${getStatusClass(status)}">${escapeHtml(status)}</span>
+            </td>
+            <td>
+              <button class="table-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function getScreenshotPreviewHtml(team) {
+      const previewUrl = safe(team.paymentScreenshotPreviewUrl || team.paymentScreenshotUrl);
+      const openUrl = safe(team.paymentScreenshotOpenUrl || team.paymentScreenshotUrl);
+      const downloadUrl = safe(team.paymentScreenshotDownloadUrl || team.paymentScreenshotUrl);
+
+      if (!previewUrl && !openUrl) {
+        return `
+          <div class="screenshot-box">
+            <div class="screenshot-preview-wrap">
+              <div class="empty-state">Payment screenshot not available.</div>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="screenshot-box">
+          <div class="screenshot-preview-wrap">
+            <img
+              src="${escapeHtml(previewUrl || openUrl)}"
+              alt="Payment Screenshot"
+              onerror="handlePreviewError(this, '${escapeHtml(openUrl)}')"
+            >
+            <div class="screenshot-fallback">
+              Preview not available.<br>
+              Please use the buttons below to open the full screenshot.
+            </div>
+          </div>
+
+          <div class="screenshot-actions">
+            ${openUrl ? `
+              <a class="shot-btn shot-open" href="${escapeHtml(openUrl)}" target="_blank" rel="noopener noreferrer">
+                Open Full Screenshot
+              </a>
+            ` : ""}
+
+            ${downloadUrl ? `
+              <a class="shot-btn shot-download" href="${escapeHtml(downloadUrl)}" target="_blank" rel="noopener noreferrer">
+                Download Screenshot
+              </a>
+            ` : ""}
+
+            ${previewUrl ? `
+              <a class="shot-btn shot-tab" href="${escapeHtml(previewUrl)}" target="_blank" rel="noopener noreferrer">
+                Open Preview
+              </a>
+            ` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    window.handlePreviewError = function(imgEl, openUrl) {
+      imgEl.style.display = "none";
+      const wrap = imgEl.parentElement;
+      const fallback = wrap.querySelector(".screenshot-fallback");
+      if (fallback) {
+        fallback.style.display = "block";
+      }
+    };
+
+    function openDrawer(team) {
+      const members = parseMembersFromText(team.teamMembersDetails);
+
+      drawerTitle.textContent = safe(team.teamName) || "Team Details";
+      drawerSubtitle.textContent = "Application ID: " + (safe(team.applicationId) || "-");
+
+      drawerContent.innerHTML = `
+        <div class="detail-block">
+          <h4>Application Overview</h4>
+          <div class="detail-grid">
+            <div class="info-card">
+              <div class="label">Application ID</div>
+              <div class="value">${escapeHtml(safe(team.applicationId) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Submitted At</div>
+              <div class="value">${escapeHtml(safe(team.submittedAt) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Team Name</div>
+              <div class="value">${escapeHtml(safe(team.teamName) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Team Size</div>
+              <div class="value">${escapeHtml(safe(team.teamSize) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Fee</div>
+              <div class="value">${escapeHtml(formatCurrency(team.fee || 0))}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Payment Status</div>
+              <div class="value">${escapeHtml(normalizeStatus(team))}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Leader Details</h4>
+          <div class="detail-grid">
+            <div class="info-card">
+              <div class="label">Leader Name</div>
+              <div class="value">${escapeHtml(safe(team.leaderName) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Leader Email</div>
+              <div class="value">${escapeHtml(safe(team.leaderEmail) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Leader Phone</div>
+              <div class="value">${escapeHtml(safe(team.leaderPhone) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Department</div>
+              <div class="value">${escapeHtml(safe(team.leaderDept) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">College Name</div>
+              <div class="value">${escapeHtml(safe(team.leaderCollege) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Year of Study</div>
+              <div class="value">${escapeHtml(safe(team.leaderYear) || "-")}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Payment Details</h4>
+          <div class="detail-grid">
+            <div class="info-card">
+              <div class="label">Transaction ID</div>
+              <div class="value">${escapeHtml(safe(team.transactionId) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Payment Method</div>
+              <div class="value">${escapeHtml(safe(team.paymentMethod) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Screenshot File Name</div>
+              <div class="value">${escapeHtml(safe(team.paymentScreenshotName) || "-")}</div>
+            </div>
+
+            <div class="info-card">
+              <div class="label">Ticket Link</div>
+              <div class="value">
+                ${team.ticketLink
+                  ? `<a href="${escapeHtml(team.ticketLink)}" target="_blank" rel="noopener noreferrer" style="color:#93c5fd;font-weight:800;">Open Ticket</a>`
+                  : "-"
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Team Members</h4>
+          <div class="members-grid">
+            ${
+              members.length
+                ? members.map(member => `
+                  <div class="member-card">
+                    <h5>${escapeHtml(safe(member.role) || "Member")}</h5>
+                    <p>
+                      <strong>Name:</strong> ${escapeHtml(safe(member.name) || "-")}<br>
+                      <strong>Email:</strong> ${escapeHtml(safe(member.email) || "-")}<br>
+                      <strong>Phone:</strong> ${escapeHtml(safe(member.phone) || "-")}<br>
+                      <strong>Department:</strong> ${escapeHtml(safe(member.dept) || "-")}<br>
+                      <strong>College:</strong> ${escapeHtml(safe(member.college) || "-")}<br>
+                      <strong>Year:</strong> ${escapeHtml(safe(member.year) || "-")}
+                    </p>
+                  </div>
+                `).join("")
+                : `<div class="empty-state">No member data available.</div>`
+            }
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Payment Screenshot</h4>
+          ${getScreenshotPreviewHtml(team)}
+          <div class="drawer-action-row">
+            <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+              Delete This Application
+            </button>
+          </div>
+        </div>
+      `;
+
+      drawerOverlay.classList.add("show");
+      detailDrawer.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDrawer() {
+      drawerOverlay.classList.remove("show");
+      detailDrawer.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    async function deleteTeam(team) {
+      const confirmDelete = confirm(`Are you sure you want to delete "${team.teamName}"?`);
+      if (!confirmDelete) return;
+
+      try {
+        showToast("Deleting application.", "info");
+
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "deleteRegistration",
+            applicationId: team.applicationId,
+            rowNumber: team.rowNumber || ""
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          allTeams = allTeams.filter(item => (item.applicationId || item.teamName) !== (team.applicationId || team.teamName));
+          updateDashboardStats();
+          renderTable();
+          closeDrawer();
+          showToast("Application deleted successfully.", "success");
+        } else {
+          throw new Error(result.message || "Delete failed.");
+        }
+      } catch (error) {
+        console.error(error);
+        showToast(error.message || "Unable to delete application.", "error");
+      }
+    }
+
+    window.openDrawerById = function(identifier) {
+      const team = allTeams.find(item =>
+        String(item.applicationId || item.teamName) === String(identifier)
+      );
+
+      if (team) {
+        openDrawer(team);
+      } else {
+        showToast("Unable to open selected application.", "error");
+      }
+    };
+
+    window.deleteTeamById = function(identifier) {
+      const team = allTeams.find(item =>
+        String(item.applicationId || item.teamName) === String(identifier)
+      );
+
+      if (team) {
+        deleteTeam(team);
+      } else {
+        showToast("Unable to find selected application.", "error");
+      }
+    };
+
+    function exportToCSV() {
+      const filtered = getFilteredTeams();
+
+      if (!filtered.length) {
+        showToast("No data available to export.", "error");
+        return;
+      }
+
+      const rows = [
+        [
+          "SI.No",
+          "Application ID",
+          "Team Name",
+          "Leader Name",
+          "Leader Email",
+          "Leader Phone",
+          "Department",
+          "College",
+          "Year",
+          "Team Size",
+          "Fee",
+          "Transaction ID",
+          "Payment Method",
+          "Payment Status"
+        ]
+      ];
+
+      filtered.forEach((team, index) => {
+        rows.push([
+          index + 1,
+          safe(team.applicationId),
+          safe(team.teamName),
+          safe(team.leaderName),
+          safe(team.leaderEmail),
+          safe(team.leaderPhone),
+          safe(team.leaderDept),
+          safe(team.leaderCollege),
+          safe(team.leaderYear),
+          safe(team.teamSize),
+          safe(team.fee),
+          safe(team.transactionId),
+          safe(team.paymentMethod),
+          normalizeStatus(team)
+        ]);
+      });
+
+      const csvContent = rows
+        .map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "hackverse-admin-data.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(url);
+      showToast("CSV exported successfully.", "success");
+    }
+
+    function mapBackendTeam(team) {
+      return {
+        submittedAt: team.submittedAt || "",
+        applicationId: team.applicationId || "",
+        rowNumber: team.rowNumber || "",
+        teamName: team.teamName || "",
+        teamSize: team.teamSize || "",
+        fee: team.fee || 0,
+
+        leaderName: team.leaderName || "",
+        leaderEmail: team.leaderEmail || "",
+        leaderPhone: team.leaderPhone || "",
+        leaderDept: team.leaderDept || "",
+        leaderCollege: team.leaderCollege || "",
+        leaderYear: team.leaderYear || "",
+
+        transactionId: team.transactionId || "",
+        paymentMethod: team.paymentMethod || "",
+        paymentScreenshotName: team.paymentScreenshotName || "",
+        paymentScreenshotUrl: team.paymentScreenshotUrl || "",
+        paymentScreenshotPreviewUrl: team.paymentScreenshotPreviewUrl || team.paymentScreenshotUrl || "",
+        paymentScreenshotOpenUrl: team.paymentScreenshotOpenUrl || team.paymentScreenshotUrl || "",
+        paymentScreenshotDownloadUrl: team.paymentScreenshotDownloadUrl || team.paymentScreenshotUrl || "",
+        teamMembersDetails: team.teamMembersDetails || "",
+        ticketLink: team.ticketLink || "",
+        paymentStatus: team.paymentStatus || ""
+      };
+    }
+
+    async function loadTeams() {
+      try {
+        showToast("Loading application data.", "info");
+
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "getRegistrations" })
+        });
+
+        const result = await response.json();
+
+        if (!result || result.status !== "success") {
+          throw new Error((result && result.message) || "Unable to load registration data.");
+        }
+
+        allTeams = Array.isArray(result.data) ? result.data.map(mapBackendTeam) : [];
+        updateDashboardStats();
+        renderTable();
+        lastRefreshTimeEl.textContent = formatTime(new Date());
+
+        showToast("Dashboard updated successfully.", "success");
+      } catch (error) {
+        console.error(error);
+        allTeams = [];
+        updateDashboardStats();
+        renderTable();
+        lastRefreshTimeEl.textContent = formatTime(new Date());
+        showToast(error.message || "Unable to load application data.", "error");
+      }
+    }
+
+    searchInput.addEventListener("input", renderTable);
+    teamSizeFilter.addEventListener("change", renderTable);
+    paymentFilter.addEventListener("change", renderTable);
+
+    refreshBtn.addEventListener("click", loadTeams);
+    exportBtn.addEventListener("click", exportToCSV);
+
+    logoutBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("hackverseAdminLoggedIn");
+      localStorage.removeItem("hackverseAdminLoggedIn");
+      showToast("Logged out successfully.", "success");
+      setTimeout(() => {
+        window.location.href = "admin-login.html";
+      }, 500);
+    });
+
+    drawerCloseBtn.addEventListener("click", closeDrawer);
+    drawerOverlay.addEventListener("click", closeDrawer);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeDrawer();
+      }
+    });
+
+    loadTeams();
+  </script>
+</body>
+</html>
