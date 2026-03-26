@@ -233,20 +233,6 @@
       box-shadow:0 24px 48px rgba(0,0,0,0.28);
     }
 
-    .stat-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.06), transparent);
-      transform:translateX(-100%);
-      transition:0.8s ease;
-      pointer-events:none;
-    }
-
-    .stat-card:hover::before{
-      transform:translateX(100%);
-    }
-
     .stat-title{
       font-size:13px;
       text-transform:uppercase;
@@ -432,7 +418,7 @@
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:720px;
+      min-width:860px;
     }
 
     thead th{
@@ -474,13 +460,13 @@
       cursor:pointer;
       padding:0;
       text-align:left;
+      box-shadow:none;
     }
 
     .team-link:hover{
       color:#fff;
       text-decoration:underline;
       transform:none;
-      box-shadow:none;
     }
 
     .status-pill{
@@ -506,6 +492,25 @@
       background:rgba(245,158,11,0.16);
       color:#fde68a;
       border:1px solid rgba(253,230,138,0.24);
+    }
+
+    .delete-btn,
+    .drawer-delete-btn{
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(135deg, #ef4444, #dc2626);
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+      padding:10px 14px;
+      cursor:pointer;
+      transition:0.28s ease;
+      box-shadow:0 12px 24px rgba(220,38,38,0.20);
+    }
+
+    .delete-btn:hover,
+    .drawer-delete-btn:hover{
+      transform:translateY(-2px) scale(1.02);
     }
 
     .drawer-overlay{
@@ -674,6 +679,12 @@
       box-shadow:0 14px 24px rgba(0,0,0,0.18);
     }
 
+    .drawer-action-row{
+      margin-top:14px;
+      display:flex;
+      justify-content:flex-end;
+    }
+
     .empty-state{
       padding:36px 20px;
       text-align:center;
@@ -836,7 +847,7 @@
         <div class="brand-badge">H</div>
         <div class="brand-text">
           <h1>Hackverse 1.O Admin Dashboard</h1>
-          <p>Premium mobile-friendly application viewer with side drawer team details panel.</p>
+          <p>Premium mobile-friendly application viewer with delete option.</p>
         </div>
       </div>
 
@@ -940,11 +951,12 @@
                 <th>College</th>
                 <th>Team Size</th>
                 <th>Payment</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody id="teamTableBody">
               <tr>
-                <td colspan="6">
+                <td colspan="7">
                   <div class="empty-state">Loading application data...</div>
                 </td>
               </tr>
@@ -977,7 +989,7 @@
   <div class="toast info" id="toast"></div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwcmYkwGgM-gFYzTsq6aTkJ01cqF4o93OJlwgxidh5jsi5crxw4RzFlpJzVzElrbOLAhA/exec";
+    const GAS_URL = "";
 
     const teamTableBody = document.getElementById("teamTableBody");
     const searchInput = document.getElementById("searchInput");
@@ -1051,7 +1063,7 @@
     async function loadTeams() {
       teamTableBody.innerHTML = `
         <tr>
-          <td colspan="6">
+          <td colspan="7">
             <div class="empty-state">Loading application data...</div>
           </td>
         </tr>
@@ -1078,10 +1090,10 @@
       } catch (error) {
         console.error(error);
 
-        /* Fallback demo data */
         allTeams = [
           {
             applicationId: "HV001",
+            rowNumber: 2,
             teamName: "Code Titans",
             teamSize: "4",
             leaderName: "Ravi Teja",
@@ -1104,6 +1116,7 @@
           },
           {
             applicationId: "HV002",
+            rowNumber: 3,
             teamName: "AI Sparks",
             teamSize: "3",
             leaderName: "Sneha",
@@ -1122,26 +1135,6 @@
             ],
             paymentScreenshotUrl: "payment-qr.png",
             submittedAt: "2026-03-25 11:45 AM"
-          },
-          {
-            applicationId: "HV003",
-            teamName: "Bug Smashers",
-            teamSize: "2",
-            leaderName: "Arun Kumar",
-            leaderEmail: "arun@gmail.com",
-            leaderPhone: "9012345678",
-            leaderDept: "IT",
-            leaderCollege: "ABC Engineering College",
-            leaderYear: "2nd Year",
-            transactionId: "PHN998122",
-            paymentMethod: "PhonePe",
-            paymentStatus: "Paid",
-            members: [
-              { role: "Team Leader", name: "Arun Kumar", email: "arun@gmail.com", phone: "9012345678", dept: "IT", college: "ABC Engineering College", year: "2nd Year" },
-              { role: "Member 2", name: "Vamsi", email: "vamsi@gmail.com", phone: "9090909090", dept: "IT", college: "ABC Engineering College", year: "2nd Year" }
-            ],
-            paymentScreenshotUrl: "payment-qr.png",
-            submittedAt: "2026-03-25 12:05 PM"
           }
         ];
 
@@ -1190,7 +1183,7 @@
       if (!filtered.length) {
         teamTableBody.innerHTML = `
           <tr>
-            <td colspan="6">
+            <td colspan="7">
               <div class="empty-state">No teams found for the current search or filter.</div>
             </td>
           </tr>
@@ -1213,6 +1206,11 @@
             <span class="status-pill ${normalizeStatus(team) === 'Paid' ? 'paid' : 'pending'}">
               ${escapeHtml(normalizeStatus(team))}
             </span>
+          </td>
+          <td>
+            <button class="delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+              Delete
+            </button>
           </td>
         </tr>
       `).join("");
@@ -1277,6 +1275,11 @@
           <div class="screenshot-box">
             <img src="${escapeHtml(team.paymentScreenshotUrl || 'payment-qr.png')}" alt="Payment Screenshot">
           </div>
+          <div class="drawer-action-row">
+            <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+              Delete This Application
+            </button>
+          </div>
         </div>
       `;
 
@@ -1291,6 +1294,46 @@
       document.body.style.overflow = "";
     }
 
+    async function deleteTeam(team) {
+      const confirmDelete = confirm(`Are you sure you want to delete "${team.teamName}"?`);
+      if (!confirmDelete) return;
+
+      try {
+        showToast("Deleting application...", "info");
+
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "deleteRegistration",
+            applicationId: team.applicationId,
+            rowNumber: team.rowNumber || ""
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          allTeams = allTeams.filter(item => (item.applicationId || item.teamName) !== (team.applicationId || team.teamName));
+          updateDashboardStats();
+          renderTable();
+          closeDrawer();
+          showToast("Application deleted successfully.", "success");
+        } else {
+          throw new Error(result.message || "Delete failed.");
+        }
+      } catch (error) {
+        console.error(error);
+
+        /* fallback demo delete */
+        allTeams = allTeams.filter(item => (item.applicationId || item.teamName) !== (team.applicationId || team.teamName));
+        updateDashboardStats();
+        renderTable();
+        closeDrawer();
+        showToast("Deleted from demo view. Connect backend delete logic.", "error");
+      }
+    }
+
     window.openDrawerById = function(identifier) {
       const team = allTeams.find(item =>
         String(item.applicationId || item.teamName) === String(identifier)
@@ -1300,6 +1343,18 @@
         openDrawer(team);
       } else {
         showToast("Unable to open selected application.", "error");
+      }
+    };
+
+    window.deleteTeamById = function(identifier) {
+      const team = allTeams.find(item =>
+        String(item.applicationId || item.teamName) === String(identifier)
+      );
+
+      if (team) {
+        deleteTeam(team);
+      } else {
+        showToast("Unable to find selected application.", "error");
       }
     };
 
