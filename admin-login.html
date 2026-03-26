@@ -3,200 +3,824 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hackverse 1.O Admin Login</title>
+  <title>Hackverse 1.O Admin Dashboard</title>
   <style>
     *{
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family:Arial, Helvetica, sans-serif;
+      font-family:"Segoe UI", Arial, sans-serif;
+    }
+
+    :root{
+      --bg1:#070b1a;
+      --bg2:#111c3d;
+      --bg3:#3d0a62;
+      --primary:#2563eb;
+      --secondary:#7c3aed;
+      --accent:#f59e0b;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --cyan:#06b6d4;
+      --pink:#ec4899;
+      --border:rgba(255,255,255,0.14);
+      --text:#ffffff;
+      --muted:#cbd5e1;
+      --panel:rgba(255,255,255,0.07);
+      --panel2:rgba(255,255,255,0.1);
+      --shadow:0 18px 45px rgba(0,0,0,0.35);
+    }
+
+    html{
+      scroll-behavior:smooth;
     }
 
     body{
       min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:linear-gradient(135deg, #0f172a, #1e293b, #312e81);
-      overflow:hidden;
+      color:#fff;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(37,99,235,0.18), transparent 18%),
+        radial-gradient(circle at 90% 10%, rgba(124,58,237,0.18), transparent 20%),
+        radial-gradient(circle at 50% 90%, rgba(245,158,11,0.10), transparent 18%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      background-attachment:fixed;
+      overflow-x:hidden;
+      position:relative;
       padding:20px;
     }
 
     .bg-orb{
       position:fixed;
       border-radius:50%;
-      filter:blur(50px);
-      opacity:.35;
-      animation:float 10s ease-in-out infinite;
+      filter:blur(10px);
+      opacity:0.35;
+      pointer-events:none;
       z-index:0;
+      animation-timing-function:ease-in-out;
+      animation-iteration-count:infinite;
     }
 
     .orb1{
-      width:260px;
-      height:260px;
-      background:#38bdf8;
-      top:8%;
-      left:8%;
+      width:200px;
+      height:200px;
+      background:linear-gradient(135deg, #2563eb, #60a5fa);
+      top:90px;
+      left:30px;
+      animation:float1 8s infinite;
     }
 
     .orb2{
-      width:300px;
-      height:300px;
-      background:#8b5cf6;
-      bottom:10%;
-      right:8%;
-      animation-delay:2s;
+      width:260px;
+      height:260px;
+      background:linear-gradient(135deg, #7c3aed, #c084fc);
+      top:260px;
+      right:20px;
+      animation:float2 10s infinite;
     }
 
     .orb3{
-      width:220px;
-      height:220px;
-      background:#22c55e;
-      top:55%;
-      left:18%;
-      animation-delay:4s;
+      width:160px;
+      height:160px;
+      background:linear-gradient(135deg, #f59e0b, #fcd34d);
+      bottom:40px;
+      left:16%;
+      animation:float3 9s infinite;
     }
 
-    @keyframes float{
-      0%,100%{ transform:translateY(0) translateX(0) scale(1); }
-      50%{ transform:translateY(-18px) translateX(10px) scale(1.04); }
+    @keyframes float1{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);}
+      50%{transform:translateY(-18px) translateX(14px) scale(1.05);}
+    }
+    @keyframes float2{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);}
+      50%{transform:translateY(16px) translateX(-14px) scale(1.07);}
+    }
+    @keyframes float3{
+      0%,100%{transform:translateY(0) scale(1);}
+      50%{transform:translateY(-12px) scale(1.06);}
     }
 
-    .login-card{
+    .dashboard-shell{
+      max-width:1400px;
+      margin:0 auto;
       position:relative;
       z-index:1;
-      width:100%;
-      max-width:420px;
-      background:rgba(255,255,255,0.12);
-      border:1px solid rgba(255,255,255,0.18);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:20px 22px;
+      border-radius:28px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--border);
       backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
-      border-radius:24px;
-      padding:32px 26px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
-      color:#fff;
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .topbar::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.06), transparent);
+      transform:translateX(-100%);
+      animation:shine 5s linear infinite;
+      pointer-events:none;
+    }
+
+    @keyframes shine{
+      0%{transform:translateX(-100%);}
+      100%{transform:translateX(100%);}
     }
 
     .brand{
-      text-align:center;
-      margin-bottom:24px;
+      display:flex;
+      align-items:center;
+      gap:16px;
+      min-width:0;
     }
 
     .brand-badge{
-      width:72px;
-      height:72px;
-      margin:0 auto 14px;
+      width:68px;
+      height:68px;
       border-radius:20px;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:30px;
-      font-weight:700;
-      background:linear-gradient(135deg, #38bdf8, #8b5cf6);
-      box-shadow:0 10px 24px rgba(56,189,248,.28);
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      font-size:26px;
+      font-weight:900;
+      box-shadow:0 14px 30px rgba(37,99,235,0.28);
+      flex-shrink:0;
+      transform:perspective(900px) rotateX(8deg);
     }
 
-    .brand h1{
+    .brand-text h1{
       font-size:28px;
-      margin-bottom:8px;
+      line-height:1.2;
+      font-weight:900;
+      margin-bottom:6px;
     }
 
-    .brand p{
+    .brand-text p{
+      color:#dbeafe;
       font-size:14px;
-      color:rgba(255,255,255,.82);
+      font-weight:700;
       line-height:1.5;
     }
 
-    .form-group{
-      margin-bottom:16px;
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    label{
-      display:block;
-      margin-bottom:8px;
+    .action-btn{
+      border:none;
+      color:#fff;
       font-size:14px;
-      font-weight:600;
+      font-weight:900;
+      padding:13px 18px;
+      border-radius:14px;
+      cursor:pointer;
+      transition:0.28s ease;
+      box-shadow:0 12px 24px rgba(0,0,0,0.18);
+    }
+
+    .action-btn:hover{
+      transform:translateY(-3px) scale(1.02);
+    }
+
+    .refresh-btn{
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+    }
+
+    .export-btn{
+      background:linear-gradient(135deg, #16a34a, #15803d);
+    }
+
+    .logout-btn{
+      background:linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .stat-card{
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+      transition:0.3s ease;
+    }
+
+    .stat-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 24px 48px rgba(0,0,0,0.28);
+    }
+
+    .stat-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,0.06), transparent);
+      transform:translateX(-100%);
+      transition:0.8s ease;
+      pointer-events:none;
+    }
+
+    .stat-card:hover::before{
+      transform:translateX(100%);
+    }
+
+    .stat-title{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      color:#cbd5e1;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .stat-value{
+      font-size:34px;
+      font-weight:900;
+      color:#fff;
+      margin-bottom:8px;
+    }
+
+    .stat-note{
+      font-size:13px;
+      color:#dbeafe;
+      font-weight:700;
+      line-height:1.5;
+    }
+
+    .main-layout{
+      display:grid;
+      grid-template-columns:1.1fr 2.2fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    .left-panel,
+    .right-panel{
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--border);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .panel-head{
+      padding:20px 22px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background:linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+    }
+
+    .panel-head h2{
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .panel-head p{
+      font-size:14px;
+      color:#dbeafe;
+      font-weight:700;
+    }
+
+    .filters{
+      padding:20px 22px 18px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:14px;
+    }
+
+    .input-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .input-wrap label{
+      font-size:13px;
+      font-weight:800;
       color:#e2e8f0;
     }
 
-    input{
+    .input-wrap input,
+    .input-wrap select{
       width:100%;
-      padding:14px 14px;
-      border:none;
+      min-height:50px;
+      padding:14px 15px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.16);
+      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.07));
+      color:#fff;
       outline:none;
-      border-radius:14px;
-      background:rgba(255,255,255,.14);
-      color:#fff;
+      transition:0.28s ease;
       font-size:15px;
-      border:1px solid rgba(255,255,255,.12);
-      transition:.25s ease;
     }
 
-    input::placeholder{
-      color:rgba(255,255,255,.62);
+    .input-wrap input::placeholder{
+      color:#cbd5e1;
     }
 
-    input:focus{
-      transform:translateY(-1px);
-      border-color:#7dd3fc;
-      box-shadow:0 0 0 4px rgba(56,189,248,.14);
-      background:rgba(255,255,255,.18);
+    .input-wrap input:focus,
+    .input-wrap select:focus{
+      transform:perspective(900px) translateY(-4px) translateZ(16px) scale(1.02);
+      border-color:#93c5fd;
+      box-shadow:0 0 0 4px rgba(147,197,253,0.12), 0 16px 30px rgba(0,0,0,0.22);
     }
 
-    .login-btn{
+    select option{
+      color:#111827;
+    }
+
+    .mini-status{
+      padding:0 22px 22px;
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .mini-card{
+      padding:16px;
+      border-radius:20px;
+      background:linear-gradient(135deg, rgba(37,99,235,0.14), rgba(124,58,237,0.10));
+      border:1px solid rgba(255,255,255,0.10);
+      box-shadow:0 12px 28px rgba(0,0,0,0.16);
+    }
+
+    .mini-card h4{
+      font-size:13px;
+      color:#cbd5e1;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .mini-card .mini-value{
+      font-size:24px;
+      font-weight:900;
+      color:#fde68a;
+    }
+
+    .mini-card .mini-text{
+      margin-top:5px;
+      font-size:12px;
+      line-height:1.5;
+      color:#dbeafe;
+      font-weight:700;
+    }
+
+    .table-toolbar{
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background:linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    }
+
+    .table-toolbar .title{
+      font-size:18px;
+      font-weight:900;
+      color:#fff;
+    }
+
+    .table-toolbar .sub{
+      font-size:13px;
+      color:#cbd5e1;
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    .results-badge{
+      padding:12px 16px;
+      border-radius:999px;
+      background:linear-gradient(135deg, #f59e0b, #ea580c);
+      color:#fff;
+      font-size:13px;
+      font-weight:900;
+      box-shadow:0 12px 24px rgba(245,158,11,0.25);
+    }
+
+    .table-wrap{
+      overflow:auto;
+      max-height:70vh;
+    }
+
+    table{
       width:100%;
-      margin-top:10px;
-      padding:14px 16px;
+      border-collapse:collapse;
+      min-width:720px;
+    }
+
+    thead th{
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:rgba(15,23,42,0.95);
+      color:#bfdbfe;
+      font-size:13px;
+      letter-spacing:0.6px;
+      text-transform:uppercase;
+      text-align:left;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+    }
+
+    tbody tr{
+      transition:0.28s ease;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    tbody tr:hover{
+      background:rgba(255,255,255,0.05);
+    }
+
+    tbody td{
+      padding:16px 18px;
+      font-size:14px;
+      color:#e5e7eb;
+      vertical-align:middle;
+    }
+
+    .team-link{
+      background:none;
+      border:none;
+      color:#fde68a;
+      font-size:15px;
+      font-weight:900;
+      cursor:pointer;
+      padding:0;
+      text-align:left;
+    }
+
+    .team-link:hover{
+      color:#fff;
+      text-decoration:underline;
+      transform:none;
+      box-shadow:none;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:90px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+
+    .paid{
+      background:rgba(22,163,74,0.16);
+      color:#86efac;
+      border:1px solid rgba(134,239,172,0.24);
+    }
+
+    .pending{
+      background:rgba(245,158,11,0.16);
+      color:#fde68a;
+      border:1px solid rgba(253,230,138,0.24);
+    }
+
+    .drawer-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(2,6,23,0.64);
+      backdrop-filter:blur(6px);
+      z-index:9997;
+      display:none;
+    }
+
+    .drawer-overlay.show{
+      display:block;
+    }
+
+    .detail-drawer{
+      position:fixed;
+      top:0;
+      right:-100%;
+      width:min(520px, 100%);
+      height:100vh;
+      z-index:9998;
+      background:linear-gradient(180deg, rgba(15,23,42,0.98), rgba(30,41,59,0.98));
+      border-left:1px solid rgba(255,255,255,0.12);
+      box-shadow:-20px 0 50px rgba(0,0,0,0.35);
+      transition:0.38s ease;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .detail-drawer.open{
+      right:0;
+    }
+
+    .drawer-head{
+      padding:22px 20px;
+      background:linear-gradient(135deg, #7c3aed, #2563eb);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .drawer-head h3{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:6px;
+      line-height:1.3;
+    }
+
+    .drawer-head p{
+      font-size:13px;
+      color:#e0e7ff;
+      font-weight:700;
+      line-height:1.6;
+    }
+
+    .drawer-close{
+      width:42px;
+      height:42px;
       border:none;
       border-radius:14px;
-      cursor:pointer;
-      font-size:16px;
-      font-weight:700;
+      background:rgba(255,255,255,0.16);
       color:#fff;
-      background:linear-gradient(135deg, #06b6d4, #7c3aed);
-      box-shadow:0 12px 26px rgba(124,58,237,.28);
-      transition:.25s ease;
+      font-size:24px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:none;
+      flex-shrink:0;
     }
 
-    .login-btn:hover{
-      transform:translateY(-2px);
+    .drawer-content{
+      flex:1;
+      overflow:auto;
+      padding:20px;
     }
 
-    .login-btn:active{
-      transform:translateY(0);
+    .detail-block{
+      margin-bottom:18px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.16);
     }
 
-    .error-message{
-      display:none;
-      margin-top:14px;
-      padding:12px 14px;
-      border-radius:12px;
-      font-size:14px;
-      line-height:1.5;
-      background:rgba(239,68,68,.18);
-      border:1px solid rgba(239,68,68,.35);
-      color:#fecaca;
+    .detail-block h4{
+      font-size:16px;
+      font-weight:900;
+      color:#bfdbfe;
+      margin-bottom:14px;
+      border-left:4px solid #60a5fa;
+      padding-left:10px;
     }
 
-    .hint{
-      margin-top:18px;
-      text-align:center;
+    .detail-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .detail-item{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;
+      padding:12px;
+      min-height:74px;
+    }
+
+    .detail-item strong{
+      display:block;
+      margin-bottom:6px;
       font-size:12px;
-      color:rgba(255,255,255,.68);
+      color:#fde68a;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
     }
 
-    @media (max-width: 480px){
-      .login-card{
-        padding:26px 18px;
-        border-radius:20px;
+    .detail-item span{
+      font-size:14px;
+      color:#f8fafc;
+      font-weight:700;
+      line-height:1.6;
+      word-break:break-word;
+    }
+
+    .member-stack{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .member-box{
+      padding:14px;
+      border-radius:18px;
+      background:linear-gradient(135deg, rgba(37,99,235,0.10), rgba(236,72,153,0.07));
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:0 10px 22px rgba(0,0,0,0.14);
+    }
+
+    .member-box h5{
+      font-size:15px;
+      font-weight:900;
+      color:#fff;
+      margin-bottom:10px;
+    }
+
+    .member-box p{
+      font-size:13px;
+      color:#dbeafe;
+      line-height:1.8;
+      font-weight:700;
+    }
+
+    .screenshot-box{
+      text-align:center;
+    }
+
+    .screenshot-box img{
+      width:100%;
+      max-height:260px;
+      object-fit:contain;
+      border-radius:18px;
+      background:#fff;
+      padding:10px;
+      box-shadow:0 14px 24px rgba(0,0,0,0.18);
+    }
+
+    .empty-state{
+      padding:36px 20px;
+      text-align:center;
+      color:#cbd5e1;
+      font-weight:700;
+      line-height:1.8;
+    }
+
+    .toast{
+      position:fixed;
+      top:20px;
+      right:20px;
+      z-index:99999;
+      min-width:280px;
+      max-width:360px;
+      padding:16px 18px;
+      border-radius:16px;
+      color:#fff;
+      font-weight:800;
+      box-shadow:0 18px 38px rgba(0,0,0,0.25);
+      transform:translateY(-20px);
+      opacity:0;
+      pointer-events:none;
+      transition:0.35s ease;
+      border:1px solid rgba(255,255,255,0.16);
+      backdrop-filter:blur(14px);
+    }
+
+    .toast.show{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .toast.success{
+      background:linear-gradient(135deg, rgba(22,163,74,0.95), rgba(21,128,61,0.95));
+    }
+
+    .toast.error{
+      background:linear-gradient(135deg, rgba(220,38,38,0.95), rgba(185,28,28,0.95));
+    }
+
+    .toast.info{
+      background:linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
+    }
+
+    @media (max-width: 1180px){
+      .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+      .main-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 768px){
+      body{
+        padding:12px;
       }
 
-      .brand h1{
-        font-size:23px;
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        padding:18px 16px;
+        border-radius:22px;
       }
 
-      .brand p{
+      .brand{
+        width:100%;
+      }
+
+      .brand-badge{
+        width:56px;
+        height:56px;
+        border-radius:16px;
+        font-size:22px;
+      }
+
+      .brand-text h1{
+        font-size:22px;
+      }
+
+      .brand-text p{
         font-size:13px;
+      }
+
+      .top-actions{
+        width:100%;
+        justify-content:stretch;
+      }
+
+      .top-actions .action-btn{
+        flex:1;
+      }
+
+      .stats-grid{
+        grid-template-columns:1fr;
+      }
+
+      .left-panel,
+      .right-panel{
+        border-radius:22px;
+      }
+
+      .panel-head,
+      .filters,
+      .mini-status,
+      .table-toolbar{
+        padding-left:16px;
+        padding-right:16px;
+      }
+
+      .mini-status{
+        grid-template-columns:1fr;
+      }
+
+      .table-toolbar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .results-badge{
+        width:100%;
+        text-align:center;
+      }
+
+      .detail-grid{
+        grid-template-columns:1fr;
+      }
+
+      .drawer-head{
+        padding:18px 16px;
+      }
+
+      .drawer-head h3{
+        font-size:20px;
+      }
+
+      .drawer-content{
+        padding:16px;
+      }
+
+      .toast{
+        left:12px;
+        right:12px;
+        top:12px;
+        min-width:auto;
+        max-width:none;
       }
     }
   </style>
@@ -206,79 +830,542 @@
   <div class="bg-orb orb2"></div>
   <div class="bg-orb orb3"></div>
 
-  <div class="login-card">
-    <div class="brand">
-      <div class="brand-badge">H</div>
-      <h1>Admin Login</h1>
-      <p>Hackverse 1.O dashboard secure sign in panel</p>
-    </div>
-
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="username">Admin Username</label>
-        <input type="text" id="username" placeholder="Enter admin username" required />
+  <div class="dashboard-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-badge">H</div>
+        <div class="brand-text">
+          <h1>Hackverse 1.O Admin Dashboard</h1>
+          <p>Premium mobile-friendly application viewer with side drawer team details panel.</p>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="password">Admin Password</label>
-        <input type="password" id="password" placeholder="Enter admin password" required />
+      <div class="top-actions">
+        <button class="action-btn refresh-btn" id="refreshBtn">Refresh Data</button>
+        <button class="action-btn export-btn" id="exportBtn">Export CSV</button>
+        <button class="action-btn logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-title">Total Teams</div>
+        <div class="stat-value" id="totalTeams">0</div>
+        <div class="stat-note">Overall team applications available in the dashboard.</div>
       </div>
 
-      <button type="submit" class="login-btn">Login to Dashboard</button>
-      <div class="error-message" id="errorMessage">Invalid username or password.</div>
-    </form>
+      <div class="stat-card">
+        <div class="stat-title">Paid Teams</div>
+        <div class="stat-value" id="paidTeams">0</div>
+        <div class="stat-note">Teams with confirmed payment transaction details.</div>
+      </div>
 
-    <div class="hint">Use your admin credentials to continue</div>
+      <div class="stat-card">
+        <div class="stat-title">Pending Review</div>
+        <div class="stat-value" id="pendingTeams">0</div>
+        <div class="stat-note">Applications needing admin verification or correction.</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-title">Live View</div>
+        <div class="stat-value" id="liveVisitors">7</div>
+        <div class="stat-note">Animated dashboard activity count for premium admin feel.</div>
+      </div>
+    </section>
+
+    <section class="main-layout">
+      <aside class="left-panel">
+        <div class="panel-head">
+          <h2>Search and Filters</h2>
+          <p>Find teams quickly and open their full application in the side drawer.</p>
+        </div>
+
+        <div class="filters">
+          <div class="input-wrap">
+            <label for="searchInput">Search Team Name / Leader / College</label>
+            <input type="text" id="searchInput" placeholder="Type team name or leader name">
+          </div>
+
+          <div class="input-wrap">
+            <label for="teamSizeFilter">Filter by Team Size</label>
+            <select id="teamSizeFilter">
+              <option value="">All Team Sizes</option>
+              <option value="2">2 Members</option>
+              <option value="3">3 Members</option>
+              <option value="4">4 Members</option>
+            </select>
+          </div>
+
+          <div class="input-wrap">
+            <label for="paymentFilter">Filter by Payment Status</label>
+            <select id="paymentFilter">
+              <option value="">All Payment Status</option>
+              <option value="Paid">Paid</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mini-status">
+          <div class="mini-card">
+            <h4>Last Refresh</h4>
+            <div class="mini-value" id="lastRefreshTime">--:--</div>
+            <div class="mini-text">Shows the most recent dashboard sync time.</div>
+          </div>
+
+          <div class="mini-card">
+            <h4>Visible Results</h4>
+            <div class="mini-value" id="visibleResults">0</div>
+            <div class="mini-text">Count changes when search or filter values are updated.</div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="right-panel">
+        <div class="table-toolbar">
+          <div>
+            <div class="title">Registered Teams Table</div>
+            <div class="sub">Click the team name to open the full application details.</div>
+          </div>
+          <div class="results-badge" id="resultsBadge">0 Teams</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>SI.No</th>
+                <th>Team Name</th>
+                <th>Leader Name</th>
+                <th>College</th>
+                <th>Team Size</th>
+                <th>Payment</th>
+              </tr>
+            </thead>
+            <tbody id="teamTableBody">
+              <tr>
+                <td colspan="6">
+                  <div class="empty-state">Loading application data...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
   </div>
 
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="detail-drawer" id="detailDrawer">
+    <div class="drawer-head">
+      <div>
+        <h3 id="drawerTitle">Team Details</h3>
+        <p id="drawerSubtitle">Application information will appear here.</p>
+      </div>
+      <button class="drawer-close" id="drawerCloseBtn">&times;</button>
+    </div>
+
+    <div class="drawer-content" id="drawerContent">
+      <div class="detail-block">
+        <h4>Application View</h4>
+        <div class="empty-state">Select a team name from the table to open the application view.</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="toast info" id="toast"></div>
+
   <script>
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "admin123";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwcmYkwGgM-gFYzTsq6aTkJ01cqF4o93OJlwgxidh5jsi5crxw4RzFlpJzVzElrbOLAhA/exec";
 
-    const SESSION_KEY = "isAdminLoggedIn";
-    const SESSION_TIME_KEY = "adminLastActivity";
-    const SESSION_USER_KEY = "adminUser";
+    const teamTableBody = document.getElementById("teamTableBody");
+    const searchInput = document.getElementById("searchInput");
+    const teamSizeFilter = document.getElementById("teamSizeFilter");
+    const paymentFilter = document.getElementById("paymentFilter");
 
-    const DASHBOARD_PAGE = "admin.html";
+    const totalTeams = document.getElementById("totalTeams");
+    const paidTeams = document.getElementById("paidTeams");
+    const pendingTeams = document.getElementById("pendingTeams");
+    const liveVisitors = document.getElementById("liveVisitors");
+    const resultsBadge = document.getElementById("resultsBadge");
+    const visibleResults = document.getElementById("visibleResults");
+    const lastRefreshTime = document.getElementById("lastRefreshTime");
 
-    const loginForm = document.getElementById("loginForm");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const errorMessage = document.getElementById("errorMessage");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    function showError(message){
-      errorMessage.style.display = "block";
-      errorMessage.textContent = message;
+    const drawerOverlay = document.getElementById("drawerOverlay");
+    const detailDrawer = document.getElementById("detailDrawer");
+    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+    const drawerTitle = document.getElementById("drawerTitle");
+    const drawerSubtitle = document.getElementById("drawerSubtitle");
+    const drawerContent = document.getElementById("drawerContent");
+
+    const toast = document.getElementById("toast");
+
+    let allTeams = [];
+
+    function showToast(message, type = "info") {
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
     }
 
-    function hideError(){
-      errorMessage.style.display = "none";
+    function updateLastRefresh() {
+      const now = new Date();
+      lastRefreshTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    function loginAdmin(username){
-      localStorage.setItem(SESSION_KEY, "true");
-      localStorage.setItem(SESSION_TIME_KEY, String(Date.now()));
-      localStorage.setItem(SESSION_USER_KEY, username);
-      window.location.href = DASHBOARD_PAGE;
+    function startLiveVisitorsEffect() {
+      let value = 7;
+      setInterval(() => {
+        value = Math.floor(Math.random() * 8) + 5;
+        liveVisitors.textContent = value;
+      }, 5000);
     }
 
-    loginForm.addEventListener("submit", function(e){
-      e.preventDefault();
-      hideError();
+    function normalizeStatus(team) {
+      if (team.paymentStatus) return team.paymentStatus;
+      if (team.transactionId && String(team.transactionId).trim() !== "") return "Paid";
+      return "Pending";
+    }
 
-      const username = usernameInput.value.trim();
-      const password = passwordInput.value.trim();
+    function safe(value) {
+      return value === undefined || value === null || value === "" ? "-" : value;
+    }
 
-      if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
-        loginAdmin(username);
-      } else {
-        showError("Wrong admin username or password.");
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function loadTeams() {
+      teamTableBody.innerHTML = `
+        <tr>
+          <td colspan="6">
+            <div class="empty-state">Loading application data...</div>
+          </td>
+        </tr>
+      `;
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "getRegistrations" })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          allTeams = Array.isArray(result.data) ? result.data : [];
+          updateDashboardStats();
+          renderTable();
+          updateLastRefresh();
+          showToast("Dashboard data loaded successfully.", "success");
+        } else {
+          throw new Error(result.message || "Unable to load data.");
+        }
+      } catch (error) {
+        console.error(error);
+
+        /* Fallback demo data */
+        allTeams = [
+          {
+            applicationId: "HV001",
+            teamName: "Code Titans",
+            teamSize: "4",
+            leaderName: "Ravi Teja",
+            leaderEmail: "raviteja@gmail.com",
+            leaderPhone: "9876543210",
+            leaderDept: "CSE",
+            leaderCollege: "VMTW",
+            leaderYear: "3rd Year",
+            transactionId: "UPI882716",
+            paymentMethod: "UPI",
+            paymentStatus: "Paid",
+            members: [
+              { role: "Team Leader", name: "Ravi Teja", email: "raviteja@gmail.com", phone: "9876543210", dept: "CSE", college: "VMTW", year: "3rd Year" },
+              { role: "Member 2", name: "Nithin", email: "nithin@gmail.com", phone: "9123456780", dept: "CSE", college: "VMTW", year: "3rd Year" },
+              { role: "Member 3", name: "Harsha", email: "harsha@gmail.com", phone: "9988776655", dept: "CSE", college: "VMTW", year: "3rd Year" },
+              { role: "Member 4", name: "Sai Kiran", email: "saikiran@gmail.com", phone: "9345678123", dept: "CSE", college: "VMTW", year: "2nd Year" }
+            ],
+            paymentScreenshotUrl: "payment-qr.png",
+            submittedAt: "2026-03-25 10:30 AM"
+          },
+          {
+            applicationId: "HV002",
+            teamName: "AI Sparks",
+            teamSize: "3",
+            leaderName: "Sneha",
+            leaderEmail: "sneha@gmail.com",
+            leaderPhone: "9849012345",
+            leaderDept: "CSE (AI & ML)",
+            leaderCollege: "VMTW",
+            leaderYear: "4th Year",
+            transactionId: "",
+            paymentMethod: "PhonePe",
+            paymentStatus: "Pending",
+            members: [
+              { role: "Team Leader", name: "Sneha", email: "sneha@gmail.com", phone: "9849012345", dept: "CSE (AI & ML)", college: "VMTW", year: "4th Year" },
+              { role: "Member 2", name: "Madhavi", email: "madhavi@gmail.com", phone: "9876501234", dept: "CSE (AI & ML)", college: "VMTW", year: "4th Year" },
+              { role: "Member 3", name: "Lahari", email: "lahari@gmail.com", phone: "9876509876", dept: "CSE (AI & ML)", college: "VMTW", year: "4th Year" }
+            ],
+            paymentScreenshotUrl: "payment-qr.png",
+            submittedAt: "2026-03-25 11:45 AM"
+          },
+          {
+            applicationId: "HV003",
+            teamName: "Bug Smashers",
+            teamSize: "2",
+            leaderName: "Arun Kumar",
+            leaderEmail: "arun@gmail.com",
+            leaderPhone: "9012345678",
+            leaderDept: "IT",
+            leaderCollege: "ABC Engineering College",
+            leaderYear: "2nd Year",
+            transactionId: "PHN998122",
+            paymentMethod: "PhonePe",
+            paymentStatus: "Paid",
+            members: [
+              { role: "Team Leader", name: "Arun Kumar", email: "arun@gmail.com", phone: "9012345678", dept: "IT", college: "ABC Engineering College", year: "2nd Year" },
+              { role: "Member 2", name: "Vamsi", email: "vamsi@gmail.com", phone: "9090909090", dept: "IT", college: "ABC Engineering College", year: "2nd Year" }
+            ],
+            paymentScreenshotUrl: "payment-qr.png",
+            submittedAt: "2026-03-25 12:05 PM"
+          }
+        ];
+
+        updateDashboardStats();
+        renderTable();
+        updateLastRefresh();
+        showToast("Live backend unavailable. Demo data loaded.", "error");
       }
+    }
+
+    function updateDashboardStats() {
+      const total = allTeams.length;
+      const paid = allTeams.filter(team => normalizeStatus(team) === "Paid").length;
+      const pending = total - paid;
+
+      totalTeams.textContent = total;
+      paidTeams.textContent = paid;
+      pendingTeams.textContent = pending;
+    }
+
+    function getFilteredTeams() {
+      const query = searchInput.value.trim().toLowerCase();
+      const sizeValue = teamSizeFilter.value;
+      const paymentValue = paymentFilter.value;
+
+      return allTeams.filter(team => {
+        const matchesSearch =
+          !query ||
+          (team.teamName || "").toLowerCase().includes(query) ||
+          (team.leaderName || "").toLowerCase().includes(query) ||
+          (team.leaderCollege || "").toLowerCase().includes(query);
+
+        const matchesSize = !sizeValue || String(team.teamSize) === sizeValue;
+        const matchesPayment = !paymentValue || normalizeStatus(team) === paymentValue;
+
+        return matchesSearch && matchesSize && matchesPayment;
+      });
+    }
+
+    function renderTable() {
+      const filtered = getFilteredTeams();
+
+      resultsBadge.textContent = `${filtered.length} Teams`;
+      visibleResults.textContent = filtered.length;
+
+      if (!filtered.length) {
+        teamTableBody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state">No teams found for the current search or filter.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      teamTableBody.innerHTML = filtered.map((team, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>
+            <button class="team-link" onclick="openDrawerById('${escapeHtml(team.applicationId || team.teamName)}')">
+              ${escapeHtml(team.teamName || "Unnamed Team")}
+            </button>
+          </td>
+          <td>${escapeHtml(safe(team.leaderName))}</td>
+          <td>${escapeHtml(safe(team.leaderCollege))}</td>
+          <td>${escapeHtml(safe(team.teamSize))}</td>
+          <td>
+            <span class="status-pill ${normalizeStatus(team) === 'Paid' ? 'paid' : 'pending'}">
+              ${escapeHtml(normalizeStatus(team))}
+            </span>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function openDrawer(team) {
+      drawerTitle.textContent = team.teamName || "Team Details";
+      drawerSubtitle.textContent = `Application ID: ${safe(team.applicationId)} • Submitted: ${safe(team.submittedAt)}`;
+
+      const members = Array.isArray(team.members) ? team.members : [];
+
+      drawerContent.innerHTML = `
+        <div class="detail-block">
+          <h4>Application Overview</h4>
+          <div class="detail-grid">
+            <div class="detail-item"><strong>Application ID</strong><span>${escapeHtml(safe(team.applicationId))}</span></div>
+            <div class="detail-item"><strong>Team Name</strong><span>${escapeHtml(safe(team.teamName))}</span></div>
+            <div class="detail-item"><strong>Team Size</strong><span>${escapeHtml(safe(team.teamSize))} Members</span></div>
+            <div class="detail-item"><strong>Payment Status</strong><span>${escapeHtml(normalizeStatus(team))}</span></div>
+            <div class="detail-item"><strong>Transaction ID</strong><span>${escapeHtml(safe(team.transactionId))}</span></div>
+            <div class="detail-item"><strong>Payment Method</strong><span>${escapeHtml(safe(team.paymentMethod))}</span></div>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Team Leader Details</h4>
+          <div class="detail-grid">
+            <div class="detail-item"><strong>Name</strong><span>${escapeHtml(safe(team.leaderName))}</span></div>
+            <div class="detail-item"><strong>Email</strong><span>${escapeHtml(safe(team.leaderEmail))}</span></div>
+            <div class="detail-item"><strong>Phone</strong><span>${escapeHtml(safe(team.leaderPhone))}</span></div>
+            <div class="detail-item"><strong>Department</strong><span>${escapeHtml(safe(team.leaderDept))}</span></div>
+            <div class="detail-item"><strong>College</strong><span>${escapeHtml(safe(team.leaderCollege))}</span></div>
+            <div class="detail-item"><strong>Year of Study</strong><span>${escapeHtml(safe(team.leaderYear))}</span></div>
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Team Members</h4>
+          <div class="member-stack">
+            ${
+              members.length
+                ? members.map(member => `
+                  <div class="member-box">
+                    <h5>${escapeHtml(safe(member.role))}</h5>
+                    <p>
+                      <strong>Name:</strong> ${escapeHtml(safe(member.name))}<br>
+                      <strong>Email:</strong> ${escapeHtml(safe(member.email))}<br>
+                      <strong>Phone:</strong> ${escapeHtml(safe(member.phone))}<br>
+                      <strong>Department:</strong> ${escapeHtml(safe(member.dept))}<br>
+                      <strong>College:</strong> ${escapeHtml(safe(member.college))}<br>
+                      <strong>Year:</strong> ${escapeHtml(safe(member.year))}
+                    </p>
+                  </div>
+                `).join("")
+                : `<div class="empty-state">No member data available.</div>`
+            }
+          </div>
+        </div>
+
+        <div class="detail-block">
+          <h4>Payment Screenshot</h4>
+          <div class="screenshot-box">
+            <img src="${escapeHtml(team.paymentScreenshotUrl || 'payment-qr.png')}" alt="Payment Screenshot">
+          </div>
+        </div>
+      `;
+
+      drawerOverlay.classList.add("show");
+      detailDrawer.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDrawer() {
+      drawerOverlay.classList.remove("show");
+      detailDrawer.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    window.openDrawerById = function(identifier) {
+      const team = allTeams.find(item =>
+        String(item.applicationId || item.teamName) === String(identifier)
+      );
+
+      if (team) {
+        openDrawer(team);
+      } else {
+        showToast("Unable to open selected application.", "error");
+      }
+    };
+
+    function exportToCSV() {
+      const filtered = getFilteredTeams();
+
+      if (!filtered.length) {
+        showToast("No data available to export.", "error");
+        return;
+      }
+
+      const rows = [
+        ["SI.No", "Application ID", "Team Name", "Leader Name", "Leader Email", "Leader Phone", "Department", "College", "Year", "Team Size", "Transaction ID", "Payment Method", "Payment Status"]
+      ];
+
+      filtered.forEach((team, index) => {
+        rows.push([
+          index + 1,
+          safe(team.applicationId),
+          safe(team.teamName),
+          safe(team.leaderName),
+          safe(team.leaderEmail),
+          safe(team.leaderPhone),
+          safe(team.leaderDept),
+          safe(team.leaderCollege),
+          safe(team.leaderYear),
+          safe(team.teamSize),
+          safe(team.transactionId),
+          safe(team.paymentMethod),
+          normalizeStatus(team)
+        ]);
+      });
+
+      const csvContent = rows
+        .map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "hackverse-admin-data.csv";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      URL.revokeObjectURL(url);
+      showToast("CSV exported successfully.", "success");
+    }
+
+    searchInput.addEventListener("input", renderTable);
+    teamSizeFilter.addEventListener("change", renderTable);
+    paymentFilter.addEventListener("change", renderTable);
+
+    refreshBtn.addEventListener("click", loadTeams);
+    exportBtn.addEventListener("click", exportToCSV);
+    logoutBtn.addEventListener("click", () => {
+      showToast("Logout button clicked. Connect your real logout logic here.", "info");
     });
 
-    if(localStorage.getItem(SESSION_KEY) === "true"){
-      window.location.href = DASHBOARD_PAGE;
-    }
+    drawerCloseBtn.addEventListener("click", closeDrawer);
+    drawerOverlay.addEventListener("click", closeDrawer);
+
+    loadTeams();
+    startLiveVisitorsEffect();
   </script>
 </body>
 </html>
