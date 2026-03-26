@@ -21,13 +21,9 @@
       --accent:#f59e0b;
       --success:#16a34a;
       --danger:#dc2626;
-      --cyan:#06b6d4;
-      --pink:#ec4899;
       --border:rgba(255,255,255,0.14);
       --text:#ffffff;
       --muted:#cbd5e1;
-      --panel:rgba(255,255,255,0.07);
-      --panel2:rgba(255,255,255,0.1);
       --shadow:0 18px 45px rgba(0,0,0,0.35);
     }
 
@@ -715,6 +711,19 @@
       line-height:1.8;
     }
 
+    .session-banner{
+      display:none;
+      margin-bottom:16px;
+      padding:14px 18px;
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(245,158,11,0.18), rgba(234,88,12,0.18));
+      border:1px solid rgba(253,186,116,0.25);
+      color:#fff7ed;
+      font-weight:800;
+      position:relative;
+      z-index:1;
+    }
+
     .toast{
       position:fixed;
       top:20px;
@@ -868,12 +877,16 @@
   <div class="bg-orb orb3"></div>
 
   <div class="dashboard-shell">
+    <div class="session-banner" id="sessionBanner">
+      Session will expire soon due to inactivity.
+    </div>
+
     <header class="topbar">
       <div class="brand">
         <div class="brand-badge">H</div>
         <div class="brand-text">
           <h1>Hackverse 1.O Admin Dashboard</h1>
-          <p>Premium mobile-friendly application viewer with ticket-only drawer, screenshot viewer, total fee card, and delete option.</p>
+          <p>Premium mobile-friendly application viewer with ticket-only drawer, screenshot viewer, total fee card, delete option, and upgraded session logout.</p>
         </div>
       </div>
 
@@ -1024,6 +1037,90 @@
   <script>
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwcmYkwGgM-gFYzTsq6aTkJ01cqF4o93OJlwgxidh5jsi5crxw4RzFlpJzVzElrbOLAhA/exec";
 
+    /* =========================
+       SESSION SECURITY
+    ========================= */
+    const LOGIN_PAGE = "admin-login.html";
+    const SESSION_KEY = "isAdminLoggedIn";
+    const SESSION_TIME_KEY = "adminLastActivity";
+    const SESSION_USER_KEY = "adminUser";
+    const INACTIVITY_LIMIT_MS = 15 * 60 * 1000;
+    const WARNING_BEFORE_MS = 60 * 1000;
+
+    const sessionBanner = document.getElementById("sessionBanner");
+    let sessionWarningTimer = null;
+    let sessionLogoutTimer = null;
+
+    function redirectToLogin() {
+      window.location.href = LOGIN_PAGE;
+    }
+
+    function isSessionValid() {
+      const isLoggedIn = localStorage.getItem(SESSION_KEY) === "true";
+      const lastActivity = Number(localStorage.getItem(SESSION_TIME_KEY) || 0);
+
+      if (!isLoggedIn || !lastActivity) return false;
+      return (Date.now() - lastActivity) < INACTIVITY_LIMIT_MS;
+    }
+
+    function requireAdminSession() {
+      if (!isSessionValid()) {
+        localStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem(SESSION_TIME_KEY);
+        localStorage.removeItem(SESSION_USER_KEY);
+        redirectToLogin();
+      }
+    }
+
+    function showSessionWarning() {
+      sessionBanner.style.display = "block";
+      sessionBanner.textContent = "Session will expire in 1 minute due to inactivity.";
+    }
+
+    function hideSessionWarning() {
+      sessionBanner.style.display = "none";
+    }
+
+    function scheduleSessionTimers() {
+      clearTimeout(sessionWarningTimer);
+      clearTimeout(sessionLogoutTimer);
+      hideSessionWarning();
+
+      sessionWarningTimer = setTimeout(showSessionWarning, INACTIVITY_LIMIT_MS - WARNING_BEFORE_MS);
+      sessionLogoutTimer = setTimeout(() => {
+        logoutAdmin(true);
+      }, INACTIVITY_LIMIT_MS);
+    }
+
+    function refreshSessionActivity() {
+      localStorage.setItem(SESSION_TIME_KEY, String(Date.now()));
+      scheduleSessionTimers();
+    }
+
+    function logoutAdmin(isAuto = false) {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_TIME_KEY);
+      localStorage.removeItem(SESSION_USER_KEY);
+
+      if (isAuto) {
+        alert("Your admin session expired due to inactivity.");
+      }
+
+      redirectToLogin();
+    }
+
+    requireAdminSession();
+    refreshSessionActivity();
+
+    ["click", "keydown", "mousemove", "touchstart", "scroll"].forEach(eventName => {
+      window.addEventListener(eventName, () => {
+        if (isSessionValid()) refreshSessionActivity();
+      }, { passive: true });
+    });
+
+    /* =========================
+       DASHBOARD ELEMENTS
+    ========================= */
     const teamTableBody = document.getElementById("teamTableBody");
     const searchInput = document.getElementById("searchInput");
     const teamSizeFilter = document.getElementById("teamSizeFilter");
@@ -1137,6 +1234,8 @@
     }
 
     async function loadTeams() {
+      requireAdminSession();
+
       teamTableBody.innerHTML = `
         <tr>
           <td colspan="8">
@@ -1505,10 +1604,18 @@
     teamSizeFilter.addEventListener("change", renderTable);
     paymentFilter.addEventListener("change", renderTable);
 
-    refreshBtn.addEventListener("click", loadTeams);
-    exportBtn.addEventListener("click", exportToCSV);
+    refreshBtn.addEventListener("click", () => {
+      refreshSessionActivity();
+      loadTeams();
+    });
+
+    exportBtn.addEventListener("click", () => {
+      refreshSessionActivity();
+      exportToCSV();
+    });
+
     logoutBtn.addEventListener("click", () => {
-      showToast("Logout button clicked. Connect your real logout logic here.", "info");
+      logoutAdmin(false);
     });
 
     drawerCloseBtn.addEventListener("click", closeDrawer);
