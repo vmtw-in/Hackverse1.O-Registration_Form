@@ -203,6 +203,10 @@
     }
 
     .logout-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:110px;
       background:linear-gradient(135deg, #ef4444, #dc2626);
     }
 
@@ -891,9 +895,9 @@
       </div>
 
       <div class="top-actions">
-        <button class="action-btn refresh-btn" id="refreshBtn">Refresh Data</button>
-        <button class="action-btn export-btn" id="exportBtn">Export CSV</button>
-        <button class="action-btn logout-btn" id="logoutBtn">Logout</button>
+        <button class="action-btn refresh-btn" id="refreshBtn" type="button">Refresh Data</button>
+        <button class="action-btn export-btn" id="exportBtn" type="button">Export CSV</button>
+        <button class="action-btn logout-btn" id="logoutBtn" type="button">Logout</button>
       </div>
     </header>
 
@@ -1021,7 +1025,7 @@
         <h3 id="drawerTitle">Team Details</h3>
         <p id="drawerSubtitle">Application information will appear here.</p>
       </div>
-      <button class="drawer-close" id="drawerCloseBtn">&times;</button>
+      <button class="drawer-close" id="drawerCloseBtn" type="button">&times;</button>
     </div>
 
     <div class="drawer-content" id="drawerContent">
@@ -1035,12 +1039,9 @@
   <div class="toast info" id="toast"></div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwcmYkwGgM-gFYzTsq6aTkJ01cqF4o93OJlwgxidh5jsi5crxw4RzFlpJzVzElrbOLAhA/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxLMs76dsPqgoFfhL-QnavlFDGY0G7bd6W-_VOfEQHzTL_HMlvU3fDbpzJGwCn0MF1YmQ/exec";
 
-    /* =========================
-       SESSION SECURITY
-    ========================= */
-    const LOGIN_PAGE = "admin.html";
+    const LOGIN_PAGE = "admin-login.html";
     const SESSION_KEY = "isAdminLoggedIn";
     const SESSION_TIME_KEY = "adminLastActivity";
     const SESSION_USER_KEY = "adminUser";
@@ -1048,79 +1049,6 @@
     const WARNING_BEFORE_MS = 60 * 1000;
 
     const sessionBanner = document.getElementById("sessionBanner");
-    let sessionWarningTimer = null;
-    let sessionLogoutTimer = null;
-
-    function redirectToLogin() {
-      window.location.href = LOGIN_PAGE;
-    }
-
-    function isSessionValid() {
-      const isLoggedIn = localStorage.getItem(SESSION_KEY) === "true";
-      const lastActivity = Number(localStorage.getItem(SESSION_TIME_KEY) || 0);
-
-      if (!isLoggedIn || !lastActivity) return false;
-      return (Date.now() - lastActivity) < INACTIVITY_LIMIT_MS;
-    }
-
-    function requireAdminSession() {
-      if (!isSessionValid()) {
-        localStorage.removeItem(SESSION_KEY);
-        localStorage.removeItem(SESSION_TIME_KEY);
-        localStorage.removeItem(SESSION_USER_KEY);
-        redirectToLogin();
-      }
-    }
-
-    function showSessionWarning() {
-      sessionBanner.style.display = "block";
-      sessionBanner.textContent = "Session will expire in 1 minute due to inactivity.";
-    }
-
-    function hideSessionWarning() {
-      sessionBanner.style.display = "none";
-    }
-
-    function scheduleSessionTimers() {
-      clearTimeout(sessionWarningTimer);
-      clearTimeout(sessionLogoutTimer);
-      hideSessionWarning();
-
-      sessionWarningTimer = setTimeout(showSessionWarning, INACTIVITY_LIMIT_MS - WARNING_BEFORE_MS);
-      sessionLogoutTimer = setTimeout(() => {
-        logoutAdmin(true);
-      }, INACTIVITY_LIMIT_MS);
-    }
-
-    function refreshSessionActivity() {
-      localStorage.setItem(SESSION_TIME_KEY, String(Date.now()));
-      scheduleSessionTimers();
-    }
-
-    function logoutAdmin(isAuto = false) {
-      localStorage.removeItem(SESSION_KEY);
-      localStorage.removeItem(SESSION_TIME_KEY);
-      localStorage.removeItem(SESSION_USER_KEY);
-
-      if (isAuto) {
-        alert("Your admin session expired due to inactivity.");
-      }
-
-      redirectToLogin();
-    }
-
-    requireAdminSession();
-    refreshSessionActivity();
-
-    ["click", "keydown", "mousemove", "touchstart", "scroll"].forEach(eventName => {
-      window.addEventListener(eventName, () => {
-        if (isSessionValid()) refreshSessionActivity();
-      }, { passive: true });
-    });
-
-    /* =========================
-       DASHBOARD ELEMENTS
-    ========================= */
     const teamTableBody = document.getElementById("teamTableBody");
     const searchInput = document.getElementById("searchInput");
     const teamSizeFilter = document.getElementById("teamSizeFilter");
@@ -1149,6 +1077,60 @@
     const toast = document.getElementById("toast");
 
     let allTeams = [];
+    let sessionWarningTimer = null;
+    let sessionLogoutTimer = null;
+
+    function redirectToLogin() {
+      window.location.href = LOGIN_PAGE;
+    }
+
+    function isSessionValid() {
+      const isLoggedIn = localStorage.getItem(SESSION_KEY) === "true";
+      const lastActivity = Number(localStorage.getItem(SESSION_TIME_KEY) || 0);
+      if (!isLoggedIn || !lastActivity) return false;
+      return (Date.now() - lastActivity) < INACTIVITY_LIMIT_MS;
+    }
+
+    function requireAdminSession() {
+      if (!isSessionValid()) {
+        localStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem(SESSION_TIME_KEY);
+        localStorage.removeItem(SESSION_USER_KEY);
+        redirectToLogin();
+      }
+    }
+
+    function showSessionWarning() {
+      sessionBanner.style.display = "block";
+      sessionBanner.textContent = "Session will expire in 1 minute due to inactivity.";
+    }
+
+    function hideSessionWarning() {
+      sessionBanner.style.display = "none";
+    }
+
+    function scheduleSessionTimers() {
+      clearTimeout(sessionWarningTimer);
+      clearTimeout(sessionLogoutTimer);
+      hideSessionWarning();
+      sessionWarningTimer = setTimeout(showSessionWarning, INACTIVITY_LIMIT_MS - WARNING_BEFORE_MS);
+      sessionLogoutTimer = setTimeout(() => logoutAdmin(true), INACTIVITY_LIMIT_MS);
+    }
+
+    function refreshSessionActivity() {
+      localStorage.setItem(SESSION_TIME_KEY, String(Date.now()));
+      scheduleSessionTimers();
+    }
+
+    function logoutAdmin(isAuto = false) {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem(SESSION_TIME_KEY);
+      localStorage.removeItem(SESSION_USER_KEY);
+      if (isAuto) {
+        alert("Your admin session expired due to inactivity.");
+      }
+      redirectToLogin();
+    }
 
     function showToast(message, type = "info") {
       toast.textContent = message;
@@ -1161,7 +1143,7 @@
 
     function updateLastRefresh() {
       const now = new Date();
-      lastRefreshTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      lastRefreshTime.textContent = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     }
 
     function startLiveVisitorsEffect() {
@@ -1195,8 +1177,7 @@
       const raw = team.ticketLink || team.directTicketUrl || team.ticketUrl || "";
       if (!raw) return "";
 
-      let clean = String(raw).trim();
-
+      const clean = String(raw).trim();
       const driveFileMatch = clean.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (driveFileMatch && driveFileMatch[1]) {
         return `https://drive.google.com/file/d/${driveFileMatch[1]}/preview`;
@@ -1219,7 +1200,6 @@
       if (!url) return "";
 
       const clean = String(url).trim();
-
       const driveFileMatch = clean.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
       if (driveFileMatch && driveFileMatch[1]) {
         return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
@@ -1264,52 +1244,11 @@
         }
       } catch (error) {
         console.error(error);
-
-        allTeams = [
-          {
-            applicationId: "HV001",
-            rowNumber: 2,
-            teamName: "Code Titans",
-            teamSize: "4",
-            fee: 900,
-            leaderName: "Ravi Teja",
-            leaderEmail: "raviteja@gmail.com",
-            leaderPhone: "9876543210",
-            leaderDept: "CSE",
-            leaderCollege: "VMTW",
-            leaderYear: "3rd Year",
-            transactionId: "UPI882716",
-            paymentMethod: "UPI",
-            paymentStatus: "Paid",
-            paymentScreenshotUrl: "https://drive.google.com/uc?export=view&id=1ABCDEF1234567890",
-            submittedAt: "2026-03-25 10:30 AM",
-            ticketLink: "https://drive.google.com/file/d/1ABCDEF1234567890/view"
-          },
-          {
-            applicationId: "HV002",
-            rowNumber: 3,
-            teamName: "AI Sparks",
-            teamSize: "3",
-            fee: 750,
-            leaderName: "Sneha",
-            leaderEmail: "sneha@gmail.com",
-            leaderPhone: "9849012345",
-            leaderDept: "CSE (AI & ML)",
-            leaderCollege: "VMTW",
-            leaderYear: "4th Year",
-            transactionId: "",
-            paymentMethod: "PhonePe",
-            paymentStatus: "Pending",
-            paymentScreenshotUrl: "",
-            submittedAt: "2026-03-25 11:45 AM",
-            ticketLink: ""
-          }
-        ];
-
+        allTeams = [];
         updateDashboardStats();
         renderTable();
         updateLastRefresh();
-        showToast("Live backend unavailable. Demo data loaded.", "error");
+        showToast("Unable to load dashboard data.", "error");
       }
     }
 
@@ -1365,7 +1304,7 @@
         <tr>
           <td>${index + 1}</td>
           <td>
-            <button class="team-link" onclick="openDrawerById('${escapeHtml(team.applicationId || team.teamName)}')">
+            <button class="team-link" type="button" onclick="openDrawerById('${escapeHtml(team.applicationId || team.teamName)}')">
               ${escapeHtml(team.teamName || "Unnamed Team")}
             </button>
           </td>
@@ -1374,12 +1313,12 @@
           <td>${escapeHtml(safe(team.teamSize))}</td>
           <td>₹${escapeHtml(Number(team.fee || 0))}</td>
           <td>
-            <span class="status-pill ${normalizeStatus(team) === 'Paid' ? 'paid' : 'pending'}">
+            <span class="status-pill ${normalizeStatus(team) === "Paid" ? "paid" : "pending"}">
               ${escapeHtml(normalizeStatus(team))}
             </span>
           </td>
           <td>
-            <button class="delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+            <button class="delete-btn" type="button" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
               Delete
             </button>
           </td>
@@ -1428,11 +1367,7 @@
             ticketPreviewLink
               ? `
                 <div class="ticket-frame-wrap">
-                  <iframe
-                    src="${escapeHtml(ticketPreviewLink)}"
-                    class="ticket-frame"
-                    loading="lazy">
-                  </iframe>
+                  <iframe src="${escapeHtml(ticketPreviewLink)}" class="ticket-frame" loading="lazy"></iframe>
                 </div>
                 <div class="drawer-action-row">
                   <a href="${escapeHtml(ticketOpenLink)}" target="_blank" class="ticket-view-btn">Open Ticket in New Tab</a>
@@ -1456,7 +1391,7 @@
                 </div>
                 <div class="drawer-action-row">
                   <a href="${escapeHtml(screenshotLink)}" target="_blank" class="ticket-view-btn">Open Payment Screenshot</a>
-                  <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+                  <button class="drawer-delete-btn" type="button" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
                     Delete This Application
                   </button>
                 </div>
@@ -1466,7 +1401,7 @@
                   Payment screenshot is not available.
                 </div>
                 <div class="drawer-action-row">
-                  <button class="drawer-delete-btn" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
+                  <button class="drawer-delete-btn" type="button" onclick="deleteTeamById('${escapeHtml(team.applicationId || team.teamName)}')">
                     Delete This Application
                   </button>
                 </div>
@@ -1516,12 +1451,7 @@
         }
       } catch (error) {
         console.error(error);
-
-        allTeams = allTeams.filter(item => (item.applicationId || item.teamName) !== (team.applicationId || team.teamName));
-        updateDashboardStats();
-        renderTable();
-        closeDrawer();
-        showToast("Deleted from demo view. Connect backend delete logic.", "error");
+        showToast("Delete failed.", "error");
       }
     }
 
@@ -1620,6 +1550,15 @@
 
     drawerCloseBtn.addEventListener("click", closeDrawer);
     drawerOverlay.addEventListener("click", closeDrawer);
+
+    requireAdminSession();
+    refreshSessionActivity();
+
+    ["click", "keydown", "mousemove", "touchstart", "scroll"].forEach(eventName => {
+      window.addEventListener(eventName, () => {
+        if (isSessionValid()) refreshSessionActivity();
+      }, { passive: true });
+    });
 
     loadTeams();
     startLiveVisitorsEffect();
