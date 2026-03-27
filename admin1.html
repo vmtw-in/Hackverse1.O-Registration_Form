@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hackverse 1.O Admin Login</title>
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --bg1:#06111d;
+      --bg2:#0b1730;
+      --card:rgba(10,18,34,0.78);
+      --stroke:rgba(255,255,255,0.08);
+      --text:#f8fbff;
+      --muted:#b9c4dc;
+      --blue:#2563eb;
+      --violet:#7c3aed;
+      --red:#dc2626;
+      --shadow:0 22px 60px rgba(0,0,0,0.35);
+    }
+
+    body{
+      min-height:100vh;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,0.22), transparent 24%),
+        radial-gradient(circle at top right, rgba(124,58,237,0.22), transparent 26%),
+        radial-gradient(circle at bottom center, rgba(6,182,212,0.12), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      overflow:hidden;
+    }
+
+    .orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(60px);
+      z-index:0;
+      pointer-events:none;
+      animation:floatOrb 12s ease-in-out infinite;
+    }
+
+    .orb1{
+      width:230px;
+      height:230px;
+      background:rgba(37,99,235,0.2);
+      top:40px;
+      left:20px;
+    }
+
+    .orb2{
+      width:260px;
+      height:260px;
+      background:rgba(124,58,237,0.2);
+      bottom:30px;
+      right:10px;
+      animation-delay:2s;
+    }
+
+    @keyframes floatOrb{
+      0%,100%{ transform:translateY(0) translateX(0) scale(1); }
+      50%{ transform:translateY(-16px) translateX(10px) scale(1.06); }
+    }
+
+    .login-shell{
+      width:100%;
+      max-width:460px;
+      position:relative;
+      z-index:1;
+    }
+
+    .login-card{
+      background:linear-gradient(145deg, rgba(15,24,46,0.9), rgba(8,14,28,0.82));
+      border:1px solid var(--stroke);
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+      overflow:hidden;
+    }
+
+    .login-head{
+      padding:28px 24px 20px;
+      text-align:center;
+      background:linear-gradient(135deg, rgba(37,99,235,0.14), rgba(124,58,237,0.14));
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+
+    .brand-badge{
+      width:78px;
+      height:78px;
+      margin:0 auto 16px;
+      border-radius:24px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
+      font-weight:900;
+      background:linear-gradient(135deg, var(--blue), var(--violet));
+      box-shadow:0 20px 38px rgba(37,99,235,0.28);
+    }
+
+    .login-head h1{
+      font-size:28px;
+      font-weight:900;
+      margin-bottom:8px;
+    }
+
+    .login-head p{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .login-body{
+      padding:24px;
+      display:grid;
+      gap:16px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+    }
+
+    .field label{
+      font-size:13px;
+      font-weight:800;
+      color:#dce4f7;
+    }
+
+    .field input{
+      width:100%;
+      border:1px solid rgba(255,255,255,0.08);
+      outline:none;
+      color:#fff;
+      background:rgba(255,255,255,0.05);
+      border-radius:16px;
+      padding:15px 15px;
+      font-size:15px;
+      transition:border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+    }
+
+    .field input:focus{
+      border-color:rgba(96,165,250,0.75);
+      box-shadow:0 0 0 4px rgba(37,99,235,0.14);
+      transform:translateY(-1px);
+    }
+
+    .login-btn{
+      border:none;
+      cursor:pointer;
+      width:100%;
+      padding:15px 18px;
+      border-radius:16px;
+      color:#fff;
+      font-size:15px;
+      font-weight:900;
+      background:linear-gradient(135deg, #2563eb, #7c3aed);
+      box-shadow:0 16px 30px rgba(37,99,235,0.24);
+      transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+    }
+
+    .login-btn:hover{
+      transform:translateY(-2px) scale(1.01);
+    }
+
+    .login-btn:disabled{
+      opacity:.7;
+      cursor:not-allowed;
+    }
+
+    .helper-box{
+      padding:14px 16px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.7;
+      text-align:center;
+    }
+
+    .footer-note{
+      text-align:center;
+      color:#9fb0cf;
+      font-size:12px;
+      line-height:1.6;
+      padding-top:4px;
+    }
+
+    .toast{
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:120;
+      min-width:260px;
+      max-width:380px;
+      padding:14px 16px;
+      border-radius:18px;
+      color:#fff;
+      font-size:14px;
+      font-weight:800;
+      box-shadow:0 18px 34px rgba(0,0,0,0.28);
+      transform:translateY(-12px);
+      opacity:0;
+      pointer-events:none;
+      transition:all .24s ease;
+      line-height:1.6;
+      backdrop-filter:blur(8px);
+    }
+
+    .toast.show{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .toast.success{
+      background:linear-gradient(135deg, rgba(22,163,74,0.95), rgba(21,128,61,0.95));
+    }
+
+    .toast.error{
+      background:linear-gradient(135deg, rgba(220,38,38,0.95), rgba(185,28,28,0.95));
+    }
+
+    .toast.info{
+      background:linear-gradient(135deg, rgba(37,99,235,0.95), rgba(124,58,237,0.95));
+    }
+
+    @media (max-width:560px){
+      body{
+        padding:12px;
+      }
+
+      .login-head{
+        padding:24px 18px 18px;
+      }
+
+      .login-body{
+        padding:18px;
+      }
+
+      .brand-badge{
+        width:68px;
+        height:68px;
+        border-radius:20px;
+        font-size:28px;
+      }
+
+      .login-head h1{
+        font-size:24px;
+      }
+
+      .toast{
+        left:12px;
+        right:12px;
+        top:12px;
+        min-width:auto;
+        max-width:none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="login-shell">
+    <div class="login-card">
+      <div class="login-head">
+        <div class="brand-badge">H</div>
+        <h1>Admin Login</h1>
+        <p>Hackverse 1.O dashboard secure access for application management and payment verification.</p>
+      </div>
+
+      <div class="login-body">
+        <div class="field">
+          <label for="adminId">Admin ID</label>
+          <input type="text" id="adminId" placeholder="Enter admin ID" autocomplete="username" />
+        </div>
+
+        <div class="field">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter password" autocomplete="current-password" />
+        </div>
+
+        <button class="login-btn" id="loginBtn">Login to Dashboard</button>
+
+        <div class="helper-box">
+          After successful login, you will be redirected to the admin dashboard page.
+        </div>
+
+        <div class="footer-note">
+          Hackverse 1.O Admin Access Panel
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycby9vq9W5ze8-2C0JChm9670ydXPOLDFuteFs4eSdvt20BUwkFCcmEoeseWOhEVwjIXQ/exec";
+
+    const adminIdInput = document.getElementById("adminId");
+    const adminPasswordInput = document.getElementById("adminPassword");
+    const loginBtn = document.getElementById("loginBtn");
+    const toast = document.getElementById("toast");
+
+    function showToast(message, type = "info") {
+      toast.textContent = message;
+      toast.className = "toast " + type + " show";
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => {
+        toast.className = "toast " + type;
+      }, 2600);
+    }
+
+    function safe(value) {
+      return value === undefined || value === null ? "" : String(value).trim();
+    }
+
+    function redirectToDashboard() {
+      window.location.href = "hema-admin.html";
+    }
+
+    function setLoginSession() {
+      sessionStorage.setItem("hackverseAdminLoggedIn", "true");
+      localStorage.setItem("hackverseAdminLoggedIn", "true");
+    }
+
+    function isAlreadyLoggedIn() {
+      return (
+        sessionStorage.getItem("hackverseAdminLoggedIn") === "true" ||
+        localStorage.getItem("hackverseAdminLoggedIn") === "true"
+      );
+    }
+
+    async function loginAdmin() {
+      const adminId = safe(adminIdInput.value);
+      const adminPassword = safe(adminPasswordInput.value);
+
+      if (!adminId || !adminPassword) {
+        showToast("Please enter admin ID and password.", "error");
+        return;
+      }
+
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Checking...";
+
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            action: "adminLogin",
+            adminId,
+            adminPassword
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+          setLoginSession();
+          showToast("Login successful. Redirecting...", "success");
+          setTimeout(() => {
+            redirectToDashboard();
+          }, 700);
+        } else {
+          throw new Error(result.message || "Invalid login credentials.");
+        }
+      } catch (error) {
+        console.error(error);
+        showToast(error.message || "Unable to login.", "error");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login to Dashboard";
+      }
+    }
+
+    loginBtn.addEventListener("click", loginAdmin);
+
+    adminIdInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        loginAdmin();
+      }
+    });
+
+    adminPasswordInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        loginAdmin();
+      }
+    });
+
+    if (isAlreadyLoggedIn()) {
+      redirectToDashboard();
+    }
+  </script>
+</body>
+</html>
