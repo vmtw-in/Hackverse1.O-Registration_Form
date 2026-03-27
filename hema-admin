@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hackverse Admin View</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0a0f1f;
+  color:#fff;
+}
+
+header{
+  padding:15px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  text-align:center;
+  font-weight:bold;
+}
+
+.container{
+  padding:15px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#111827;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+th,td{
+  padding:12px;
+  border-bottom:1px solid #333;
+}
+
+tr:hover{
+  background:#1f2937;
+  cursor:pointer;
+}
+
+.drawer{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:90%;
+  max-width:400px;
+  height:100%;
+  background:#111827;
+  padding:20px;
+  transition:0.3s;
+  overflow:auto;
+  z-index:1000;
+}
+
+.drawer.open{
+  right:0;
+}
+
+.close-btn{
+  background:red;
+  color:#fff;
+  border:none;
+  padding:8px;
+  cursor:pointer;
+}
+
+img{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:10px;
+  background:#2563eb;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>Hackverse Admin Panel (View Only)</header>
+
+<div class="container">
+  <table id="table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Team Name</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="drawer" id="drawer">
+  <button class="close-btn" onclick="closeDrawer()">Close</button>
+  <div id="details"></div>
+</div>
+
+<script>
+const GAS_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+// LOGIN CHECK
+if(
+  sessionStorage.getItem("hackverseAdminLoggedIn")!=="true" &&
+  localStorage.getItem("hackverseAdminLoggedIn")!=="true"
+){
+  window.location.href="admin-login.html";
+}
+
+async function loadData(){
+  const res = await fetch(GAS_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"getRegistrations"})
+  });
+  const data = await res.json();
+
+  const tbody = document.querySelector("#table tbody");
+  tbody.innerHTML="";
+
+  data.data.forEach((team,index)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${index+1}</td>
+      <td>${team.teamName}</td>
+    `;
+    tr.onclick=()=>openDrawer(team);
+    tbody.appendChild(tr);
+  });
+}
+
+function openDrawer(team){
+  const drawer=document.getElementById("drawer");
+  const details=document.getElementById("details");
+
+  const img = team.paymentScreenshotPreviewUrl || team.paymentScreenshotUrl;
+
+  details.innerHTML=`
+    <h3>${team.teamName}</h3>
+
+    <p><b>Leader:</b> ${team.leaderName}</p>
+    <p><b>Email:</b> ${team.leaderEmail}</p>
+    <p><b>Phone:</b> ${team.leaderPhone}</p>
+
+    <p><b>Transaction ID:</b> ${team.transactionId}</p>
+    <p><b>Payment Method:</b> ${team.paymentMethod}</p>
+
+    <h4>Payment Screenshot</h4>
+
+    <img src="${img}" onerror="this.style.display='none'">
+
+    <a class="btn" href="${team.paymentScreenshotOpenUrl || img}" target="_blank">
+      View Full Image
+    </a>
+
+    <br><br>
+
+    <a class="btn" href="${team.ticketLink}" target="_blank">
+      Download Ticket
+    </a>
+  `;
+
+  drawer.classList.add("open");
+}
+
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+}
+
+loadData();
+</script>
+
+</body>
+</html>
